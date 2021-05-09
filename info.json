@@ -1,0 +1,9 @@
+{
+    "name": "milestones",
+    "version": "0.1.0",
+    "title": "Milestones",
+    "author": "Wiwiweb",
+    "factorio_version": "1.1",
+    "dependencies": ["base >= 1.1", "flib >= 0.7.0"],
+    "description": "Tracks the time you created your first science pack, or any other item you want to track"
+  }
