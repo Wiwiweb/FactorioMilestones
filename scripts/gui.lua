@@ -1,3 +1,21 @@
+local function add_milestone_display(table, milestone)
+    local milestone_flow = table.add{type="flow", direction="horizontal"}
+    local prototype = nil
+    if milestone.type == "item" then
+        prototype = game.item_prototypes[milestone.name]
+    elseif milestone.type == "fluid" then
+        prototype = game.fluid_prototypes[milestone.name]
+    end
+
+    if prototype == nil then
+        game.print("Milestones error! Invalid milestone: " .. serpent.line(milestone))
+        return
+    end
+    -- game.print(milestone.name)
+    -- game.print(prototype)
+    milestone_flow.add{type="label", caption=prototype.localised_name}
+end
+
 local function build_interface(player)
     local screen_element = player.gui.screen
     local main_frame = screen_element.add{type="frame", name="milestones_main_frame", caption={"gui.title"}}
@@ -7,7 +25,17 @@ local function build_interface(player)
     player.opened = main_frame
 
     local content_frame = main_frame.add{type="frame", name="content_frame", direction="vertical", style="ugg_content_frame"}
-    local controls_flow = content_frame.add{type="flow", name="controls_flow", direction="horizontal", style="ugg_controls_flow"}
+    local content_table = content_frame.add{type="table", name="content_table", column_count=2}
+
+    local global_force = global.forces[player.force.name]
+
+    for _, milestone in pairs(global_force.complete_milestones) do
+        add_milestone_display(content_table, milestone)
+    end
+
+    for _, milestone in pairs(global_force.incomplete_milestones) do
+        add_milestone_display(content_table, milestone)
+    end
 end
 
 local function toggle_interface(player)

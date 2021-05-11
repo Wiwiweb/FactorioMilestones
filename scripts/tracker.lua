@@ -5,7 +5,7 @@ milestones = {
     {type="item", name="iron-gear-wheel", quantity=50},
     {type="item", name="automation-science-pack", quantity=1},
     {type="item", name="logistic-science-pack", quantity=1},
-    {type="fluid", name="petroleum", quantity=1},
+    {type="fluid", name="petroleum-gas", quantity=1},
 }
 
 local function print_milestone_reached(force, milestone)
@@ -15,7 +15,7 @@ local function print_milestone_reached(force, milestone)
     local quantity_string = (milestone.quantity == 1 and "" or milestone.quantity .. " ")
     local rich_text = "[" .. milestone.type .. "=" .. milestone.name .. "]"
     force.print("[font=heading-1]Created the first " .. quantity_string .. rich_text .. " at [color=green]" .. human_timestamp .. "[img=quantity-time][/color]![/font]")
-    force.play_sound({path="utility/achievement_unlocked"})
+    force.play_sound{path="utility/achievement_unlocked"}
 end
 
 local function check_milestone_reached(force, milestone, input_counts, milestone_index)
