@@ -13,14 +13,14 @@ styles["ugg_controls_flow"] = {
     horizontal_spacing = 16
 }
 
-data:extend({
+data:extend{
     {
         type = "custom-input",
         name = "milestones-toggle-gui",
         key_sequence = "CONTROL + ALT + M",
         order = "a"
     }
-})
+}
 
 local shortcut_icon = "__milestones__/graphics/shortcut-icon.png"
 data:extend{
@@ -35,4 +35,11 @@ data:extend{
     toggleable = true,
     action = "lua"
   }
+}
+
+styles.milestones_label_flow = {
+  type = "horizontal_flow_style",
+  parent = "horizontal_flow",
+  vertical_align = "center",
+  natural_width = 250
 }

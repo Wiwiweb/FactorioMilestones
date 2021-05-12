@@ -1,5 +1,5 @@
 local function add_milestone_display(table, milestone)
-    local milestone_flow = table.add{type="flow", direction="horizontal"}
+    local milestone_flow = table.add{type="flow", direction="horizontal", style="milestones_label_flow"}
     local prototype = nil
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]
@@ -9,17 +9,20 @@ local function add_milestone_display(table, milestone)
 
     if prototype == nil then
         game.print("Milestones error! Invalid milestone: " .. serpent.line(milestone))
+        milestone_flow.add{type="label", caption="Invalid: " .. milestone.name}
         return
     end
     -- game.print(milestone.name)
     -- game.print(prototype)
+    local sprite_path = milestone.type .. "/" .. milestone.name
+    local sprite_number = milestone.quantity > 1 and milestone.quantity or nil
+    milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, style="transparent_slot"}
     milestone_flow.add{type="label", caption=prototype.localised_name}
 end
 
 local function build_interface(player)
     local screen_element = player.gui.screen
     local main_frame = screen_element.add{type="frame", name="milestones_main_frame", caption={"gui.title"}}
-    main_frame.style.size = {385, 165}
     main_frame.auto_center = true
 
     player.opened = main_frame
