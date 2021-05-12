@@ -1,3 +1,5 @@
+local misc = require("__flib__.misc")
+
 local function add_milestone_display(table, milestone)
     local milestone_flow = table.add{type="flow", direction="horizontal", style="milestones_label_flow"}
     local prototype = nil
@@ -15,9 +17,21 @@ local function add_milestone_display(table, milestone)
     -- game.print(milestone.name)
     -- game.print(prototype)
     local sprite_path = milestone.type .. "/" .. milestone.name
-    local sprite_number = milestone.quantity > 1 and milestone.quantity or nil
-    milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, style="transparent_slot"}
-    milestone_flow.add{type="label", caption=prototype.localised_name}
+    local sprite_number = nil
+    local tooltip = prototype.localised_name
+    if milestone.quantity > 1 then
+        sprite_number = milestone.quantity
+        tooltip = {"", milestone.quantity, "x ", prototype.localised_name}
+    end
+    local caption
+    if milestone.completion_tick == nil then
+        caption = "[color=100,100,100]Incomplete[/color]"
+    else
+        caption = "Completed at " .. misc.ticks_to_timestring(milestone.completion_tick) .. "[img=quantity-time]"
+    end
+    
+    milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
+    milestone_flow.add{type="label", caption=caption}
 end
 
 local function build_interface(player)

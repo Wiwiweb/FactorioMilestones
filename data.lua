@@ -41,5 +41,6 @@ styles.milestones_label_flow = {
   type = "horizontal_flow_style",
   parent = "horizontal_flow",
   vertical_align = "center",
-  natural_width = 250
+  natural_width = 220,
+  horizontal_spacing = 8
 }
