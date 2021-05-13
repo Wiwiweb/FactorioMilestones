@@ -18,8 +18,8 @@ local function print_milestone_reached(force, milestone)
     force.play_sound{path="utility/achievement_unlocked"}
 end
 
-local function check_milestone_reached(force, milestone, input_counts, milestone_index)
-    if input_counts[milestone.name] and input_counts[milestone.name] >= milestone.quantity then
+local function check_milestone_reached(force, milestone, stats, milestone_index)
+    if stats.get_input_count(milestone.name) >= milestone.quantity then
         milestone.completion_tick = game.tick
         table.insert(global.forces[force.name].complete_milestones, milestone)
         table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
@@ -40,14 +40,14 @@ function track_item_creation(event)
             force.item_production_statistics.input_counts and 
             next(force.item_production_statistics.input_counts) ~= nil then -- This force has players and production
                 
-            local item_counts = force.item_production_statistics.input_counts
-            local fluid_counts = force.fluid_production_statistics.input_counts
+            local item_stats = force.item_production_statistics
+            local fluid_stats = force.fluid_production_statistics
 
             for i, milestone in ipairs(global_force.incomplete_milestones) do
                 if milestone.type == "item" then
-                    check_milestone_reached(force, milestone, item_counts, i)
+                    check_milestone_reached(force, milestone, item_stats, i)
                 elseif milestone.type == "fluid" then
-                    check_milestone_reached(force, milestone, fluid_counts, i)
+                    check_milestone_reached(force, milestone, fluid_stats, i)
                 end
             end
         end
