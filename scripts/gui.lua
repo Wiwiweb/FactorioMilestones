@@ -57,7 +57,10 @@ local function build_interface(player)
         clicked_sprite="milestones_settings_black", 
         disabled_sprite="milestones_settings_disabled",
         mouse_button_filter={"left"},
-        tooltip = {"gui.settings-instruction"}
+        tooltip = {"gui.settings-instruction"},
+        tags={
+            action="milestones_open_settings"
+        }
     }
     titlebar.add{
         type="sprite-button",
@@ -66,7 +69,10 @@ local function build_interface(player)
         sprite="utility/close_white",
         hovered_sprite="utility/close_black",
         clicked_sprite="utility/close_black",
-        tooltip = {"gui.close-instruction"}
+        tooltip = {"gui.close-instruction"},
+        tags={
+            action="milestones_close_gui"
+        }
     }
     titlebar.drag_target = main_frame
 
@@ -84,26 +90,33 @@ local function build_interface(player)
     end
 end
 
-local function toggle_interface(player)
+local function build_gui(player)
+    build_interface(player)
+    player.set_shortcut_toggled("milestones-toggle-gui", true)
+end
+
+local function close_gui(player)
     local main_frame = player.gui.screen.milestones_main_frame
+    main_frame.destroy()
+    player.set_shortcut_toggled("milestones-toggle-gui", false)
+end
+
+local function toggle_interface(player)
     if main_frame == nil then
-        build_interface(player)
-        player.set_shortcut_toggled("milestones-toggle-gui", true)
+        build_gui(player)
     else
-        main_frame.destroy()
-        player.set_shortcut_toggled("milestones-toggle-gui", false)
+        close_gui(player)
     end
 end
 
-
-script.on_event(defines.events.on_gui_click, function(event)
-
+script.on_event(defines.events.on_gui_closed, function(event)
+    if event.element and event.element.name == "milestones_main_frame" then
+        local player = game.get_player(event.player_index)
+        close_gui(player)
+    end
 end)
 
-script.on_event(defines.events.on_gui_text_changed, function(event)
-
-end)
-
+-- Quickbar shortcut
 script.on_event(defines.events.on_lua_shortcut, function(event)
     if event.prototype_name == "milestones-toggle-gui" then
         local player = game.get_player(event.player_index)
@@ -111,14 +124,22 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
     end
 end)
 
+-- Keyboard shortcut
 script.on_event("milestones-toggle-gui", function(event)
     local player = game.get_player(event.player_index)
     toggle_interface(player)
 end)
 
-script.on_event(defines.events.on_gui_closed, function(event)
-    if event.element and event.element.name == "milestones_main_frame" then
+
+script.on_event(defines.events.on_gui_click, function(event)
+    if not event.element then return end
+    if not event.element.tags then return end
+    if event.element.tags.action == "milestones_close_gui" then
         local player = game.get_player(event.player_index)
-        toggle_interface(player)
+        close_gui(player)
     end
+end)
+
+script.on_event(defines.events.on_gui_text_changed, function(event)
+
 end)
