@@ -1,16 +1,23 @@
 local data_util = require("__flib__.data-util")
 local styles = data.raw["gui-style"].default
 
-styles["ugg_content_frame"] = {
+styles.milestones_content_frame = {
     type = "frame_style",
     parent = "inside_shallow_frame_with_padding",
     vertically_stretchable = "on"
 }
 
-styles["ugg_controls_flow"] = {
-    type = "horizontal_flow_style",
-    vertical_align = "center",
-    horizontal_spacing = 16
+styles.milestones_label_flow = {
+  type = "horizontal_flow_style",
+  parent = "horizontal_flow",
+  vertical_align = "center",
+  minimal_width = 150,
+  horizontal_spacing = 8
+}
+
+styles.milestones_table_style = {
+  type = "table_style",
+  horizontal_spacing = 32
 }
 
 data:extend{
@@ -37,10 +44,10 @@ data:extend{
   }
 }
 
-styles.milestones_label_flow = {
-  type = "horizontal_flow_style",
-  parent = "horizontal_flow",
-  vertical_align = "center",
-  natural_width = 220,
-  horizontal_spacing = 8
+-- Sprites
+local settings_gear = "__milestones__/graphics/settings-gear.png"
+data:extend{
+  data_util.build_sprite("milestones_settings_black", {0, 0}, settings_gear, 32),
+  data_util.build_sprite("milestones_settings_white", {32, 0}, settings_gear, 32),
+  data_util.build_sprite("milestones_settings_disabled", {64, 0}, settings_gear, 32),
 }

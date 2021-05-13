@@ -1,6 +1,6 @@
 local misc = require("__flib__.misc")
 
-local function add_milestone_display(table, milestone)
+local function add_milestone_item(table, milestone)
     local milestone_flow = table.add{type="flow", direction="horizontal", style="milestones_label_flow"}
     local prototype = nil
     if milestone.type == "item" then
@@ -25,9 +25,9 @@ local function add_milestone_display(table, milestone)
     end
     local caption
     if milestone.completion_tick == nil then
-        caption = "[color=100,100,100]Incomplete[/color]"
+        caption = {"", "[color=100,100,100]", {"gui.incomplete_label"}, "[/color]"}
     else
-        caption = "Completed at " .. misc.ticks_to_timestring(milestone.completion_tick) .. "[img=quantity-time]"
+        caption = {"", {"gui.completed_label"}, " [font=default-bold]", misc.ticks_to_timestring(milestone.completion_tick), "[img=quantity-time][/font]"}
     end
     
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
@@ -36,22 +36,51 @@ end
 
 local function build_interface(player)
     local screen_element = player.gui.screen
-    local main_frame = screen_element.add{type="frame", name="milestones_main_frame", caption={"gui.title"}}
-    main_frame.auto_center = true
-
+    local main_frame = screen_element.add{type="frame", name="milestones_main_frame", direction="vertical"}
     player.opened = main_frame
+    main_frame.force_auto_center()
 
-    local content_frame = main_frame.add{type="frame", name="content_frame", direction="vertical", style="ugg_content_frame"}
-    local content_table = content_frame.add{type="table", name="content_table", column_count=2}
+    local titlebar = main_frame.add{type="flow", style="flib_titlebar_flow", direction="horizontal"}
+    titlebar.add{
+        type = "label",
+        style = "frame_title",
+        style_mods = {left_margin = 4},
+        caption = {"gui.title"},
+        ignored_by_interaction = true
+    }
+    titlebar.add{type = "empty-widget", style = "flib_titlebar_drag_handle", ignored_by_interaction = true}
+    titlebar.add{
+        type="sprite-button",
+        style="frame_action_button",
+        sprite="milestones_settings_white", 
+        hovered_sprite="milestones_settings_black", 
+        clicked_sprite="milestones_settings_black", 
+        disabled_sprite="milestones_settings_disabled",
+        mouse_button_filter={"left"},
+        tooltip = {"gui.settings-instruction"}
+    }
+    titlebar.add{
+        type="sprite-button",
+        style="frame_action_button",
+        mouse_button_filter={"left"},
+        sprite="utility/close_white",
+        hovered_sprite="utility/close_black",
+        clicked_sprite="utility/close_black",
+        tooltip = {"gui.close-instruction"}
+    }
+    titlebar.drag_target = main_frame
+
+    local content_frame = main_frame.add{type="frame", name="content_frame", direction="vertical", style="milestones_content_frame"}
+    local content_table = content_frame.add{type="table", name="content_table", column_count=2, style="milestones_table_style"}
 
     local global_force = global.forces[player.force.name]
 
     for _, milestone in pairs(global_force.complete_milestones) do
-        add_milestone_display(content_table, milestone)
+        add_milestone_item(content_table, milestone)
     end
 
     for _, milestone in pairs(global_force.incomplete_milestones) do
-        add_milestone_display(content_table, milestone)
+        add_milestone_item(content_table, milestone)
     end
 end
 
