@@ -49,19 +49,25 @@ local function build_interface(player)
         ignored_by_interaction = true
     }
     titlebar.add{type = "empty-widget", style = "flib_titlebar_drag_handle", ignored_by_interaction = true}
-    titlebar.add{
+    local settings_button = titlebar.add{
         type="sprite-button",
         style="frame_action_button",
         sprite="milestones_settings_white", 
         hovered_sprite="milestones_settings_black", 
         clicked_sprite="milestones_settings_black", 
-        disabled_sprite="milestones_settings_disabled",
         mouse_button_filter={"left"},
-        tooltip = {"gui.settings-instruction"},
+        tooltip = {"gui.milestones_settings_instructions"},
         tags={
             action="milestones_open_settings"
         }
     }
+    if not player.permission_group.allows_action(defines.input_action.mod_settings_changed) then
+        settings_button.enabled = false
+        settings_button.tooltip = {"gui.milestones_settings_disabled"}
+        settings_button.sprite = "milestones_settings_disabled"
+        settings_button.hovered_sprite = "milestones_settings_disabled"
+        settings_button.clicked_sprite = "milestones_settings_disabled"
+    end
     titlebar.add{
         type="sprite-button",
         style="frame_action_button",
@@ -92,13 +98,13 @@ end
 
 local function build_gui(player)
     build_interface(player)
-    player.set_shortcut_toggled("milestones-toggle-gui", true)
+    player.set_shortcut_toggled("milestones_toggle_gui", true)
 end
 
 local function close_gui(player)
     local main_frame = player.gui.screen.milestones_main_frame
     main_frame.destroy()
-    player.set_shortcut_toggled("milestones-toggle-gui", false)
+    player.set_shortcut_toggled("milestones_toggle_gui", false)
 end
 
 local function toggle_interface(player)
@@ -118,14 +124,14 @@ end)
 
 -- Quickbar shortcut
 script.on_event(defines.events.on_lua_shortcut, function(event)
-    if event.prototype_name == "milestones-toggle-gui" then
+    if event.prototype_name == "milestones_toggle_gui" then
         local player = game.get_player(event.player_index)
         toggle_interface(player)
     end
 end)
 
 -- Keyboard shortcut
-script.on_event("milestones-toggle-gui", function(event)
+script.on_event("milestones_toggle_gui", function(event)
     local player = game.get_player(event.player_index)
     toggle_interface(player)
 end)
