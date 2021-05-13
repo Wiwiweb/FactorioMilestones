@@ -27,7 +27,6 @@ local function check_milestone_reached(force, milestone, stats, milestone_index)
     end
 end
 
-
 function track_item_creation(event)
     if event.tick == 0 then -- Skip first tick of the game where all listeners will be called
         return

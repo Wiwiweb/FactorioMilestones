@@ -31,7 +31,13 @@ script.on_event(defines.events.on_forces_merged, function(event)
     clear_global(event.source_name)
 end)
 
-script.on_nth_tick(120, track_item_creation)
+script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+    if event.setting == "milestones_check_frequency" then
+        script.on_nth_tick(nil) -- Unregister event
+        script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
+    end
+end)
 
 -- Debug command
 remote.add_interface("milestones", {

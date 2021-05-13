@@ -1,6 +1,17 @@
 local misc = require("__flib__.misc")
 
-local function add_milestone_item(table, milestone)
+local function get_timestamp(ticks, print_milliseconds)
+    if print_milliseconds then
+        local remaining_ticks = ticks % 60
+        local milliseconds = math.floor((16.66666 * remaining_ticks) + 0.5) -- 16.666666 milliseconds per tick, rounded to int
+        return misc.ticks_to_timestring(ticks) .. "." .. string.format("%03d", milliseconds)
+    else
+        return misc.ticks_to_timestring(ticks)
+    end
+
+end
+
+local function add_milestone_item(table, milestone, print_milliseconds)
     local milestone_flow = table.add{type="flow", direction="horizontal", style="milestones_label_flow"}
     local prototype = nil
     if milestone.type == "item" then
@@ -27,7 +38,7 @@ local function add_milestone_item(table, milestone)
     if milestone.completion_tick == nil then
         caption = {"", "[color=100,100,100]", {"gui.incomplete_label"}, "[/color]"}
     else
-        caption = {"", {"gui.completed_label"}, " [font=default-bold]", misc.ticks_to_timestring(milestone.completion_tick), "[img=quantity-time][/font]"}
+        caption = {"", {"gui.completed_label"}, " [font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     end
     
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
@@ -87,12 +98,13 @@ local function build_interface(player)
 
     local global_force = global.forces[player.force.name]
 
+    local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     for _, milestone in pairs(global_force.complete_milestones) do
-        add_milestone_item(content_table, milestone)
+        add_milestone_item(content_table, milestone, print_milliseconds)
     end
 
     for _, milestone in pairs(global_force.incomplete_milestones) do
-        add_milestone_item(content_table, milestone)
+        add_milestone_item(content_table, milestone, print_milliseconds)
     end
 end
 
