@@ -45,7 +45,23 @@ local function add_milestone_item(table, milestone, print_milliseconds)
     milestone_flow.add{type="label", caption=caption}
 end
 
-local function build_interface(player)
+local function build_main_content_frame(main_frame, player)
+    local content_frame = main_frame.add{type="frame", name="milestones_content_frame", direction="vertical", style="milestones_content_frame"}
+    local content_table = content_frame.add{type="table", name="milestones_content_table", column_count=2, style="milestones_table_style"}
+
+    local global_force = global.forces[player.force.name]
+
+    local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
+    for _, milestone in pairs(global_force.complete_milestones) do
+        add_milestone_item(content_table, milestone, print_milliseconds)
+    end
+
+    for _, milestone in pairs(global_force.incomplete_milestones) do
+        add_milestone_item(content_table, milestone, print_milliseconds)
+    end
+end
+
+local function build_main_frame(player)
     local screen_element = player.gui.screen
     local main_frame = screen_element.add{type="frame", name="milestones_main_frame", direction="vertical"}
     player.opened = main_frame
@@ -93,44 +109,36 @@ local function build_interface(player)
     }
     titlebar.drag_target = main_frame
 
-    local content_frame = main_frame.add{type="frame", name="content_frame", direction="vertical", style="milestones_content_frame"}
-    local content_table = content_frame.add{type="table", name="content_table", column_count=2, style="milestones_table_style"}
-
-    local global_force = global.forces[player.force.name]
-
-    local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
-    for _, milestone in pairs(global_force.complete_milestones) do
-        add_milestone_item(content_table, milestone, print_milliseconds)
-    end
-
-    for _, milestone in pairs(global_force.incomplete_milestones) do
-        add_milestone_item(content_table, milestone, print_milliseconds)
-    end
+    build_main_content_frame(main_frame, player)
 end
 
-local function build_gui(player)
-    build_interface(player)
+local function open_gui(player)
+    build_main_frame(player)
     player.set_shortcut_toggled("milestones_toggle_gui", true)
 end
 
-local function close_gui(player)
+local function toggle_gui(player)
     local main_frame = player.gui.screen.milestones_main_frame
-    main_frame.destroy()
-    player.set_shortcut_toggled("milestones_toggle_gui", false)
+    if main_frame == nil then
+        open_gui(player)
+    else
+        main_frame.destroy()
+        player.set_shortcut_toggled("milestones_toggle_gui", false)
+    end
 end
 
-local function toggle_interface(player)
-    if main_frame == nil then
-        build_gui(player)
-    else
-        close_gui(player)
+function refresh_main_frame(player)
+    local content_frame = player.gui.screen.milestones_main_frame.milestones_content_frame
+    if content_frame ~= nil then
+        content_frame.destroy()
+        build_main_content_frame(player.gui.screen.milestones_main_frame, player)
     end
 end
 
 script.on_event(defines.events.on_gui_closed, function(event)
     if event.element and event.element.name == "milestones_main_frame" then
         local player = game.get_player(event.player_index)
-        close_gui(player)
+        toggle_gui(player)
     end
 end)
 
@@ -138,14 +146,14 @@ end)
 script.on_event(defines.events.on_lua_shortcut, function(event)
     if event.prototype_name == "milestones_toggle_gui" then
         local player = game.get_player(event.player_index)
-        toggle_interface(player)
+        toggle_gui(player)
     end
 end)
 
 -- Keyboard shortcut
 script.on_event("milestones_toggle_gui", function(event)
     local player = game.get_player(event.player_index)
-    toggle_interface(player)
+    toggle_gui(player)
 end)
 
 
@@ -154,7 +162,7 @@ script.on_event(defines.events.on_gui_click, function(event)
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_close_gui" then
         local player = game.get_player(event.player_index)
-        close_gui(player)
+        toggle_gui(player)
     end
 end)
 

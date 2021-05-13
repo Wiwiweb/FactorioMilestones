@@ -1,4 +1,5 @@
 local misc = require("__flib__.misc")
+require("scripts.gui")
 
 milestones = {
     {type="item", name="iron-gear-wheel", quantity=1},
@@ -24,6 +25,10 @@ local function check_milestone_reached(force, milestone, stats, milestone_index)
         table.insert(global.forces[force.name].complete_milestones, milestone)
         table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
         print_milestone_reached(force, milestone)
+        for _, player in pairs(force.players) do
+            refresh_main_frame(player)
+        end
+            
     end
 end
 
