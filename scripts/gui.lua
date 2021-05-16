@@ -1,22 +1,25 @@
 local misc = require("__flib__.misc")
 local misc = require("gui_display_page")
+local misc = require("gui_settings_page")
 
 
 function build_main_frame(player)
     local screen_element = player.gui.screen
     local main_frame = screen_element.add{type="frame", name="milestones_main_frame", direction="vertical", visible=false}
 
-    local titlebar = main_frame.add{type="flow", style="flib_titlebar_flow", direction="horizontal"}
+    local titlebar = main_frame.add{type="flow", name="milestones_titlebar", style="flib_titlebar_flow", direction="horizontal"}
     titlebar.add{
-        type = "label",
-        style = "frame_title",
-        style_mods = {left_margin = 4},
-        caption = {"gui.title"},
-        ignored_by_interaction = true
+        type="label",
+        name="milestones_main_label",
+        style="frame_title",
+        style_mods={left_margin=4},
+        caption={"gui.title"},
+        ignored_by_interaction=true
     }
-    titlebar.add{type = "empty-widget", style = "flib_titlebar_drag_handle", ignored_by_interaction = true}
+    titlebar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
     local settings_button = titlebar.add{
         type="sprite-button",
+        name="milestones_settings_button",
         style="frame_action_button",
         sprite="milestones_settings_white", 
         hovered_sprite="milestones_settings_black", 
@@ -36,6 +39,7 @@ function build_main_frame(player)
     end
     titlebar.add{
         type="sprite-button",
+        name="milestones_close_button",
         style="frame_action_button",
         mouse_button_filter={"left"},
         sprite="utility/close_white",
@@ -50,6 +54,12 @@ function build_main_frame(player)
 
     local inner_frame = main_frame.add{type="frame", name="milestones_inner_frame", direction="vertical", style="milestones_inner_frame"}
 
+    local dialog_buttons_bar = main_frame.add{type="flow", style="dialog_buttons_horizontal_flow", name="milestones_dialog_buttons", direction="horizontal"}
+    dialog_buttons_bar.add{type="button", style="back_button", caption={"gui.settings_cancel"}}
+    dialog_buttons_bar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
+    dialog_buttons_bar.add{type="button", style="confirm_button", caption={"gui.settings_confirm"}}
+    dialog_buttons_bar.drag_target = main_frame
+
     return main_frame, inner_frame
 end
 
@@ -57,7 +67,7 @@ local function open_gui(player)
     local global_player = global.players[player.index]
     build_display_page(player)
     global_player.main_frame.visible = true
-    player.opened = main_frame
+    player.opened = global_player.main_frame
     player.set_shortcut_toggled("milestones_toggle_gui", true)
 
     if not global_player.opened_once_before then -- Open in the center the first time
@@ -116,6 +126,10 @@ script.on_event(defines.events.on_gui_click, function(event)
     if event.element.tags.action == "milestones_close_gui" then
         local player = game.get_player(event.player_index)
         close_gui(player)
+    elseif event.element.tags.action == "milestones_open_settings" then
+        local player = game.get_player(event.player_index)
+        global.players[player.index].inner_frame.clear()
+        build_settings_page(player)
     end
 end)
 

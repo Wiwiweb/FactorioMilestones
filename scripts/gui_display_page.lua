@@ -45,6 +45,12 @@ local function add_milestone_item(table, milestone, print_milliseconds)
 end
 
 function build_display_page(player)
+    local main_frame = global.players[player.index].main_frame
+    main_frame.milestones_titlebar.milestones_main_label.caption = {"gui.title"}
+    main_frame.milestones_titlebar.milestones_settings_button.visible = true
+    main_frame.milestones_titlebar.milestones_close_button.visible = true
+    main_frame.milestones_dialog_buttons.visible = false
+
     local inner_frame = global.players[player.index].inner_frame
     local content_table = inner_frame.add{type="table", name="milestones_content_table", column_count=2, style="milestones_table_style"}
 
