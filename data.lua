@@ -1,7 +1,7 @@
 local data_util = require("__flib__.data-util")
 local styles = data.raw["gui-style"].default
 
-styles.milestones_content_frame = {
+styles.milestones_inner_frame = {
     type = "frame_style",
     parent = "inside_shallow_frame_with_padding",
     vertically_stretchable = "on"
