@@ -76,6 +76,7 @@ end)
 
 -- Debug command
 remote.add_interface("milestones", {
+    -- /c remote.call("milestones", "debug_print_milestones")
     debug_print_milestones = function()
         game.print(serpent.block(global.forces))
     end
