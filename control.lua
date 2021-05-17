@@ -5,7 +5,7 @@ local function initialize_force(force)
     if next(force.players) ~= nil then -- Don't bother with forces without players
         global.forces[force.name] = {
             complete_milestones = {},
-            incomplete_milestones = milestones
+            incomplete_milestones = global.loaded_milestones
         }
     end
 end
@@ -30,6 +30,13 @@ end
 script.on_init(function()
     global.forces = {}
     global.players = {}
+    global.loaded_milestones = {
+        {type="item", name="iron-gear-wheel", quantity=1},
+        {type="item", name="iron-gear-wheel", quantity=50},
+        {type="item", name="automation-science-pack", quantity=1},
+        {type="item", name="logistic-science-pack", quantity=1},
+        {type="fluid", name="petroleum-gas", quantity=1},
+    }
 
     -- Initialize for existing forces in existing save file
     for _, force in pairs(game.forces) do

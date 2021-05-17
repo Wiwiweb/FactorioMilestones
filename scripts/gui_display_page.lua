@@ -24,8 +24,7 @@ local function add_milestone_item(table, milestone, print_milliseconds)
         milestone_flow.add{type="label", caption="Invalid: " .. milestone.name}
         return
     end
-    -- game.print(milestone.name)
-    -- game.print(prototype)
+    
     local sprite_path = milestone.type .. "/" .. milestone.name
     local sprite_number = nil
     local tooltip = prototype.localised_name
