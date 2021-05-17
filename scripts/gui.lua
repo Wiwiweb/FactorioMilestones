@@ -55,9 +55,9 @@ function build_main_frame(player)
     local inner_frame = main_frame.add{type="frame", name="milestones_inner_frame", direction="vertical", style="milestones_inner_frame"}
 
     local dialog_buttons_bar = main_frame.add{type="flow", style="dialog_buttons_horizontal_flow", name="milestones_dialog_buttons", direction="horizontal"}
-    dialog_buttons_bar.add{type="button", style="back_button", caption={"gui.settings_cancel"}}
+    dialog_buttons_bar.add{type="button", style="back_button", caption={"gui.settings_cancel"}, tags={action="milestones_cancel_settings"}}
     dialog_buttons_bar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
-    dialog_buttons_bar.add{type="button", style="confirm_button", caption={"gui.settings_confirm"}}
+    dialog_buttons_bar.add{type="button", style="confirm_button", caption={"gui.settings_confirm"}, tags={action="milestones_confirm_settings"}}
     dialog_buttons_bar.drag_target = main_frame
 
     return main_frame, inner_frame
@@ -130,6 +130,14 @@ script.on_event(defines.events.on_gui_click, function(event)
         local player = game.get_player(event.player_index)
         global.players[player.index].inner_frame.clear()
         build_settings_page(player)
+    elseif event.element.tags.action == "milestones_cancel_settings" then
+        local player = game.get_player(event.player_index)
+        global.players[player.index].inner_frame.clear()
+        build_display_page(player)
+    elseif event.element.tags.action == "milestones_confirm_settings" then
+        local player = game.get_player(event.player_index)
+        global.players[player.index].inner_frame.clear()
+        build_display_page(player)
     end
 end)
 
