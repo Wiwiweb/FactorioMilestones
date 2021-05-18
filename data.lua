@@ -4,7 +4,11 @@ local styles = data.raw["gui-style"].default
 styles.milestones_inner_frame = {
     type = "frame_style",
     parent = "inside_shallow_frame_with_padding",
-    vertically_stretchable = "on"
+    vertically_stretchable = "on",
+    vertical_flow_style = {
+      type = "vertical_flow_style",
+      horizontal_align = "center"
+    }
 }
 
 styles.milestones_label_flow = {
@@ -24,8 +28,7 @@ styles.milestones_arrow_button = {
   type = "button_style",
   parent = "frame_action_button",
   width = 16,
-  height = 16,
-  left_padding
+  height = 16
 }
 
 data:extend{
