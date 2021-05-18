@@ -5,7 +5,7 @@ local function add_milestone_setting(milestone, inner_frame)
     if milestone.type == "item" then
         type_caption = {"gui.milestones_type_item"}
         prototype = game.item_prototypes[milestone.name]
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, item=milestone.name, tags={action="milestones_change_setting"}}
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, item=milestone.name, tags={action="milestones_change_setting"}, caption="test"}
     elseif milestone.type == "fluid" then
         type_caption = {"gui.milestones_type_fluid"}
         prototype = game.fluid_prototypes[milestone.name]
@@ -19,6 +19,11 @@ local function add_milestone_setting(milestone, inner_frame)
     milestone_flow.add{type="label", name="milestones_settings_label", caption=prototype.localised_name}
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
     milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, tags={action="milestones_change_setting_quantity"}, style="short_number_textfield"}
+    milestone_flow.add{type="sprite-button", sprite="utility/trash", style="frame_action_button_red"}
+
+    local arrows_flow = milestone_flow.add{type="flow", direction="vertical"}
+    arrows_flow.add{type="sprite-button", sprite="milestones_arrow_up", style="milestones_arrow_button"}
+    arrows_flow.add{type="sprite-button", sprite="milestones_arrow_down", style="milestones_arrow_button"}
 
     inner_frame.add{type="line"}
 end
@@ -56,6 +61,8 @@ function build_settings_page(player)
     for _, milestone in pairs(global.loaded_milestones) do
         add_milestone_setting(milestone, inner_frame)
     end
+
+    -- TODO "add" buttons
 
 end
 

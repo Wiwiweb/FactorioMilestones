@@ -20,6 +20,14 @@ styles.milestones_table_style = {
   horizontal_spacing = 32
 }
 
+styles.milestones_arrow_button = {
+  type = "button_style",
+  parent = "frame_action_button",
+  width = 16,
+  height = 16,
+  left_padding
+}
+
 data:extend{
     {
         type = "custom-input",
@@ -46,8 +54,11 @@ data:extend{
 
 -- Sprites
 local settings_gear = "__milestones__/graphics/settings-gear.png"
+local arrows = "__milestones__/graphics/arrows.png"
 data:extend{
   data_util.build_sprite("milestones_settings_black", {0, 0}, settings_gear, 32),
   data_util.build_sprite("milestones_settings_white", {32, 0}, settings_gear, 32),
   data_util.build_sprite("milestones_settings_disabled", {64, 0}, settings_gear, 32),
+  data_util.build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
+  data_util.build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),
 }
