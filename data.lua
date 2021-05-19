@@ -7,8 +7,18 @@ styles.milestones_inner_frame = {
     vertically_stretchable = "on",
     vertical_flow_style = {
       type = "vertical_flow_style",
-      horizontal_align = "center"
+      horizontal_align = "center",
+      vertical_spacing = 8,
     }
+}
+
+styles.milestones_deep_frame_in_shallow_frame = {
+  type = "frame_style",
+  parent = "deep_frame_in_shallow_frame",
+  left_padding = 8,
+  right_padding = 8,
+  top_padding = 4,
+  bottom_padding = 4,
 }
 
 styles.milestones_label_flow = {
@@ -58,10 +68,13 @@ data:extend{
 -- Sprites
 local settings_gear = "__milestones__/graphics/settings-gear.png"
 local arrows = "__milestones__/graphics/arrows.png"
+local item_icons = "__milestones__/graphics/item-icons.png"
 data:extend{
   data_util.build_sprite("milestones_settings_black", {0, 0}, settings_gear, 32),
   data_util.build_sprite("milestones_settings_white", {32, 0}, settings_gear, 32),
   data_util.build_sprite("milestones_settings_disabled", {64, 0}, settings_gear, 32),
   data_util.build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
   data_util.build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),
+  data_util.build_sprite("milestones_icon_item", {0, 0}, item_icons, 16),
+  data_util.build_sprite("milestones_icon_fluid", {16, 0}, item_icons, 16),
 }

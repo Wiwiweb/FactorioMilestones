@@ -3,21 +3,16 @@ local function add_milestone_setting(milestone, containing_frame)
     local prototype
     local elem_button
 
-    local milestone_outer_flow = containing_frame.add{type="flow", direction="vertical"}
-
     if milestone.type == "item" then
-        type_caption = {"gui.milestones_type_item"}
         prototype = game.item_prototypes[milestone.name]
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, item=milestone.name, tags={action="milestones_change_setting"}, caption="test"}
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, item=milestone.name, tags={action="milestones_change_setting"}}
     elseif milestone.type == "fluid" then
-        type_caption = {"gui.milestones_type_fluid"}
         prototype = game.fluid_prototypes[milestone.name]
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, fluid=milestone.name, tags={action="milestones_change_setting"}}
     end
 
-    milestone_outer_flow.add{type="label", caption=type_caption, style="caption_label"}
-
-    local milestone_flow = milestone_outer_flow.add{type="flow", direction="horizontal", style="milestones_label_flow"}
+    local milestone_flow = containing_frame.add{type="flow", direction="horizontal", style="milestones_label_flow"}
+    milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"gui.milestones_type_"..milestone.type}}
     milestone_flow.add(elem_button)
     milestone_flow.add{type="label", name="milestones_settings_label", caption=prototype.localised_name}
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
@@ -27,8 +22,6 @@ local function add_milestone_setting(milestone, containing_frame)
     local arrows_flow = milestone_flow.add{type="flow", direction="vertical"}
     arrows_flow.add{type="sprite-button", sprite="milestones_arrow_up", style="milestones_arrow_button"}
     arrows_flow.add{type="sprite-button", sprite="milestones_arrow_down", style="milestones_arrow_button"}
-
-    containing_frame.add{type="line"}
 end
 
 local function get_milestones_array_element(flow)
@@ -64,16 +57,19 @@ function build_settings_page(player)
     local preset_flow = inner_frame.add{type="flow", direction="horizontal"}
     preset_flow.add{type="label", caption="Preset:", style="caption_label"}
     preset_flow.add{type="drop-down", items={"Vanilla", "Space Exploration"}}
-    inner_frame.add{type="line"}
+    -- inner_frame.add{type="line"}
 
-    local milestones_settings_flow = inner_frame.add{type="flow", direction="vertical"}
-    for _, milestone in pairs(global.loaded_milestones) do
+    local milestones_settings_flow = inner_frame.add{type="frame", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
+    for i, milestone in pairs(global.loaded_milestones) do
         add_milestone_setting(milestone, milestones_settings_flow)
+        if i < #global.loaded_milestones then
+            milestones_settings_flow.add{type="line"}
+        end
     end
 
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
-    buttons_flow.add{type="button", caption={"", {"gui.milestones_settings_add_item"}, " [item=iron-gear-wheel]"}}
-    buttons_flow.add{type="button", caption={"", {"gui.milestones_settings_add_fluid"}, " [fluid=water]"}}
+    buttons_flow.add{type="button", caption={"", "[item=iron-gear-wheel] ", {"gui.milestones_settings_add_item"}}}
+    buttons_flow.add{type="button", caption={"", "[fluid=water] ", {"gui.milestones_settings_add_fluid"}}}
 
 end
 
