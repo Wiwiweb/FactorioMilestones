@@ -36,7 +36,13 @@ styles.milestones_table_style = {
 
 styles.milestones_arrow_button = {
   type = "button_style",
-  parent = "frame_action_button",
+  parent = "frame_button",
+  width = 16,
+  height = 16
+}
+
+styles.milestones_empty_button = {
+  type = "empty_widget_style",
   width = 16,
   height = 16
 }

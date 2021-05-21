@@ -1,4 +1,4 @@
-local function add_milestone_setting(milestone, containing_frame)
+local function add_milestone_setting(milestone, containing_frame, first_element, last_element)
     local type_caption
     local prototype
     local elem_button
@@ -19,9 +19,19 @@ local function add_milestone_setting(milestone, containing_frame)
     milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, tags={action="milestones_change_setting_quantity"}, style="short_number_textfield"}
     milestone_flow.add{type="sprite-button", sprite="utility/trash", style="frame_action_button_red"}
 
-    local arrows_flow = milestone_flow.add{type="flow", direction="vertical"}
-    arrows_flow.add{type="sprite-button", sprite="milestones_arrow_up", style="milestones_arrow_button"}
-    arrows_flow.add{type="sprite-button", sprite="milestones_arrow_down", style="milestones_arrow_button"}
+    local arrows_flow = milestone_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
+    if first_element then
+        arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
+    else
+        arrows_flow.add{type="sprite-button", name="milestones_arrow_up", sprite="milestones_arrow_up", style="milestones_arrow_button"}
+    end
+    if last_element then
+        arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
+    else
+        arrows_flow.add{type="sprite-button", name="milestones_arrow_down", sprite="milestones_arrow_down", style="milestones_arrow_button"}
+    end
+
+    return milestone_flow
 end
 
 local function get_milestones_array_element(flow)
@@ -61,7 +71,7 @@ function build_settings_page(player)
 
     local milestones_settings_flow = inner_frame.add{type="frame", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
     for i, milestone in pairs(global.loaded_milestones) do
-        add_milestone_setting(milestone, milestones_settings_flow)
+        local milestone_item_flow = add_milestone_setting(milestone, milestones_settings_flow, i == 1, i == #global.loaded_milestones)
         if i < #global.loaded_milestones then
             milestones_settings_flow.add{type="line"}
         end
