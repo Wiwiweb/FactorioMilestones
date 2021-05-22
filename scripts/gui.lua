@@ -142,5 +142,7 @@ script.on_event(defines.events.on_gui_click, function(event)
         swap_settings(event.player_index, event.element)
     elseif event.element.tags.action == "milestones_delete_setting" then
         delete_setting(event.player_index, event.element)
+    elseif event.element.tags.action == "milestones_add_setting" then
+        add_setting(event.player_index, event.element)
     end
 end)
