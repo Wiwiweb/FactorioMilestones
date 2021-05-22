@@ -1,3 +1,4 @@
+local misc = require("__flib__.misc")
 
 local function get_timestamp(ticks, print_milliseconds)
     if print_milliseconds then
@@ -11,7 +12,7 @@ local function get_timestamp(ticks, print_milliseconds)
 end
 
 local function add_milestone_item(table, milestone, print_milliseconds)
-    local milestone_flow = table.add{type="flow", direction="horizontal", style="milestones_label_flow"}
+    local milestone_flow = table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow"}
     local prototype = nil
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]

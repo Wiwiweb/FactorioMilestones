@@ -1,6 +1,5 @@
-local misc = require("__flib__.misc")
-local misc = require("gui_display_page")
-local misc = require("gui_settings_page")
+require("gui_display_page")
+require("gui_settings_page")
 
 
 function build_main_frame(player)
@@ -139,5 +138,7 @@ script.on_event(defines.events.on_gui_click, function(event)
         get_resulting_milestones_array(event.player_index)
         -- global.players[player.index].inner_frame.clear()
         -- build_display_page(player)
+    elseif event.element.tags.action == "milestones_swap_setting" then
+        swap_settings(event.player_index, event.element.tags.index1, event.element.tags.index2)
     end
 end)

@@ -21,7 +21,7 @@ styles.milestones_deep_frame_in_shallow_frame = {
   bottom_padding = 4,
 }
 
-styles.milestones_label_flow = {
+styles.milestones_horizontal_flow = {
   type = "horizontal_flow_style",
   parent = "horizontal_flow",
   vertical_align = "center",

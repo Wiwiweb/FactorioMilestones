@@ -18,7 +18,7 @@ local function check_milestone_reached(force, milestone, stats, milestone_index)
         table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
         print_milestone_reached(force, milestone)
         for _, player in pairs(force.players) do
-            refresh_main_frame(player)
+            refresh_gui(player)
         end
             
     end
