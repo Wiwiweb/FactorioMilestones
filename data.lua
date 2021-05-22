@@ -19,6 +19,7 @@ styles.milestones_deep_frame_in_shallow_frame = {
   right_padding = 8,
   top_padding = 4,
   bottom_padding = 4,
+  minimal_width = 400
 }
 
 styles.milestones_horizontal_flow = {

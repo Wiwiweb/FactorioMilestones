@@ -21,18 +21,18 @@ local function add_milestone_setting(milestone, containing_frame, index)
     milestone_flow.add{type="label", name="milestones_settings_label", caption=prototype.localised_name}
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
     milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, tags={action="milestones_change_setting_quantity"}, style="short_number_textfield"}
-    milestone_flow.add{type="sprite-button", sprite="utility/trash", style="frame_action_button_red"}
+    milestone_flow.add{type="sprite-button", sprite="utility/trash", style="frame_action_button_red", tags={action="milestones_delete_setting"}}
 
     local arrows_flow = milestone_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
     if index == 1 then
         arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
     else
-        arrows_flow.add{type="sprite-button", name="milestones_arrow_up", sprite="milestones_arrow_up", style="milestones_arrow_button", tags={action="milestones_swap_setting", index1=index-1, index2=index}}
+        arrows_flow.add{type="sprite-button", name="milestones_arrow_up", sprite="milestones_arrow_up", style="milestones_arrow_button", tags={action="milestones_swap_setting", direction=-1}}
     end
     if index == #global.loaded_milestones then
         arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
     else
-        arrows_flow.add{type="sprite-button", name="milestones_arrow_down", sprite="milestones_arrow_down", style="milestones_arrow_button", tags={action="milestones_swap_setting", index1=index, index2=index+1}}
+        arrows_flow.add{type="sprite-button", name="milestones_arrow_down", sprite="milestones_arrow_down", style="milestones_arrow_button", tags={action="milestones_swap_setting", direction=1}}
     end
 
     return milestone_flow
@@ -85,8 +85,12 @@ function build_settings_page(player)
     buttons_flow.add{type="button", caption={"", "[fluid=water] ", {"gui.milestones_settings_add_fluid"}}}
 end
 
-function swap_settings(player_index, index1, index2)
-    gui_index1, gui_index2 = index1*2-1, index2*2-1 -- Convert from milestone index to GUI index, which has `line` elements
+function swap_settings(player_index, button_element)
+    local index_delta = button_element.tags.direction *2
+    gui_index1 = button_element.parent.parent.get_index_in_parent()
+    gui_index2 = gui_index1 + index_delta
+    gui_index1, gui_index2 = math.min(gui_index1, gui_index2), math.max(gui_index1, gui_index2)
+    index1, index2 = (gui_index1+1)/2, (gui_index2+1)/2 -- Convert from gui index to milestone index
     local inner_frame = global.players[player_index].inner_frame
     local milestones_flow = inner_frame.milestones_settings_inner_flow
     local milestone1 = get_milestones_array_element(milestones_flow.children[gui_index1])
@@ -97,6 +101,20 @@ function swap_settings(player_index, index1, index2)
     milestones_flow.children[gui_index1].destroy()
     add_milestone_setting(milestone2, milestones_flow, index1)
     add_milestone_setting(milestone1, milestones_flow, index2)
+end
+
+function delete_setting(player_index, button_element)
+    gui_index = button_element.parent.get_index_in_parent()
+    button_element.parent.destroy()
+
+    local inner_frame = global.players[player_index].inner_frame
+    local milestones_flow = inner_frame.milestones_settings_inner_flow
+    if #milestones_flow.children ~= 0 then
+        -- If this is the first element, we have to delete the line AFTER the element
+        -- The line AFTER will be index 1 once the element is destroyed
+        line_gui_index = (gui_index == 1) and 1 or gui_index - 1
+        milestones_flow.children[line_gui_index].destroy()
+    end
 end
 
 script.on_event(defines.events.on_gui_elem_changed, function(event)

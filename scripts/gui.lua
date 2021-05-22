@@ -139,6 +139,8 @@ script.on_event(defines.events.on_gui_click, function(event)
         -- global.players[player.index].inner_frame.clear()
         -- build_display_page(player)
     elseif event.element.tags.action == "milestones_swap_setting" then
-        swap_settings(event.player_index, event.element.tags.index1, event.element.tags.index2)
+        swap_settings(event.player_index, event.element)
+    elseif event.element.tags.action == "milestones_delete_setting" then
+        delete_setting(event.player_index, event.element)
     end
 end)
