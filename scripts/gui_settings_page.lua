@@ -93,7 +93,7 @@ function build_settings_page(player)
     preset_flow.add{type="label", caption="Preset:", style="caption_label"}
     preset_flow.add{type="drop-down", items={"Vanilla", "Space Exploration"}}
 
-    local settings_scroll = inner_frame.add{type="scroll-pane"}
+    local settings_scroll = inner_frame.add{type="scroll-pane", name="milestones_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
     global.players[player.index].settings_flow = settings_flow
     for i, milestone in pairs(global.loaded_milestones) do
@@ -161,6 +161,9 @@ function add_setting(player_index, button_element)
     add_milestone_setting(milestone, settings_flow, new_element_index)
     refresh_arrow_buttons(new_element_index, settings_flow)
     refresh_arrow_buttons(previous_last_element_index, settings_flow)
+
+    local inner_frame = global.players[player_index].inner_frame
+    inner_frame.milestones_scroll.scroll_to_bottom()
 end
 
 script.on_event(defines.events.on_gui_elem_changed, function(event)
