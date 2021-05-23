@@ -35,16 +35,22 @@ local function add_milestone_setting(milestone, milestones_settings_flow, gui_in
     elseif milestone.type == "fluid" then
         prototype = game.fluid_prototypes[milestone.name]
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, fluid=milestone.name, tags={action="milestones_change_setting"}}
+    elseif milestone.type == "technology" then
+        prototype = game.technology_prototypes[milestone.name]
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, technology=milestone.name, tags={action="milestones_change_setting"}}
     end
 
     local milestone_flow = milestones_settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow", index=gui_index}
     milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"gui.milestones_type_"..milestone.type}}
     milestone_flow.add(elem_button)
-    
+
     local caption = (prototype ~= nil) and prototype.localised_name or ""
     milestone_flow.add{type="label", name="milestones_settings_label", caption=caption}
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
-    milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, tags={action="milestones_change_setting_quantity"}, style="short_number_textfield"}
+
+    local visible_textfield = milestone.type ~= "technology" or (prototype ~= nil and prototype.research_unit_count_formula ~= nil) -- No text field for unique technologies
+    milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, 
+        tags={action="milestones_change_setting_quantity"}, style="short_number_textfield", visible=visible_textfield}
     milestone_flow.add{type="sprite-button", sprite="utility/trash", style="frame_action_button_red", tags={action="milestones_delete_setting"}}
 
     local arrows_flow = milestone_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
@@ -53,6 +59,7 @@ local function add_milestone_setting(milestone, milestones_settings_flow, gui_in
 end
 
 local function get_milestones_array_element(flow)
+    if flow.milestones_settings_item.elem_value == nil then return nil end
     local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
     return {
         type=flow.milestones_settings_item.elem_type,
@@ -63,8 +70,8 @@ end
 
 function get_resulting_milestones_array(player_index)
     local resulting_milestones = {}
-    local flows = global.players[player_index].inner_frame.children
-    for _, child in pairs(flows) do
+    local milestones_settings_flow = global.players[player_index].inner_frame.milestones_settings_inner_flow
+    for _, child in pairs(milestones_settings_flow.children) do
         if child.type == "flow" then
             local milestone = get_milestones_array_element(child)
             table.insert(resulting_milestones, milestone)
@@ -97,10 +104,12 @@ function build_settings_page(player)
     refresh_all_arrow_buttons(milestones_settings_flow)
 
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
-    buttons_flow.add{type="button", caption={"", "[item=iron-gear-wheel] ", {"gui.milestones_settings_add_item"}},
+    buttons_flow.add{type="button", caption={"", "[img=milestones_icon_item_black] ", {"gui.milestones_settings_add_item"}},
         tags={action="milestones_add_setting", type="item"}}
-    buttons_flow.add{type="button", caption={"", "[fluid=water] ", {"gui.milestones_settings_add_fluid"}},
+    buttons_flow.add{type="button", caption={"", "[img=milestones_icon_fluid_black] ", {"gui.milestones_settings_add_fluid"}},
         tags={action="milestones_add_setting", type="fluid"}}
+    buttons_flow.add{type="button", caption={"", "[img=milestones_icon_technology_black] ", {"gui.milestones_settings_add_technology"}},
+        tags={action="milestones_add_setting", type="technology"}}
 end
 
 function swap_settings(player_index, button_element)
@@ -164,6 +173,13 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
             prototype = game.item_prototypes[event.element.elem_value]
         elseif event.element.elem_type == "fluid" then
             prototype = game.fluid_prototypes[event.element.elem_value]
+        elseif event.element.elem_type == "technology" then
+            prototype = game.technology_prototypes[event.element.elem_value]
+            local visible_textfield = prototype ~= nil and prototype.research_unit_count_formula ~= nil -- No text field for unique technologies
+            event.element.parent.milestones_settings_quantity.visible = visible_textfield
+            if not visible_textfield then
+                event.element.parent.milestones_settings_quantity.text = "1"
+            end
         end
         event.element.parent.milestones_settings_label.caption = prototype.localised_name
     end

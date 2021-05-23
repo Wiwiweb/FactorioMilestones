@@ -82,6 +82,11 @@ data:extend{
   data_util.build_sprite("milestones_settings_disabled", {64, 0}, settings_gear, 32),
   data_util.build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
   data_util.build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),
+
   data_util.build_sprite("milestones_icon_item", {0, 0}, item_icons, 16),
+  data_util.build_sprite("milestones_icon_item_black", {0, 16}, item_icons, 16),
   data_util.build_sprite("milestones_icon_fluid", {16, 0}, item_icons, 16),
+  data_util.build_sprite("milestones_icon_fluid_black", {16, 16}, item_icons, 16),
+  data_util.build_sprite("milestones_icon_technology", {32, 0}, item_icons, 16),
+  data_util.build_sprite("milestones_icon_technology_black", {32, 16}, item_icons, 16),
 }
