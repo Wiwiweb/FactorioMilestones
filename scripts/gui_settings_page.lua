@@ -58,8 +58,8 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     return milestone_flow
 end
 
-local function get_milestones_array_element(flow)
-    if flow.milestones_settings_item.elem_value == nil then return nil end
+local function get_milestones_array_element(flow, allow_empty)
+    if flow.milestones_settings_item.elem_value == nil and not allow_empty then return nil end
     local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
     return {
         type=flow.milestones_settings_item.elem_type,
@@ -70,10 +70,10 @@ end
 
 function get_resulting_milestones_array(player_index)
     local resulting_milestones = {}
-    local settings_flow = global.players[player.index].settings_flow
+    local settings_flow = global.players[player_index].settings_flow
     for _, child in pairs(settings_flow.children) do
         if child.type == "flow" then
-            local milestone = get_milestones_array_element(child)
+            local milestone = get_milestones_array_element(child, false)
             table.insert(resulting_milestones, milestone)
         end
     end
@@ -119,19 +119,18 @@ function swap_settings(player_index, button_element)
     gui_index1 = button_element.parent.parent.get_index_in_parent()
     gui_index2 = gui_index1 + index_delta
     gui_index1, gui_index2 = math.min(gui_index1, gui_index2), math.max(gui_index1, gui_index2)
-    local inner_frame = global.players[player_index].inner_frame
-    local milestones_flow = inner_frame.milestones_settings_inner_flow
-    local milestone1 = get_milestones_array_element(milestones_flow.children[gui_index1])
-    local milestone2 = get_milestones_array_element(milestones_flow.children[gui_index2])
-    
+    local settings_flow = global.players[player_index].settings_flow
+    local milestone1 = get_milestones_array_element(settings_flow.children[gui_index1], true)
+    local milestone2 = get_milestones_array_element(settings_flow.children[gui_index2], true)
+
     -- index1 is always smaller, destroying and rebuilding in this order works
-    local is_last_element = gui_index2 == #milestones_flow.children
-    milestones_flow.children[gui_index2].destroy()
-    milestones_flow.children[gui_index1].destroy()
-    add_milestone_setting(milestone2, milestones_flow, gui_index1)
-    add_milestone_setting(milestone1, milestones_flow, gui_index2)
-    refresh_arrow_buttons(gui_index1, milestones_flow)
-    refresh_arrow_buttons(gui_index2, milestones_flow)
+    local is_last_element = gui_index2 == #settings_flow.children
+    settings_flow.children[gui_index2].destroy()
+    settings_flow.children[gui_index1].destroy()
+    add_milestone_setting(milestone2, settings_flow, gui_index1)
+    add_milestone_setting(milestone1, settings_flow, gui_index2)
+    refresh_arrow_buttons(gui_index1, settings_flow)
+    refresh_arrow_buttons(gui_index2, settings_flow)
 end
 
 function delete_setting(player_index, button_element)
