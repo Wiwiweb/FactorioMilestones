@@ -1,7 +1,7 @@
 local table = require("__flib__.table")
 
-local function refresh_arrow_buttons(gui_index, milestones_settings_flow)
-    local arrows_flow = milestones_settings_flow.children[gui_index].milestones_arrows_flow
+local function refresh_arrow_buttons(gui_index, settings_flow)
+    local arrows_flow = settings_flow.children[gui_index].milestones_arrows_flow
     arrows_flow.clear()
 
     if gui_index == 1 then
@@ -9,22 +9,22 @@ local function refresh_arrow_buttons(gui_index, milestones_settings_flow)
     else
         arrows_flow.add{type="sprite-button", name="milestones_arrow_up", sprite="milestones_arrow_up", style="milestones_arrow_button", tags={action="milestones_swap_setting", direction=-1}}
     end
-    if gui_index == #milestones_settings_flow.children then
+    if gui_index == #settings_flow.children then
         arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
     else
         arrows_flow.add{type="sprite-button", name="milestones_arrow_down", sprite="milestones_arrow_down", style="milestones_arrow_button", tags={action="milestones_swap_setting", direction=1}}
     end
 end
 
-local function refresh_all_arrow_buttons(milestones_settings_flow)
-    for i, child in pairs(milestones_settings_flow.children) do
+local function refresh_all_arrow_buttons(settings_flow)
+    for i, child in pairs(settings_flow.children) do
         if child.type == "flow" then
-            refresh_arrow_buttons(i, milestones_settings_flow)
+            refresh_arrow_buttons(i, settings_flow)
         end
     end
 end
 
-local function add_milestone_setting(milestone, milestones_settings_flow, gui_index)
+local function add_milestone_setting(milestone, settings_flow, gui_index)
     local prototype
     local elem_button
     local sprite
@@ -40,7 +40,7 @@ local function add_milestone_setting(milestone, milestones_settings_flow, gui_in
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, technology=milestone.name, tags={action="milestones_change_setting"}}
     end
 
-    local milestone_flow = milestones_settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow", index=gui_index}
+    local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow", index=gui_index}
     milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"gui.milestones_type_"..milestone.type}}
     milestone_flow.add(elem_button)
 
@@ -70,8 +70,8 @@ end
 
 function get_resulting_milestones_array(player_index)
     local resulting_milestones = {}
-    local milestones_settings_flow = global.players[player_index].inner_frame.milestones_settings_inner_flow
-    for _, child in pairs(milestones_settings_flow.children) do
+    local settings_flow = global.players[player.index].settings_flow
+    for _, child in pairs(settings_flow.children) do
         if child.type == "flow" then
             local milestone = get_milestones_array_element(child)
             table.insert(resulting_milestones, milestone)
@@ -93,15 +93,17 @@ function build_settings_page(player)
     preset_flow.add{type="label", caption="Preset:", style="caption_label"}
     preset_flow.add{type="drop-down", items={"Vanilla", "Space Exploration"}}
 
-    local milestones_settings_flow = inner_frame.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
+    local settings_scroll = inner_frame.add{type="scroll-pane"}
+    local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
+    global.players[player.index].settings_flow = settings_flow
     for i, milestone in pairs(global.loaded_milestones) do
         gui_index = i*2-1 -- Account for `line` elements
-        local milestone_item_flow = add_milestone_setting(milestone, milestones_settings_flow, gui_index)
+        local item_flow = add_milestone_setting(milestone, settings_flow, gui_index)
         if i < #global.loaded_milestones then
-            milestones_settings_flow.add{type="line"}
+            settings_flow.add{type="line"}
         end
     end
-    refresh_all_arrow_buttons(milestones_settings_flow)
+    refresh_all_arrow_buttons(settings_flow)
 
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
     buttons_flow.add{type="button", caption={"", "[img=milestones_icon_item_black] ", {"gui.milestones_settings_add_item"}},
@@ -136,8 +138,7 @@ function delete_setting(player_index, button_element)
     gui_index = button_element.parent.get_index_in_parent()
     button_element.parent.destroy()
 
-    local inner_frame = global.players[player_index].inner_frame
-    local milestones_flow = inner_frame.milestones_settings_inner_flow
+    local milestones_flow = global.players[player_index].settings_flow
     if #milestones_flow.children ~= 0 then
         -- If this is the first element, we have to delete the line AFTER the element
         -- The line AFTER will be index 1 once the element is destroyed
@@ -150,18 +151,17 @@ function delete_setting(player_index, button_element)
 end
 
 function add_setting(player_index, button_element)
-    local milestones_type = button_element.tags.type
-    local inner_frame = global.players[player_index].inner_frame
-    local milestones_settings_flow = inner_frame.milestones_settings_inner_flow
+    local milestone_type = button_element.tags.type
+    local settings_flow = global.players[player_index].settings_flow
 
-    local previous_last_element_index = #milestones_settings_flow.children
-    local new_element_index = #milestones_settings_flow.children + 2
+    local previous_last_element_index = #settings_flow.children
+    local new_element_index = #settings_flow.children + 2
     
-    local milestone = {type=milestones_type, quantity=1}
-    milestones_settings_flow.add{type="line"}
-    add_milestone_setting(milestone, milestones_settings_flow, new_element_index)
-    refresh_arrow_buttons(new_element_index, milestones_settings_flow)
-    refresh_arrow_buttons(previous_last_element_index, milestones_settings_flow)
+    local milestone = {type=milestone_type, quantity=1}
+    settings_flow.add{type="line"}
+    add_milestone_setting(milestone, settings_flow, new_element_index)
+    refresh_arrow_buttons(new_element_index, settings_flow)
+    refresh_arrow_buttons(previous_last_element_index, settings_flow)
 end
 
 script.on_event(defines.events.on_gui_elem_changed, function(event)
