@@ -106,12 +106,11 @@ function build_settings_page(player)
     refresh_all_arrow_buttons(settings_flow)
 
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
-    buttons_flow.add{type="button", caption={"", "[img=milestones_icon_item_black] ", {"gui.milestones_settings_add_item"}},
-        tags={action="milestones_add_setting", type="item"}}
-    buttons_flow.add{type="button", caption={"", "[img=milestones_icon_fluid_black] ", {"gui.milestones_settings_add_fluid"}},
-        tags={action="milestones_add_setting", type="fluid"}}
-    buttons_flow.add{type="button", caption={"", "[img=milestones_icon_technology_black] ", {"gui.milestones_settings_add_technology"}},
-        tags={action="milestones_add_setting", type="technology"}}
+    for _, type in pairs({"item", "fluid", "technology"}) do
+        buttons_flow.add{type="button", 
+            caption={"", "[img=milestones_icon_"..type.."_black] ", {"gui.milestones_settings_add_"..type}},
+            tags={action="milestones_add_setting", type=type}}
+    end
 end
 
 function swap_settings(player_index, button_element)
