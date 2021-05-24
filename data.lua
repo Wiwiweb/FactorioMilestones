@@ -54,6 +54,18 @@ data:extend{
         name = "milestones_toggle_gui",
         key_sequence = "CONTROL + ALT + M",
         order = "a"
+    },
+    {
+      type = "custom-input",
+      name = "milestones_confirm_settings",
+      key_sequence = "",
+      linked_game_control = "confirm-gui"
+    },
+    {
+      type = "custom-input",
+      name = "milestones_cancel_settings",
+      key_sequence = "",
+      linked_game_control = "toggle-menu"
     }
 }
 

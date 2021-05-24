@@ -41,7 +41,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     end
 
     local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow", index=gui_index}
-    milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"gui.milestones_type_"..milestone.type}}
+    milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
     milestone_flow.add(elem_button)
 
     local caption = (prototype ~= nil) and prototype.localised_name or ""
@@ -68,7 +68,7 @@ local function get_milestones_array_element(flow, allow_empty)
     }
 end
 
-function get_resulting_milestones_array(player_index)
+local function get_resulting_milestones_array(player_index)
     local resulting_milestones = {}
     local settings_flow = global.players[player_index].settings_flow
     for _, child in pairs(settings_flow.children) do
@@ -77,12 +77,12 @@ function get_resulting_milestones_array(player_index)
             table.insert(resulting_milestones, milestone)
         end
     end
-    game.print(serpent.block(resulting_milestones))
+    return resulting_milestones
 end
 
 function build_settings_page(player)
     local main_frame = global.players[player.index].main_frame
-    main_frame.milestones_titlebar.milestones_main_label.caption = {"gui.settings_title"}
+    main_frame.milestones_titlebar.milestones_main_label.caption = {"milestones.settings_title"}
     main_frame.milestones_titlebar.milestones_settings_button.visible = false
     main_frame.milestones_titlebar.milestones_close_button.visible = false
     main_frame.milestones_dialog_buttons.visible = true
@@ -93,7 +93,7 @@ function build_settings_page(player)
     preset_flow.add{type="label", caption="Preset:", style="caption_label"}
     preset_flow.add{type="drop-down", items={"Vanilla", "Space Exploration"}}
 
-    local settings_scroll = inner_frame.add{type="scroll-pane", name="milestones_scroll"}
+    local settings_scroll = inner_frame.add{type="scroll-pane", name="milestones_settings_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
     global.players[player.index].settings_flow = settings_flow
     for i, milestone in pairs(global.loaded_milestones) do
@@ -108,7 +108,7 @@ function build_settings_page(player)
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
     for _, type in pairs({"item", "fluid", "technology"}) do
         buttons_flow.add{type="button", 
-            caption={"", "[img=milestones_icon_"..type.."_black] ", {"gui.milestones_settings_add_"..type}},
+            caption={"", "[img=milestones_icon_"..type.."_black] ", {"milestones.settings_add_"..type}},
             tags={action="milestones_add_setting", type=type}}
     end
 end
@@ -162,7 +162,21 @@ function add_setting(player_index, button_element)
     refresh_arrow_buttons(previous_last_element_index, settings_flow)
 
     local inner_frame = global.players[player_index].inner_frame
-    inner_frame.milestones_scroll.scroll_to_bottom()
+    inner_frame.milestones_settings_scroll.scroll_to_bottom()
+end
+
+function cancel_settings_page(player_index)
+    global.players[player_index].inner_frame.clear()
+    local player = game.get_player(player_index)
+    build_display_page(player)
+end
+
+function confirm_settings_page(player_index)
+    local resulting_milestones = get_resulting_milestones_array(player_index)
+    game.print(serpent.block(resulting_milestones))
+    -- global.players[player_index].inner_frame.clear()
+    -- local player = game.get_player(player_index)
+    -- build_display_page(player)
 end
 
 script.on_event(defines.events.on_gui_elem_changed, function(event)
@@ -197,3 +211,7 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
         end
     end
 end)
+
+function is_settings_page_visible(player_index)
+    return global.players[player_index].inner_frame.milestones_settings_scroll ~= nil
+end

@@ -35,9 +35,9 @@ local function add_milestone_item(table, milestone, print_milliseconds)
     end
     local caption
     if milestone.completion_tick == nil then
-        caption = {"", "[color=100,100,100]", {"gui.incomplete_label"}, "[/color]"}
+        caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
     else
-        caption = {"", {"gui.completed_label"}, " [font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
+        caption = {"", {"milestones.completed_label"}, " [font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     end
     
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
@@ -46,7 +46,7 @@ end
 
 function build_display_page(player)
     local main_frame = global.players[player.index].main_frame
-    main_frame.milestones_titlebar.milestones_main_label.caption = {"gui.title"}
+    main_frame.milestones_titlebar.milestones_main_label.caption = {"milestones.title"}
     main_frame.milestones_titlebar.milestones_settings_button.visible = true
     main_frame.milestones_titlebar.milestones_close_button.visible = true
     main_frame.milestones_dialog_buttons.visible = false
@@ -66,6 +66,6 @@ function build_display_page(player)
     end
 end
 
-function is_display_page_visible(player)
-    return global.players[player.index].inner_frame.milestones_content_table ~= nil
+function is_display_page_visible(player_index)
+    return global.players[player_index].inner_frame.milestones_content_table ~= nil
 end
