@@ -1,7 +1,6 @@
 require("gui_display_page")
 require("gui_settings_page")
 
-
 function build_main_frame(player)
     local screen_element = player.gui.screen
     local main_frame = screen_element.add{type="frame", name="milestones_main_frame", direction="vertical", visible=false}

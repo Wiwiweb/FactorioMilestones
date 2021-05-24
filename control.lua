@@ -1,5 +1,7 @@
 require("scripts.tracker")
 require("scripts.gui")
+require("scripts.presets_loader")
+local table = require("__flib__.table")
 
 local function initialize_force(force)
     if next(force.players) ~= nil then -- Don't bother with forces without players
@@ -30,13 +32,8 @@ end
 script.on_init(function()
     global.forces = {}
     global.players = {}
-    global.loaded_milestones = {
-        {type="item", name="iron-gear-wheel", quantity=1},
-        {type="item", name="iron-gear-wheel", quantity=50},
-        {type="item", name="automation-science-pack", quantity=1},
-        {type="item", name="logistic-science-pack", quantity=1},
-        {type="fluid", name="petroleum-gas", quantity=1},
-    }
+    load_presets()
+    global.loaded_milestones = global.current_preset.milestones
 
     -- Initialize for existing forces in existing save file
     for _, force in pairs(game.forces) do
@@ -52,6 +49,10 @@ script.on_event(defines.events.on_force_created, function(event)
     initialize_force(event.force)
 end)
 
+script.on_event(defines.events.on_player_changed_force, function(event)
+    initialize_force(game.get_player(event.player_index).force)
+end)
+
 script.on_event(defines.events.on_forces_merged, function(event)
     clear_force(event.source_name)
 end)
@@ -59,6 +60,9 @@ end)
 script.on_event(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
     initialize_player(player)
+    if global.forces[player.force.name] == nil then -- Possible if new player is added to empty force e.g. vanilla freeplay
+        initialize_force(player.force)
+    end
 end)
 
 script.on_event(defines.events.on_player_removed, function(event)
@@ -79,5 +83,13 @@ remote.add_interface("milestones", {
     -- /c remote.call("milestones", "debug_print_milestones")
     debug_print_milestones = function()
         game.print(serpent.block(global.forces))
-    end
+        log(serpent.block(global.forces))
+    end,
+    -- /c remote.call("milestones", "debug_print_presets")
+    debug_print_presets = function()
+        game.print(serpent.line(table.map(global.valid_presets, function(p) return p.name end)))
+        game.print(global.current_preset.name)
+        log(serpent.line(table.map(global.valid_presets, function(p) return p.name end)))
+        log(global.current_preset.name)
+    end,
 })
