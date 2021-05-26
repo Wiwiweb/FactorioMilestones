@@ -11,13 +11,15 @@ local function get_timestamp(ticks, print_milliseconds)
 
 end
 
-local function add_milestone_item(table, milestone, print_milliseconds)
-    local milestone_flow = table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow"}
+local function add_milestone_item(gui_table, milestone, print_milliseconds)
+    local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow"}
     local prototype = nil
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]
     elseif milestone.type == "fluid" then
         prototype = game.fluid_prototypes[milestone.name]
+    elseif milestone.type == "technology" then
+        prototype = game.technology_prototypes[milestone.name]
     end
 
     if prototype == nil then
@@ -26,21 +28,28 @@ local function add_milestone_item(table, milestone, print_milliseconds)
         return
     end
     
+    -- Sprite
     local sprite_path = milestone.type .. "/" .. milestone.name
     local sprite_number = nil
-    local tooltip = prototype.localised_name
+    local tooltip = {"", prototype.localised_name}
     if milestone.quantity > 1 then
         sprite_number = milestone.quantity
         tooltip = {"", milestone.quantity, "x ", prototype.localised_name}
     end
+    if milestone.type == "technology" then
+        table.insert(tooltip, " (")
+        table.insert(tooltip, {"milestones.type_technology"})
+        table.insert(tooltip, ")")
+    end
+    milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
+
+    -- Item name
     local caption
     if milestone.completion_tick == nil then
         caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
     else
         caption = {"", {"milestones.completed_label"}, " [font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     end
-    
-    milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
     milestone_flow.add{type="label", caption=caption}
 end
 

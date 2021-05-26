@@ -56,7 +56,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
     
     local visible_textfield = milestone.type ~= "technology" or (prototype ~= nil and prototype.research_unit_count_formula ~= nil) -- No text field for unique technologies
-    milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, 
+    milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, clear_and_focus_on_right_click=true, 
         tags={action="milestones_change_setting_quantity"}, style="short_number_textfield", visible=visible_textfield}
 
     milestone_flow.add{type="sprite-button", sprite="utility/trash", style="milestones_trash_button", tags={action="milestones_delete_setting"}}
@@ -90,7 +90,7 @@ end
 local function fill_settings_flow(settings_flow, milestones)
     for i, milestone in pairs(milestones) do
         local item_flow = add_milestone_setting(milestone, settings_flow, nil)
-        if i < #global.loaded_milestones then
+        if i < #milestones then
             settings_flow.add{type="line"}
         end
     end
@@ -128,6 +128,7 @@ function build_settings_page(player)
             caption={"", "[img=milestones_icon_"..type.."_black] ", {"milestones.settings_add_"..type}},
             tags={action="milestones_add_setting", type=type}}
     end
+    main_frame.force_auto_center()
 end
 
 function swap_settings(player_index, button_element)
