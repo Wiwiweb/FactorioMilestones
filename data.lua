@@ -42,6 +42,14 @@ styles.milestones_arrow_button = {
   height = 16
 }
 
+styles.milestones_trash_button = {
+  type = "button_style",
+  parent = "tool_button_red",
+  width = 24,
+  height = 24,
+  padding = 0
+}
+
 styles.milestones_empty_button = {
   type = "empty_widget_style",
   width = 16,

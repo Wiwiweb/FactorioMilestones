@@ -1,6 +1,5 @@
 presets = {
-    vanilla = {
-        name = "Vanilla",
+    ["Vanilla"] = {
         required_mods = {},
         milestones = {
             {type="item",       name="automation-science-pack", quantity=1},
@@ -25,8 +24,7 @@ presets = {
         }
     },
 
-    vanilla_extended = {
-        name = "Vanilla (Extended)",
+    ["Vanilla (Extended)"] = {
         required_mods = {},
         milestones = {
             {type="item",       name="automation-science-pack", quantity=1},
@@ -72,8 +70,7 @@ presets = {
         }
     },
     
-    space_exploration_no_spoilers = {
-        name = "Space Exploration (No Spoilers)",
+    ["Space Exploration (No Spoilers)"] = {
         required_mods = {"space-exploration"},
         milestones = {
             {type="item",       name="automation-science-pack",      quantity=1},

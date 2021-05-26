@@ -32,8 +32,8 @@ end
 script.on_init(function()
     global.forces = {}
     global.players = {}
+
     load_presets()
-    global.loaded_milestones = global.current_preset.milestones
 
     -- Initialize for existing forces in existing save file
     for _, force in pairs(game.forces) do
@@ -42,6 +42,10 @@ script.on_init(function()
     -- Initialize for existing players in existing save file
     for _, player in pairs(game.players) do
         initialize_player(player)
+    end
+
+    if global.delayed_chat_message ~= nil then
+        create_delayed_chat()
     end
 end)
 
@@ -69,11 +73,19 @@ script.on_event(defines.events.on_player_removed, function(event)
     clear_player(event.player_index)
 end)
 
+local function print_chat_delayed2(event, chat_message)
+    log("print_chat_delayed4")
+    if event.tick == 0 then return end
+    log("print_chat_delayed5")
+    game.print(chat_message)
+    script.on_nth_tick(180, nil)
+end
 
 script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+    log("on_runtime_mod_setting_changed")
     if event.setting == "milestones_check_frequency" then
-        script.on_nth_tick(nil) -- Unregister event
+        -- script.on_nth_tick(nil) -- Unregister event
         script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
     end
 end)
@@ -84,12 +96,5 @@ remote.add_interface("milestones", {
     debug_print_milestones = function()
         game.print(serpent.block(global.forces))
         log(serpent.block(global.forces))
-    end,
-    -- /c remote.call("milestones", "debug_print_presets")
-    debug_print_presets = function()
-        game.print(serpent.line(table.map(global.valid_presets, function(p) return p.name end)))
-        game.print(global.current_preset.name)
-        log(serpent.line(table.map(global.valid_presets, function(p) return p.name end)))
-        log(global.current_preset.name)
     end,
 })

@@ -21,8 +21,8 @@ local function add_milestone_item(table, milestone, print_milliseconds)
     end
 
     if prototype == nil then
-        game.print("Milestones error! Invalid milestone: " .. serpent.line(milestone))
-        milestone_flow.add{type="label", caption="Invalid: " .. milestone.name}
+        log("Milestones error! Invalid milestone: " .. serpent.line(milestone))
+        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}}
         return
     end
     

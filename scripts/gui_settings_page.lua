@@ -1,4 +1,5 @@
 local table = require("__flib__.table")
+require("presets")
 
 local function refresh_arrow_buttons(gui_index, settings_flow)
     local arrows_flow = settings_flow.children[gui_index].milestones_arrows_flow
@@ -29,6 +30,9 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     local elem_button
     local sprite
 
+    local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow", index=gui_index}
+    milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
+    
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, item=milestone.name, tags={action="milestones_change_setting"}}
@@ -40,19 +44,22 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, technology=milestone.name, tags={action="milestones_change_setting"}}
     end
 
-    local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow", index=gui_index}
-    milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
-    milestone_flow.add(elem_button)
+    if milestone.name ~= nil and prototype == nil then
+        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}}
+    else
+        milestone_flow.add(elem_button)
+        
+        local caption = (prototype ~= nil) and prototype.localised_name or ""
+        milestone_flow.add{type="label", name="milestones_settings_label", caption=caption}
+    end
 
-    local caption = (prototype ~= nil) and prototype.localised_name or ""
-    milestone_flow.add{type="label", name="milestones_settings_label", caption=caption}
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
-
+    
     local visible_textfield = milestone.type ~= "technology" or (prototype ~= nil and prototype.research_unit_count_formula ~= nil) -- No text field for unique technologies
     milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, 
         tags={action="milestones_change_setting_quantity"}, style="short_number_textfield", visible=visible_textfield}
-    milestone_flow.add{type="sprite-button", sprite="utility/trash", style="frame_action_button_red", tags={action="milestones_delete_setting"}}
 
+    milestone_flow.add{type="sprite-button", sprite="utility/trash", style="milestones_trash_button", tags={action="milestones_delete_setting"}}
     local arrows_flow = milestone_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
 
     return milestone_flow
@@ -80,6 +87,16 @@ local function get_resulting_milestones_array(player_index)
     return resulting_milestones
 end
 
+local function fill_settings_flow(settings_flow, milestones)
+    for i, milestone in pairs(milestones) do
+        local item_flow = add_milestone_setting(milestone, settings_flow, nil)
+        if i < #global.loaded_milestones then
+            settings_flow.add{type="line"}
+        end
+    end
+    refresh_all_arrow_buttons(settings_flow)
+end
+
 function build_settings_page(player)
     local main_frame = global.players[player.index].main_frame
     main_frame.milestones_titlebar.milestones_main_label.caption = {"milestones.settings_title"}
@@ -91,20 +108,20 @@ function build_settings_page(player)
 
     local preset_flow = inner_frame.add{type="flow", direction="horizontal"}
     preset_flow.add{type="label", caption="Preset:", style="caption_label"}
-    preset_flow.add{type="drop-down", items={"Vanilla", "Space Exploration"}}
+
+    -- Preset dropdown
+    local current_preset_index = 1
+    for _, value in pairs(global.valid_preset_names) do
+        if value == global.current_preset_name then break end
+        current_preset_index = current_preset_index + 1
+    end
+    preset_flow.add{type="drop-down", items=global.valid_preset_names, selected_index=current_preset_index, tags={action="milestones_change_preset"}}
 
     local settings_scroll = inner_frame.add{type="scroll-pane", name="milestones_settings_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
     global.players[player.index].settings_flow = settings_flow
-    for i, milestone in pairs(global.loaded_milestones) do
-        gui_index = i*2-1 -- Account for `line` elements
-        local item_flow = add_milestone_setting(milestone, settings_flow, gui_index)
-        if i < #global.loaded_milestones then
-            settings_flow.add{type="line"}
-        end
-    end
-    refresh_all_arrow_buttons(settings_flow)
-
+    fill_settings_flow(settings_flow, global.loaded_milestones)
+    
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
     for _, type in pairs({"item", "fluid", "technology"}) do
         buttons_flow.add{type="button", 
@@ -209,6 +226,18 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
         if new_quantity ~= nil and new_quantity < 1 then
             event.element.text = "1"
         end
+    end
+end)
+
+-- Preset dropdown
+script.on_event(defines.events.on_gui_selection_state_changed, function(event)
+    if not event.element then return end
+    if not event.element.tags then return end
+    if event.element.tags.action == "milestones_change_preset" then
+        local selected_preset_name = event.element.get_item(event.element.selected_index)
+        local settings_flow = global.players[event.player_index].settings_flow
+        settings_flow.clear()
+        fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
     end
 end)
 
