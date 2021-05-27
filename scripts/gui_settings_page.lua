@@ -188,6 +188,7 @@ function cancel_settings_page(player_index)
     global.players[player_index].inner_frame.clear()
     local player = game.get_player(player_index)
     build_display_page(player)
+    global.players[player_index].main_frame.force_auto_center()
 end
 
 function confirm_settings_page(player_index)

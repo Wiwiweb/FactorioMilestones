@@ -61,7 +61,10 @@ function build_display_page(player)
     main_frame.milestones_dialog_buttons.visible = false
 
     local inner_frame = global.players[player.index].inner_frame
-    local content_table = inner_frame.add{type="table", name="milestones_content_table", column_count=2, style="milestones_table_style"}
+    local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll"}
+    -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
+    local column_count = math.min(math.ceil(math.sqrt(#global.loaded_milestones / 3)), 8) 
+    local content_table = display_scroll.add{type="table", name="milestones_content_table", column_count=column_count, style="milestones_table_style"}
 
     local global_force = global.forces[player.force.name]
 
@@ -76,5 +79,5 @@ function build_display_page(player)
 end
 
 function is_display_page_visible(player_index)
-    return global.players[player_index].inner_frame.milestones_content_table ~= nil
+    return global.players[player_index].inner_frame.milestones_display_scroll ~= nil
 end
