@@ -1,4 +1,16 @@
 presets = {
+    ["Test"] = {
+        required_mods = {},
+        milestones = {
+            {type="item",       name="iron-gear-wheel",         quantity=1},
+            {type="item",       name="iron-gear-wheel",         quantity=50},
+            {type="item",       name="automation-science-pack", quantity=1},
+            {type="item",       name="logistic-science-pack",   quantity=1},
+            {type="fluid",      name="petroleum-gas",           quantity=1},
+            {type="technology", name="mining-productivity-4",   quantity=8},
+        }
+    },
+
     ["Vanilla"] = {
         required_mods = {},
         milestones = {

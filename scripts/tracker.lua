@@ -13,9 +13,12 @@ end
 
 local function check_milestone_reached(force, milestone, stats, milestone_index)
     if stats.get_input_count(milestone.name) >= milestone.quantity then
+
         milestone.completion_tick = game.tick
+
         table.insert(global.forces[force.name].complete_milestones, milestone)
         table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
+        
         print_milestone_reached(force, milestone)
         for _, player in pairs(force.players) do
             refresh_gui(player)

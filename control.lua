@@ -7,7 +7,7 @@ local function initialize_force(force)
     if next(force.players) ~= nil then -- Don't bother with forces without players
         global.forces[force.name] = {
             complete_milestones = {},
-            incomplete_milestones = global.loaded_milestones
+            incomplete_milestones = table.deep_copy(global.loaded_milestones)
         }
     end
 end
@@ -92,9 +92,14 @@ end)
 
 -- Debug command
 remote.add_interface("milestones", {
-    -- /c remote.call("milestones", "debug_print_milestones")
-    debug_print_milestones = function()
+    -- /c remote.call("milestones", "debug_print_forces")
+    debug_print_forces = function()
         game.print(serpent.block(global.forces))
         log(serpent.block(global.forces))
+    end,
+    -- /c remote.call("milestones", "debug_print_global")
+    debug_print_global = function()
+        game.print(serpent.block(global.loaded_milestones))
+        log(serpent.block(global.loaded_milestones))
     end,
 })

@@ -1,5 +1,6 @@
 local table = require("__flib__.table")
 require("presets")
+require("milestones_util")
 
 local function refresh_arrow_buttons(gui_index, settings_flow)
     local arrows_flow = settings_flow.children[gui_index].milestones_arrows_flow
@@ -106,7 +107,7 @@ function build_settings_page(player)
 
     local inner_frame = global.players[player.index].inner_frame
 
-    local preset_flow = inner_frame.add{type="flow", direction="horizontal"}
+    local preset_flow = inner_frame.add{type="flow", name="milestones_preset_flow", direction="horizontal"}
     preset_flow.add{type="label", caption="Preset:", style="caption_label"}
 
     -- Preset dropdown
@@ -115,7 +116,7 @@ function build_settings_page(player)
         if value == global.current_preset_name then break end
         current_preset_index = current_preset_index + 1
     end
-    preset_flow.add{type="drop-down", items=global.valid_preset_names, selected_index=current_preset_index, tags={action="milestones_change_preset"}}
+    preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=global.valid_preset_names, selected_index=current_preset_index, tags={action="milestones_change_preset"}}
 
     local settings_scroll = inner_frame.add{type="scroll-pane", name="milestones_settings_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
@@ -190,11 +191,24 @@ function cancel_settings_page(player_index)
 end
 
 function confirm_settings_page(player_index)
-    local resulting_milestones = get_resulting_milestones_array(player_index)
-    game.print(serpent.block(resulting_milestones))
-    -- global.players[player_index].inner_frame.clear()
-    -- local player = game.get_player(player_index)
-    -- build_display_page(player)
+    local new_milestones = get_resulting_milestones_array(player_index)
+
+    if not table.deep_compare(global.loaded_milestones, new_milestones) then -- If something changed
+        local inner_frame = global.players[player_index].inner_frame
+        local preset_dropdown = inner_frame.milestones_preset_flow.milestones_preset_dropdown
+        global.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
+        
+        global.loaded_milestones = new_milestones
+        
+        for _, global_force in pairs(global.forces) do
+            merge_new_milestones(global_force, new_milestones)
+            backfill_completion_times(global_force)
+        end
+
+        game.print({"milestones.message_settings_changed"})
+    end
+
+    cancel_settings_page(player_index)
 end
 
 script.on_event(defines.events.on_gui_elem_changed, function(event)
