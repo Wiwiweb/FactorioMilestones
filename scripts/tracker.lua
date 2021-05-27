@@ -12,7 +12,8 @@ local function print_milestone_reached(force, milestone)
 end
 
 local function check_milestone_reached(force, milestone, stats, milestone_index)
-    if stats.get_input_count(milestone.name) >= milestone.quantity then
+    local input_count = stats.input_counts[milestone.name]
+    if input_count ~= nil and input_count >= milestone.quantity then
 
         milestone.completion_tick = game.tick
 
