@@ -3,11 +3,24 @@ require("scripts.gui")
 
 local function print_milestone_reached(force, milestone)
     local human_timestamp = misc.ticks_to_timestring(milestone.completion_tick)
-    -- local item_prototype = game.item_prototypes[item]
-    -- local human_name = item_prototype.localised_name
-    local quantity_string = (milestone.quantity == 1 and "" or milestone.quantity .. " ")
-    local rich_text = "[" .. milestone.type .. "=" .. milestone.name .. "]"
-    force.print("[font=heading-1]Created the first " .. quantity_string .. rich_text .. " at [color=green]" .. human_timestamp .. "[img=quantity-time][/color]![/font]")
+    local sprite_name = milestone.type .. "." .. milestone.name
+    local localised_name
+    if milestone.type == "technology" then
+        localised_name = game.technology_prototypes[milestone.name].localised_name
+        local level_string = (milestone.quantity == 1 and "" or " level "..milestone.quantity.." ")
+        force.print{"milestones.message_milestone_reached_technology", sprite_name, localised_name, level_string, human_timestamp}
+    else
+        if milestone.type == "item" then
+            localised_name = game.item_prototypes[milestone.name].localised_name
+        elseif milestone.type == "fluid" then
+            localised_name = game.fluid_prototypes[milestone.name].localised_name
+        end
+        if milestone.quantity == 1 then
+            force.print{"milestones.message_milestone_reached_item_first", sprite_name, localised_name, human_timestamp}
+        else
+            force.print{"milestones.message_milestone_reached_item_more", milestone.quantity, sprite_name, localised_name, human_timestamp}
+        end
+    end
     force.play_sound{path="utility/achievement_unlocked"}
 end
 

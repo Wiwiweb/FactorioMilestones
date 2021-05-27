@@ -30,16 +30,18 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
     
     -- Sprite
     local sprite_path = milestone.type .. "/" .. milestone.name
-    local sprite_number = nil
-    local tooltip = {"", prototype.localised_name}
+    local sprite_number
+    local tooltip
     if milestone.quantity > 1 then
         sprite_number = milestone.quantity
         tooltip = {"", milestone.quantity, "x ", prototype.localised_name}
     end
     if milestone.type == "technology" then
-        table.insert(tooltip, " (")
-        table.insert(tooltip, {"milestones.type_technology"})
-        table.insert(tooltip, ")")
+        local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "level "..milestone.quantity
+        tooltip = {"", prototype.localised_name, " (", postfix, ")"}
+    else
+        local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
+        tooltip = {"", prefix, prototype.localised_name}
     end
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
 

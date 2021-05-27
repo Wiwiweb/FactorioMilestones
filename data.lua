@@ -97,6 +97,8 @@ local settings_gear = "__milestones__/graphics/settings-gear.png"
 local arrows = "__milestones__/graphics/arrows.png"
 local item_icons = "__milestones__/graphics/item-icons.png"
 data:extend{
+  data_util.build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32, 2),
+
   data_util.build_sprite("milestones_settings_black", {0, 0}, settings_gear, 32),
   data_util.build_sprite("milestones_settings_white", {32, 0}, settings_gear, 32),
   data_util.build_sprite("milestones_settings_disabled", {64, 0}, settings_gear, 32),
