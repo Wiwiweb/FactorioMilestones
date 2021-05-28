@@ -50,7 +50,8 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
     if milestone.completion_tick == nil then
         caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
     else
-        caption = {"", {"milestones.completed_label"}, " [font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
+        local locale_name = milestone.before and "milestones.completed_before_label" or "milestones.completed_label"
+        caption = {"", {locale_name}, " [font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     end
     milestone_flow.add{type="label", caption=caption}
 end

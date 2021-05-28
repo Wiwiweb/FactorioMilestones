@@ -1,5 +1,6 @@
 local misc = require("__flib__.misc")
-require("scripts.gui")
+require("gui")
+require("milestones_util")
 
 local function print_milestone_reached(force, milestone)
     log("print_milestone_reached")
@@ -23,33 +24,6 @@ local function print_milestone_reached(force, milestone)
         end
     end
     force.play_sound{path="utility/achievement_unlocked"}
-end
-
-local function mark_milestone_reached(force, milestone, milestone_index)
-    milestone.completion_tick = game.tick
-    table.insert(global.forces[force.name].complete_milestones, milestone)
-    table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
-end
-
-local function is_production_milestone_reached(force, milestone, item_count, fluid_count)
-    local type_count = milestone.type == "item" and item_count or fluid_count
-    local milestone_count = type_count[milestone.name]
-    if milestone_count ~= nil and milestone_count >= milestone.quantity then
-        return true
-    end
-    return false
-end
-
-local function is_tech_milestone_reached(force, milestone, technology_researched)
-    log("milestone: " .. serpent.line(milestone))
-    log("technology_researched: " .. technology_researched.name .." - ".. technology_researched.level)
-    local level_needed = milestone.quantity == 1 and 1 or (milestone.quantity + 1) -- +1 because the level we get is the current researchable level, not the researched level
-    if milestone.type == "technology" and
-       technology_researched.name == milestone.name and
-       technology_researched.level >= level_needed then
-        return true
-    end
-    return false
 end
 
 function track_item_creation(event)
