@@ -89,10 +89,16 @@ local function toggle_gui(player)
     end
 end
 
-function refresh_gui(player)
+local function refresh_gui(player)
     if is_display_page_visible(player.index) then
         global.players[player.index].inner_frame.clear()
         build_display_page(player)
+    end
+end
+
+function refresh_gui_for_force(force)
+    for _, player in pairs(force.players) do
+        refresh_gui(player)
     end
 end
 

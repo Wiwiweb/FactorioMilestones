@@ -73,19 +73,11 @@ script.on_event(defines.events.on_player_removed, function(event)
     clear_player(event.player_index)
 end)
 
-local function print_chat_delayed2(event, chat_message)
-    log("print_chat_delayed4")
-    if event.tick == 0 then return end
-    log("print_chat_delayed5")
-    game.print(chat_message)
-    script.on_nth_tick(180, nil)
-end
-
 script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     log("on_runtime_mod_setting_changed")
     if event.setting == "milestones_check_frequency" then
-        -- script.on_nth_tick(nil) -- Unregister event
+        script.on_nth_tick(nil) -- Unregister event
         script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
     end
 end)

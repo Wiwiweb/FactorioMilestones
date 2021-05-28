@@ -27,19 +27,6 @@ function merge_new_milestones(global_force, new_milestones)
     global_force.incomplete_milestones = new_incomplete
 end
 
-local function check_milestone_reached(global_force, milestone, stats, milestone_index)
-    if stats.get_input_count(milestone.name) >= milestone.quantity then
-        milestone.completion_tick = game.tick
-        table.insert(global.forces[force.name].complete_milestones, milestone)
-        table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
-        print_milestone_reached(force, milestone)
-        for _, player in pairs(force.players) do
-            refresh_gui(player)
-        end
-            
-    end
-end
-
 function backfill_completion_times(global_force)
     -- TODO
 end

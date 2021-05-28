@@ -2,6 +2,7 @@ local misc = require("__flib__.misc")
 require("scripts.gui")
 
 local function print_milestone_reached(force, milestone)
+    log("print_milestone_reached")
     local human_timestamp = misc.ticks_to_timestring(milestone.completion_tick)
     local sprite_name = milestone.type .. "." .. milestone.name
     local localised_name
@@ -24,21 +25,19 @@ local function print_milestone_reached(force, milestone)
     force.play_sound{path="utility/achievement_unlocked"}
 end
 
-local function check_milestone_reached(force, milestone, stats, milestone_index)
-    local input_count = stats.input_counts[milestone.name]
-    if input_count ~= nil and input_count >= milestone.quantity then
+local function mark_milestone_reached(force, milestone, milestone_index)
+    milestone.completion_tick = game.tick
+    table.insert(global.forces[force.name].complete_milestones, milestone)
+    table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
+end
 
-        milestone.completion_tick = game.tick
-
-        table.insert(global.forces[force.name].complete_milestones, milestone)
-        table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
-        
-        print_milestone_reached(force, milestone)
-        for _, player in pairs(force.players) do
-            refresh_gui(player)
-        end
-            
+local function is_milestone_reached(force, milestone, item_count, fluid_count)
+    local type_count = milestone.type == "item" and item_count or fluid_count
+    local milestone_count = type_count[milestone.name]
+    if milestone_count ~= nil and milestone_count >= milestone.quantity then
+        return true
     end
+    return false
 end
 
 function track_item_creation(event)
@@ -46,21 +45,19 @@ function track_item_creation(event)
         return
     end
 
-    for _, force in pairs(game.forces) do
-        local global_force = global.forces[force.name]
-
-        if global_force ~= nil and
-            force.item_production_statistics.input_counts and 
+    for force_name, global_force in pairs(global.forces) do
+        local force = game.forces[force_name]
+        if force.item_production_statistics.input_counts and 
             next(force.item_production_statistics.input_counts) ~= nil then -- This force has players and production
                 
-            local item_stats = force.item_production_statistics
-            local fluid_stats = force.fluid_production_statistics
+            local item_counts = force.item_production_statistics.input_counts
+            local fluid_counts = force.fluid_production_statistics.input_counts
 
             for i, milestone in ipairs(global_force.incomplete_milestones) do
-                if milestone.type == "item" then
-                    check_milestone_reached(force, milestone, item_stats, i)
-                elseif milestone.type == "fluid" then
-                    check_milestone_reached(force, milestone, fluid_stats, i)
+                if is_milestone_reached(force, milestone, item_counts, fluid_counts) then
+                    mark_milestone_reached(force, milestone, i)
+                    print_milestone_reached(force, milestone)
+                    refresh_gui_for_force(force)
                 end
             end
         end
