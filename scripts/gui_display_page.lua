@@ -37,7 +37,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
         tooltip = {"", milestone.quantity, "x ", prototype.localised_name}
     end
     if milestone.type == "technology" then
-        local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "level "..milestone.quantity
+        local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "Level "..milestone.quantity
         tooltip = {"", prototype.localised_name, " (", postfix, ")"}
     else
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
