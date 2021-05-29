@@ -79,10 +79,6 @@ function reload_presets()
 end
 
 script.on_configuration_changed(function(event)
-    log("on_configuration_changed")
-
-    log(serpent.block(event))
-
     if next(event.mod_changes) ~= nil and event.mod_changes["milestones"] == nil then
         reload_presets()
     end

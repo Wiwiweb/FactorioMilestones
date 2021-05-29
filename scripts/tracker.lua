@@ -39,10 +39,9 @@ function track_item_creation(event)
             local fluid_counts = force.fluid_production_statistics.input_counts
             local tick = game.tick
             
-            local incomplete_milestones = global_force.incomplete_milestones
             local i = 1
-            while i <= #incomplete_milestones do
-                local milestone = incomplete_milestones[i]
+            while i <= #global_force.incomplete_milestones do
+                local milestone = global_force.incomplete_milestones[i]
                 if is_production_milestone_reached(force, milestone, item_counts, fluid_counts) then
                     mark_milestone_reached(force, milestone, tick, i)
                     print_milestone_reached(force, milestone)
@@ -62,10 +61,9 @@ script.on_event(defines.events.on_research_finished, function(event)
     local force = event.research.force
     local global_force = global.forces[force.name]
 
-    local incomplete_milestones = global_force.incomplete_milestones
     local i = 1
-    while i <= #incomplete_milestones do
-        local milestone = incomplete_milestones[i]
+    while i <= #global_force.incomplete_milestones do
+        local milestone = global_force.incomplete_milestones[i]
         if is_tech_milestone_reached(force, milestone, technology_researched) then
             mark_milestone_reached(force, milestone, tick, i)
             print_milestone_reached(force, milestone)

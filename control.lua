@@ -1,6 +1,7 @@
 require("scripts.tracker")
 require("scripts.gui")
 require("scripts.presets_loader")
+require("scripts.milestones_util")
 local table = require("__flib__.table")
 
 local function initialize_force(force)
@@ -9,6 +10,7 @@ local function initialize_force(force)
             complete_milestones = {},
             incomplete_milestones = table.deep_copy(global.loaded_milestones)
         }
+        backfill_completion_times(force)
     end
 end
 

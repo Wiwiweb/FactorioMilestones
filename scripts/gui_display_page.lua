@@ -47,13 +47,15 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
 
     -- Item name
     local caption
+    local tooltip
     if milestone.completion_tick == nil then
         caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
     else
         local locale_name = milestone.before and "milestones.completed_before_label" or "milestones.completed_label"
+        tooltip = milestone.before and {"milestones.completed_before_tooltip"}
         caption = {"", {locale_name}, " [font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     end
-    milestone_flow.add{type="label", caption=caption}
+    milestone_flow.add{type="label", caption=caption, tooltip=tooltip}
 end
 
 function build_display_page(player)
@@ -66,7 +68,11 @@ function build_display_page(player)
     local inner_frame = global.players[player.index].inner_frame
     local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll"}
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-    local column_count = math.min(math.ceil(math.sqrt(#global.loaded_milestones / 3)), 8) 
+    local column_count = math.max(
+                            math.min(
+                                math.ceil(math.sqrt(#global.loaded_milestones / 3)), 
+                                8), 
+                            1) 
     local content_table = display_scroll.add{type="table", name="milestones_content_table", column_count=column_count, style="milestones_table_style"}
 
     local global_force = global.forces[player.force.name]

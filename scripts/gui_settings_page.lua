@@ -172,13 +172,18 @@ function add_setting(player_index, button_element)
     local settings_flow = global.players[player_index].settings_flow
 
     local previous_last_element_index = #settings_flow.children
-    local new_element_index = #settings_flow.children + 2
+    local only_element = previous_last_element_index == 0
+    local new_element_index = previous_last_element_index + (only_element and 1 or 2) -- No line if we are adding the 1st element
     
     local milestone = {type=milestone_type, quantity=1}
-    settings_flow.add{type="line"}
+    if not only_element then
+        settings_flow.add{type="line"}
+    end
     add_milestone_setting(milestone, settings_flow, new_element_index)
     refresh_arrow_buttons(new_element_index, settings_flow)
-    refresh_arrow_buttons(previous_last_element_index, settings_flow)
+    if not only_element then
+        refresh_arrow_buttons(previous_last_element_index, settings_flow)
+    end
 
     local inner_frame = global.players[player_index].inner_frame
     inner_frame.milestones_settings_scroll.scroll_to_bottom()
@@ -257,6 +262,7 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
         local settings_flow = global.players[event.player_index].settings_flow
         settings_flow.clear()
         fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
+        global.players[event.player_index].main_frame.force_auto_center()
     end
 end)
 
