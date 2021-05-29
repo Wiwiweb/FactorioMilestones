@@ -3,7 +3,6 @@ require("gui")
 require("milestones_util")
 
 local function print_milestone_reached(force, milestone)
-    log("print_milestone_reached")
     local human_timestamp = misc.ticks_to_timestring(milestone.completion_tick)
     local sprite_name = milestone.type .. "." .. milestone.name
     local localised_name
@@ -34,16 +33,24 @@ function track_item_creation(event)
     for force_name, global_force in pairs(global.forces) do
         local force = game.forces[force_name]
         if force.item_production_statistics.input_counts and 
-            next(force.item_production_statistics.input_counts) ~= nil then -- This force has players and production
-                
+        next(force.item_production_statistics.input_counts) ~= nil then -- This force has players and production
+            
             local item_counts = force.item_production_statistics.input_counts
             local fluid_counts = force.fluid_production_statistics.input_counts
-
-            for i, milestone in ipairs(global_force.incomplete_milestones) do
+            local tick = game.tick
+            
+            local incomplete_milestones = global_force.incomplete_milestones
+            local i = 1
+            while i <= #incomplete_milestones do
+                local milestone = incomplete_milestones[i]
                 if is_production_milestone_reached(force, milestone, item_counts, fluid_counts) then
-                    mark_milestone_reached(force, milestone, i)
+                    mark_milestone_reached(force, milestone, tick, i)
                     print_milestone_reached(force, milestone)
                     refresh_gui_for_force(force)
+                else
+                    -- When a milestone is reached, incomplete_milestones loses an element
+                    -- so we only increment when a milestone is not reached
+                    i = i + 1 
                 end
             end
         end
@@ -54,11 +61,19 @@ script.on_event(defines.events.on_research_finished, function(event)
     local technology_researched = event.research
     local force = event.research.force
     local global_force = global.forces[force.name]
-    for i, milestone in ipairs(global_force.incomplete_milestones) do
+
+    local incomplete_milestones = global_force.incomplete_milestones
+    local i = 1
+    while i <= #incomplete_milestones do
+        local milestone = incomplete_milestones[i]
         if is_tech_milestone_reached(force, milestone, technology_researched) then
-            mark_milestone_reached(force, milestone, i)
+            mark_milestone_reached(force, milestone, tick, i)
             print_milestone_reached(force, milestone)
             refresh_gui_for_force(force)
+        else
+            -- I guess you could technically have the same technology in 2 milestones...
+            -- so we have to keep iterating
+            i = i + 1 
         end
     end
 end)

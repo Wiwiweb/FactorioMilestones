@@ -27,8 +27,8 @@ function merge_new_milestones(global_force, new_milestones)
     global_force.incomplete_milestones = new_incomplete
 end
 
-function mark_milestone_reached(force, milestone, milestone_index, before) -- before is optional
-    milestone.completion_tick = game.tick
+function mark_milestone_reached(force, milestone, tick, milestone_index, before) -- before is optional
+    milestone.completion_tick = tick
     if before then milestone.before = true end
     table.insert(global.forces[force.name].complete_milestones, milestone)
     table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
@@ -38,11 +38,12 @@ function backfill_completion_times(force)
     local item_counts = force.item_production_statistics.input_counts
     local fluid_counts = force.fluid_production_statistics.input_counts
     local technologies_researched = force.technologies
-    
+
     local global_force = global.forces[force.name]
+    local tick = game.tick
     for i, milestone in ipairs(global_force.incomplete_milestones) do
         if is_milestone_reached(force, milestone, item_counts, fluid_counts, technologies_researched) then
-            mark_milestone_reached(force, milestone, i, true)
+            mark_milestone_reached(force, milestone, tick, i, true)
         end
     end
 end
