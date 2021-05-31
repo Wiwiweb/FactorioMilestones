@@ -9,12 +9,12 @@ local function refresh_arrow_buttons(gui_index, settings_flow)
     if gui_index == 1 then
         arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
     else
-        arrows_flow.add{type="sprite-button", name="milestones_arrow_up", sprite="milestones_arrow_up", style="milestones_arrow_button", tags={action="milestones_swap_setting", direction=-1}}
+        arrows_flow.add{type="sprite-button", name="milestones_arrow_up", sprite="milestones_arrow_up", style="milestones_small_button", tags={action="milestones_swap_setting", direction=-1}}
     end
     if gui_index == #settings_flow.children then
         arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
     else
-        arrows_flow.add{type="sprite-button", name="milestones_arrow_down", sprite="milestones_arrow_down", style="milestones_arrow_button", tags={action="milestones_swap_setting", direction=1}}
+        arrows_flow.add{type="sprite-button", name="milestones_arrow_down", sprite="milestones_arrow_down", style="milestones_small_button", tags={action="milestones_swap_setting", direction=1}}
     end
 end
 

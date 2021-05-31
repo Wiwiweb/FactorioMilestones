@@ -53,9 +53,69 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
     else
         local locale_name = milestone.before and "milestones.completed_before_label" or "milestones.completed_label"
         tooltip = milestone.before and {"milestones.completed_before_tooltip"}
-        caption = {"", {locale_name}, " [font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
+        print_milliseconds = print_milliseconds and not milestone.before
+        caption = {"", {locale_name}, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     end
-    milestone_flow.add{type="label", caption=caption, tooltip=tooltip}
+    milestone_flow.add{type="label", name="milestones_display_time", caption=caption, tooltip=tooltip}
+
+    -- Optional edit button
+    if milestone.before then
+        milestone_flow.add{type="sprite-button", name="milestones_edit_time", sprite="utility/rename_icon_small_white", style="milestones_small_button", 
+            tooltip={"milestones.edit_time_tooltip"}, tags={action="milestones_edit_time"}}
+    end
+end
+
+function enable_edit_time(player_index, element)
+    local force = game.players[player_index].force
+    local milestone_flow = element.parent
+    local milestone_index = milestone_flow.get_index_in_parent()
+    local milestone = global.forces[force.name].complete_milestones[milestone_index]
+
+    milestone_flow.milestones_display_time.destroy()
+    milestone_flow.milestones_edit_time.destroy()
+
+    milestone_flow.add{type="label", name="milestones_display_time", caption={"milestones.completed_label"}}
+    local textfield = milestone_flow.add{type="textfield", name="milestones_edit_time_field", 
+        text=get_timestamp(milestone.completion_tick, false), style="short_number_textfield",
+        tags={action="milestones.milestones_confirm_edit_time"}}
+    textfield.focus()
+    milestone_flow.add{type="sprite-button", name="milestones_confirm_edit_time", sprite="utility/check_mark_white", style="milestones_confirm_button", 
+        tooltip={"milestones.edit_time_confirm"}, tags={action="milestones_confirm_edit_time"}}
+end
+
+local function timestring_to_ticks(timestring)
+    local numbers = {}
+    for number in string.gmatch(timestring, "%d+") do
+        table.insert(numbers, tonumber(number))
+    end
+    if #numbers == 0 or #numbers > 3 then return nil end
+    while #numbers < 3 do
+        table.insert(numbers, 1, 0)
+    end
+
+    local ticks = 
+        numbers[1] * 60*60*60 + -- Hours
+        numbers[2] * 60*60 +    -- Minutes
+        numbers[3] * 60         -- Seconds
+    log("Converted ".. timestring .." to : "..serpent.line(numbers).. " = " .. ticks .. " ticks")
+    if ticks <= 0 then return nil end
+    if ticks > 10*365*24*60*60*60 then return nil end -- Probably no one has a save longer than 10 years...
+    return ticks
+end
+
+function confirm_edit_time(player_index, element)
+    local force = game.players[player_index].force
+    local milestone_flow = element.parent
+    local milestone_index = milestone_flow.get_index_in_parent()
+    local milestone = global.forces[force.name].complete_milestones[milestone_index]
+
+    local timestring = milestone_flow.milestones_edit_time_field.text
+    local completion_tick = timestring_to_ticks(timestring)
+    if completion_tick then
+        milestone.completion_tick = completion_tick
+        milestone.before = nil
+    end
+    refresh_gui_for_force(force)
 end
 
 function build_display_page(player)

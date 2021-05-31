@@ -35,7 +35,7 @@ styles.milestones_table_style = {
   horizontal_spacing = 32
 }
 
-styles.milestones_arrow_button = {
+styles.milestones_small_button = {
   type = "button_style",
   parent = "frame_button",
   width = 16,
@@ -45,6 +45,14 @@ styles.milestones_arrow_button = {
 styles.milestones_trash_button = {
   type = "button_style",
   parent = "tool_button_red",
+  width = 24,
+  height = 24,
+  padding = 0
+}
+
+styles.milestones_confirm_button = {
+  type = "button_style",
+  parent = "tool_button_green",
   width = 24,
   height = 24,
   padding = 0

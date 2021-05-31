@@ -201,5 +201,17 @@ script.on_event(defines.events.on_gui_click, function(event)
         delete_setting(event.player_index, event.element)
     elseif event.element.tags.action == "milestones_add_setting" then
         add_setting(event.player_index, event.element)
+    elseif event.element.tags.action == "milestones_edit_time" then
+        enable_edit_time(event.player_index, event.element)
+    elseif event.element.tags.action == "milestones_confirm_edit_time" then
+        confirm_edit_time(event.player_index, event.element)
     end
 end)
+script.on_event(defines.events.on_gui_confirmed, function(event)
+    if not event.element then return end
+    if not event.element.tags then return end
+    if event.element.tags.action == "milestones_confirm_edit_time" then
+        confirm_edit_time(event.player_index, event.element)
+    end
+end)
+
