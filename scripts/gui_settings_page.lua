@@ -197,6 +197,12 @@ function cancel_settings_page(player_index)
 end
 
 function confirm_settings_page(player_index)
+    local permission_group = game.players[player_index].permission_group
+    if permission_group == nil or not permission_group.allows_action(defines.input_action.mod_settings_changed) then
+        game.players[player_index].print{"milestones.message_settings_permission_denied"}
+        return
+    end
+
     local new_milestones = get_resulting_milestones_array(player_index)
 
     if not table.deep_compare(global.loaded_milestones, new_milestones) then -- If something changed

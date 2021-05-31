@@ -28,7 +28,7 @@ function build_main_frame(player)
             action="milestones_open_settings"
         }
     }
-    if not player.permission_group.allows_action(defines.input_action.mod_settings_changed) then
+    if player.permission_group == nil or not player.permission_group.allows_action(defines.input_action.mod_settings_changed) then
         settings_button.enabled = false
         settings_button.tooltip = {"milestones.settings_disabled"}
         settings_button.sprite = "milestones_settings_disabled"
@@ -61,9 +61,29 @@ function build_main_frame(player)
     return main_frame, inner_frame
 end
 
+local function update_settings_button(player) -- In case permissions changed
+    local main_frame = global.players[player.index].main_frame
+    settings_button = main_frame.milestones_titlebar.milestones_settings_button
+    
+    if player.permission_group and player.permission_group.allows_action(defines.input_action.mod_settings_changed) then
+        settings_button.enabled = true
+        settings_button.tooltip = {"milestones.settings_instructions"}
+        settings_button.sprite = "milestones_settings_white"
+        settings_button.hovered_sprite = "milestones_settings_black"
+        settings_button.clicked_sprite = "milestones_settings_black"
+    else
+        settings_button.enabled = false
+        settings_button.tooltip = {"milestones.settings_disabled"}
+        settings_button.sprite = "milestones_settings_disabled"
+        settings_button.hovered_sprite = "milestones_settings_disabled"
+        settings_button.clicked_sprite = "milestones_settings_disabled"
+    end
+end
+
 local function open_gui(player)
     local global_player = global.players[player.index]
     build_display_page(player)
+    update_settings_button(player)
     global_player.main_frame.visible = true
     player.opened = global_player.main_frame
     player.set_shortcut_toggled("milestones_toggle_gui", true)
