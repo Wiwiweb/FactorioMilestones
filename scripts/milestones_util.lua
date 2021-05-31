@@ -82,6 +82,12 @@ local function find_higher_bound_completion_tick(force, milestone, item_stats, f
     end
 end
 
+function sort_milestones(milestones)
+    table.sort(milestones, function(a,b) 
+        return a.completion_tick < b.completion_tick 
+    end)
+end
+
 function backfill_completion_times(force)
     log("Backfilling completion times for " .. force.name)
     local item_stats = force.item_production_statistics
@@ -102,7 +108,7 @@ function backfill_completion_times(force)
             i = i + 1
         end
     end
-    table.sort(global_force.complete_milestones, function(a,b) return a.completion_tick < b.completion_tick end)
+    sort_milestones(global_force.complete_milestones)
 end
 
 function is_production_milestone_reached(force, milestone, item_counts, fluid_counts)

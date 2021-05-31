@@ -1,4 +1,5 @@
 local misc = require("__flib__.misc")
+require("milestones_util")
 
 local function get_timestamp(ticks, print_milliseconds)
     if print_milliseconds then
@@ -115,6 +116,7 @@ function confirm_edit_time(player_index, element)
         milestone.completion_tick = completion_tick
         milestone.before = nil
     end
+    sort_milestones(global.forces[force.name].complete_milestones)
     refresh_gui_for_force(force)
 end
 
