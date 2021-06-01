@@ -108,7 +108,6 @@ local function open_gui(player)
 end
 
 local function close_gui(player)
-    log("close_gui")
     local global_player = global.players[player.index]
     global_player.main_frame.visible = false
     global_player.inner_frame.clear()
@@ -236,7 +235,7 @@ end)
 script.on_event(defines.events.on_gui_confirmed, function(event)
     if not event.element then return end
     if not event.element.tags then return end
-    if event.element.tags.action == "milestones_confirm_edit_time" then
+    if event.element.tags.action == "milestones_confirm_edit_time_textfield" then
         confirm_edit_time(event.player_index, event.element)
     end
 end)

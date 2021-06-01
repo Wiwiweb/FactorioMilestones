@@ -98,7 +98,6 @@ function backfill_completion_times(force)
 
     local global_force = global.forces[force.name]
     local i = 1
-    log(serpent.block(global_force.incomplete_milestones))
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
         if is_milestone_reached(force, milestone, item_counts, fluid_counts, technologies) then
