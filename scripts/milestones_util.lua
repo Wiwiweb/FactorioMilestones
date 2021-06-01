@@ -94,12 +94,12 @@ function backfill_completion_times(force)
     local fluid_stats = force.fluid_production_statistics
     local item_counts = item_stats.input_counts
     local fluid_counts = fluid_stats.input_counts
-
     local technologies = force.technologies
 
     local global_force = global.forces[force.name]
     local i = 1
-    while i < #global_force.incomplete_milestones do
+    log(serpent.block(global_force.incomplete_milestones))
+    while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
         if is_milestone_reached(force, milestone, item_counts, fluid_counts, technologies) then
             local tick = find_higher_bound_completion_tick(force, milestone, item_stats, fluid_stats)
