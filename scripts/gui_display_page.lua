@@ -78,8 +78,9 @@ function enable_edit_time(player_index, element)
     milestone_flow.add{type="label", name="milestones_display_time", caption={"milestones.completed_label"}}
     local textfield = milestone_flow.add{type="textfield", name="milestones_edit_time_field", 
         text=get_timestamp(milestone.completion_tick, false), style="short_number_textfield",
-        tags={action="milestones.milestones_confirm_edit_time"}}
+        tags={action="milestones_confirm_edit_time"}}
     textfield.focus()
+    textfield.select_all()
     milestone_flow.add{type="sprite-button", name="milestones_confirm_edit_time", sprite="utility/check_mark_white", style="milestones_confirm_button", 
         tooltip={"milestones.edit_time_confirm"}, tags={action="milestones_confirm_edit_time"}}
 end
