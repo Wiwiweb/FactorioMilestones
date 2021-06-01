@@ -37,6 +37,19 @@ function build_main_frame(player)
     end
     titlebar.add{
         type="sprite-button",
+        name="milestones_pin_button",
+        style="frame_action_button",
+        mouse_button_filter={"left"},
+        sprite="milestones_pin_white",
+        hovered_sprite="milestones_pin_black",
+        clicked_sprite="milestones_pin_black",
+        tooltip = {"milestones.pin_instructions"},
+        tags={
+            action="milestones_pin_gui"
+        }
+    }
+    titlebar.add{
+        type="sprite-button",
         name="milestones_close_button",
         style="frame_action_button",
         mouse_button_filter={"left"},
@@ -95,9 +108,14 @@ local function open_gui(player)
 end
 
 local function close_gui(player)
-    global.players[player.index].main_frame.visible = false
-    global.players[player.index].inner_frame.clear()
+    log("close_gui")
+    local global_player = global.players[player.index]
+    global_player.main_frame.visible = false
+    global_player.inner_frame.clear()
     player.set_shortcut_toggled("milestones_toggle_gui", false)
+    if player.opened == global_player.main_frame then
+        player.opened = nil
+    end
 end
 
 local function toggle_gui(player)
@@ -122,15 +140,34 @@ function refresh_gui_for_force(force)
     end
 end
 
+local function toggle_pinned(player, element)
+    local global_player = global.players[player.index]
+    global_player.pinned = not global_player.pinned
+    if global_player.pinned then
+        element.style = "flib_selected_frame_action_button"
+        element.sprite = "milestones_pin_black"
+        player.opened = nil
+    else
+        element.style = "frame_action_button"
+        element.sprite = "milestones_pin_white"
+        if player.opened == nil then
+            player.opened = global_player.main_frame
+        elseif player.opened ~= global_player.main_frame then
+            close_gui(player)
+        end
+    end
+end
+
 script.on_event(defines.events.on_gui_closed, function(event)
     local player = game.get_player(event.player_index)
     if event.element and event.element.name == "milestones_main_frame" then
 
         local player = game.get_player(event.player_index)
-        if global.players[event.player_index].one_time_prevent_close then
-            global.players[event.player_index].one_time_prevent_close = false
-            player.opened = global.players[event.player_index].main_frame
-        else
+        local global_player = global.players[event.player_index]
+        if global_player.one_time_prevent_close then
+            global_player.one_time_prevent_close = false
+            player.opened = global_player.main_frame
+        elseif not global_player.pinned then
             close_gui(player)
         end
     end
@@ -166,27 +203,15 @@ script.on_event("milestones_cancel_settings", function(event)
     end
 end)
 
-script.on_event(defines.events.on_gui_closed, function(event)
-    local player = game.get_player(event.player_index)
-    if event.element and event.element.name == "milestones_main_frame" then
-
-        local player = game.get_player(event.player_index)
-        if global.players[event.player_index].one_time_prevent_close then
-            global.players[event.player_index].one_time_prevent_close = false
-            player.opened = global.players[event.player_index].main_frame
-        else
-            close_gui(player)
-        end
-    end
-end)
-
-
 script.on_event(defines.events.on_gui_click, function(event)
     if not event.element then return end
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_close_gui" then
         local player = game.get_player(event.player_index)
         close_gui(player)
+    elseif event.element.tags.action == "milestones_pin_gui" then
+        local player = game.get_player(event.player_index)
+        toggle_pinned(player, event.element)
     elseif event.element.tags.action == "milestones_open_settings" then
         local player = game.get_player(event.player_index)
         global.players[player.index].inner_frame.clear()
@@ -207,6 +232,7 @@ script.on_event(defines.events.on_gui_click, function(event)
         confirm_edit_time(event.player_index, event.element)
     end
 end)
+
 script.on_event(defines.events.on_gui_confirmed, function(event)
     if not event.element then return end
     if not event.element.tags then return end

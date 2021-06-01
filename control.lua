@@ -19,7 +19,8 @@ local function initialize_player(player)
     global.players[player.index] = {
         main_frame = main_frame,
         inner_frame = inner_frame,
-        opened_once_before = false
+        opened_once_before = false,
+        pinned = false
     }
 end
 

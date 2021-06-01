@@ -101,15 +101,19 @@ data:extend{
 }
 
 -- Sprites
-local settings_gear = "__milestones__/graphics/settings-gear.png"
+local toolbar_icons = "__milestones__/graphics/toolbar-icons.png"
 local arrows = "__milestones__/graphics/arrows.png"
 local item_icons = "__milestones__/graphics/item-icons.png"
 data:extend{
   data_util.build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32, 2),
 
-  data_util.build_sprite("milestones_settings_black", {0, 0}, settings_gear, 32),
-  data_util.build_sprite("milestones_settings_white", {32, 0}, settings_gear, 32),
-  data_util.build_sprite("milestones_settings_disabled", {64, 0}, settings_gear, 32),
+  data_util.build_sprite("milestones_settings_black", {0, 0}, toolbar_icons, 32),
+  data_util.build_sprite("milestones_settings_white", {32, 0}, toolbar_icons, 32),
+  data_util.build_sprite("milestones_settings_disabled", {64, 0}, toolbar_icons, 32),
+  data_util.build_sprite("milestones_pin_black", {0, 32}, toolbar_icons, 32),
+  data_util.build_sprite("milestones_pin_white", {32, 32}, toolbar_icons, 32),
+  data_util.build_sprite("milestones_pin_disabled", {64, 32}, toolbar_icons, 32),
+
   data_util.build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
   data_util.build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),
 
