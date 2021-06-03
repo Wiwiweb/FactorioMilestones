@@ -51,16 +51,17 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
     local tooltip
     if milestone.completion_tick == nil then
         caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
+    elseif milestone.lower_bound_tick == nil then
+        caption = {"", {"milestones.completed_label"}, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     else
-        local locale_name = milestone.before and "milestones.completed_before_label" or "milestones.completed_label"
-        tooltip = milestone.before and {"milestones.completed_before_tooltip"}
-        print_milliseconds = print_milliseconds and not milestone.before
-        caption = {"", {locale_name}, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
+        tooltip = {"milestones.completed_before_tooltip"}
+        caption = "[font=default-bold]" ..get_timestamp(milestone.lower_bound_tick, false).. "[img=quantity-time][/font] - " ..
+                  "[font=default-bold]" ..get_timestamp(milestone.completion_tick, false).. "[img=quantity-time][/font]"
     end
     milestone_flow.add{type="label", name="milestones_display_time", caption=caption, tooltip=tooltip}
 
     -- Optional edit button
-    if milestone.before then
+    if milestone.lower_bound_tick then
         milestone_flow.add{type="sprite-button", name="milestones_edit_time", sprite="utility/rename_icon_small_white", style="milestones_small_button", 
             tooltip={"milestones.edit_time_tooltip"}, tags={action="milestones_edit_time"}}
     end
@@ -99,7 +100,7 @@ local function timestring_to_ticks(timestring)
         numbers[1] * 60*60*60 + -- Hours
         numbers[2] * 60*60 +    -- Minutes
         numbers[3] * 60         -- Seconds
-    log("Converted ".. timestring .." to : "..serpent.line(numbers).. " = " .. ticks .. " ticks")
+    log("Converted " ..timestring.. " to : " ..serpent.line(numbers).. " = " ..ticks.. " ticks")
     if ticks <= 0 then return nil end
     if ticks > 10*365*24*60*60*60 then return nil end -- Probably no one has a save longer than 10 years...
     return ticks
@@ -115,7 +116,7 @@ function confirm_edit_time(player_index, element)
     local completion_tick = timestring_to_ticks(timestring)
     if completion_tick then
         milestone.completion_tick = completion_tick
-        milestone.before = nil
+        milestone.lower_bound_tick = nil
     end
     sort_milestones(global.forces[force.name].complete_milestones)
     refresh_gui_for_force(force)

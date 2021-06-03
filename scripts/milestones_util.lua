@@ -16,7 +16,7 @@ local function find_possible_existing_completion_time(global_force, new_mileston
         if complete_milestone.type == new_milestone.type and
            complete_milestone.name == new_milestone.name and
            complete_milestone.quantity == new_milestone.quantity then
-            return complete_milestone.completion_tick, complete_milestone.before
+            return complete_milestone.completion_tick, complete_milestone.lower_bound_tick
         end
     end
     return nil, nil
@@ -27,12 +27,12 @@ function merge_new_milestones(global_force, new_milestones)
     local new_incomplete = {}
 
     for _, new_milestone in pairs(new_milestones) do
-        local completion_tick, before = find_possible_existing_completion_time(global_force, new_milestone)
+        local completion_tick, lower_bound_tick = find_possible_existing_completion_time(global_force, new_milestone)
         if completion_tick == nil then
             table.insert(new_incomplete, new_milestone)
         else
             new_milestone.completion_tick = completion_tick
-            new_milestone.before = before
+            new_milestone.lower_bound_tick = lower_bound_tick
             table.insert(new_complete, new_milestone)
         end
     end
@@ -41,44 +41,56 @@ function merge_new_milestones(global_force, new_milestones)
     global_force.incomplete_milestones = new_incomplete
 end
 
-function mark_milestone_reached(force, milestone, tick, milestone_index, before) -- before is optional
+function mark_milestone_reached(force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional
     milestone.completion_tick = tick
-    if before then milestone.before = true end
+    if lower_bound_tick then milestone.lower_bound_tick = lower_bound_tick end
     table.insert(global.forces[force.name].complete_milestones, milestone)
     table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
+end
+
+local function floor_to_nearest_minute(tick)
+    return (tick - (tick % (60*60)))
 end
 
 local function ceil_to_nearest_minute(tick)
     return (tick - (tick % (60*60))) + 60*60
 end
 
-local function find_higher_bound_production_tick(force, milestone, stats)
+-- Converts from "X ticks ago" to "X ticks since start of the game"
+local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago)
+    return math.max(0, floor_to_nearest_minute(game.tick - lower_bound_ticks_ago)), ceil_to_nearest_minute(game.tick - upper_bound_ticks_ago)
+end
+
+local function find_production_tick_bounds(force, milestone, stats)
     local total_count = stats.get_input_count(milestone.name)
+    local lower_bound_ticks_ago = game.tick
     for _, flow_precision_bracket in pairs(FLOW_PRECISION_BRACKETS) do
-        local bracket, bracket_ticks = flow_precision_bracket[1], flow_precision_bracket[2]
-        -- The first bracket that does NOT match the total count indicates the higher bound first production time
+        local bracket, upper_bound_ticks_ago = flow_precision_bracket[1], flow_precision_bracket[2]
+        log("up: " ..upper_bound_ticks_ago.. " - low: " ..lower_bound_ticks_ago)
+        -- The first bracket that does NOT match the total count indicates the upper bound first production time
         -- e.g: if total_count = 4, 4 were created in the last 1000 hours, 4 were created in the last 500 hours, 3 were created in the last 250 hours
         -- then the first creation was before 250 hours ago
-        if bracket_ticks < game.tick then -- Skip brackets if the game is not long enough
+        if upper_bound_ticks_ago < game.tick then -- Skip brackets if the game is not long enough
             local bracket_count = stats.get_flow_count{name=milestone.name, input=true, precision_index=bracket, count=true}
             if bracket_count <= total_count - milestone.quantity then
-                return ceil_to_nearest_minute(game.tick - bracket_ticks) 
+                return get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago)
             end
         end
+        lower_bound_ticks_ago = upper_bound_ticks_ago
     end
     -- If we haven't found any count drop after going through all brackets
     -- then the item was produced within the last 5 seconds (improbable but could happen)
-    return ceil_to_nearest_minute(game.tick)
+    return get_realtime_tick_bounds(lower_bound_ticks_ago, game.tick)
 end
 
 
-local function find_higher_bound_completion_tick(force, milestone, item_stats, fluid_stats)
+local function find_completion_tick_bounds(force, milestone, item_stats, fluid_stats)
     if milestone.type == "technology" then
-        return game.tick -- No way to know past research time
+        return 0, game.tick -- No way to know past research time
     elseif milestone.type == "item" then
-        return find_higher_bound_production_tick(force, milestone, item_stats)
+        return find_production_tick_bounds(force, milestone, item_stats)
     elseif milestone.type == "fluid" then
-        return find_higher_bound_production_tick(force, milestone, fluid_stats)
+        return find_production_tick_bounds(force, milestone, fluid_stats)
     end
 end
 
@@ -101,8 +113,9 @@ function backfill_completion_times(force)
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
         if is_milestone_reached(force, milestone, item_counts, fluid_counts, technologies) then
-            local tick = find_higher_bound_completion_tick(force, milestone, item_stats, fluid_stats)
-            mark_milestone_reached(force, milestone, tick, i, true)
+            local lower_bound, upper_bound = find_completion_tick_bounds(force, milestone, item_stats, fluid_stats)
+            log("Tick bounds for " ..milestone.name.. " : " ..lower_bound.. " - " ..upper_bound)
+            mark_milestone_reached(force, milestone, upper_bound, i, lower_bound)
         else
             i = i + 1
         end
