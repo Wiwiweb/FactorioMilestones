@@ -64,6 +64,17 @@ styles.milestones_empty_button = {
   height = 16
 }
 
+styles.milestones_small_dropdown = {
+  type = "dropdown_style",
+  minimal_width = 75
+}
+
+styles.milestones_small_textfield = {
+  type = "textbox_style",
+  width = 50,
+  natural_width = 50
+}
+
 data:extend{
     {
         type = "custom-input",

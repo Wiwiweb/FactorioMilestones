@@ -41,6 +41,20 @@ function merge_new_milestones(global_force, new_milestones)
     global_force.incomplete_milestones = new_incomplete
 end
 
+function get_default_unit_for_time_bucket(lower_bound_tick, upper_bound_tick)
+    local lower_bound_ticks_ago = game.tick - lower_bound_tick - 10*60*60 -- Add 10 minutes leeway to avoid bumping something to the next unit 1 tick after we calculate it
+    local upper_bound_ticks_ago = game.tick - upper_bound_tick
+    local upper_bound_minutes_ago = upper_bound_ticks_ago / 60 / 60
+
+    if lower_bound_ticks_ago <= 1*60*60*60 then -- 1 hour ago
+        return 1, upper_bound_minutes_ago -- minutes
+    elseif lower_bound_ticks_ago < 50*60*60*60 then -- 50 hours ago
+        return 2, upper_bound_minutes_ago / 60 -- hours
+    else -- More than 50 hours ago
+        return 3, upper_bound_minutes_ago / 60 / 24 -- days
+    end
+end
+
 function mark_milestone_reached(force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional
     milestone.completion_tick = tick
     if lower_bound_tick then milestone.lower_bound_tick = lower_bound_tick end
@@ -48,11 +62,11 @@ function mark_milestone_reached(force, milestone, tick, milestone_index, lower_b
     table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
 end
 
-local function floor_to_nearest_minute(tick)
+function floor_to_nearest_minute(tick)
     return (tick - (tick % (60*60)))
 end
 
-local function ceil_to_nearest_minute(tick)
+function ceil_to_nearest_minute(tick)
     return (tick - (tick % (60*60))) + 60*60
 end
 

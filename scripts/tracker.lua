@@ -60,7 +60,8 @@ script.on_event(defines.events.on_research_finished, function(event)
     local technology_researched = event.research
     local force = event.research.force
     local global_force = global.forces[force.name]
-
+    if global_force == nil then return end
+    
     local i = 1
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]

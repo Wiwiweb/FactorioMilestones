@@ -76,34 +76,33 @@ function enable_edit_time(player_index, element)
     milestone_flow.milestones_display_time.destroy()
     milestone_flow.milestones_edit_time.destroy()
 
-    milestone_flow.add{type="label", name="milestones_display_time", caption={"milestones.completed_label"}}
+    milestone_flow.add{type="label", name="milestones_display_time_before", caption={"milestones.edit_time_before_label"}}
+
+    local edit_time_dropdown_index, edit_time_default_value = get_default_unit_for_time_bucket(milestone.lower_bound_tick, milestone.completion_tick)
     local textfield = milestone_flow.add{type="textfield", name="milestones_edit_time_field", 
-        text=get_timestamp(milestone.completion_tick, false), style="short_number_textfield",
-        tags={action="milestones_confirm_edit_time_textfield"}}
+        text=string.format("%.1f", edit_time_default_value), numeric=true, allow_decimal=true,
+        tags={action="milestones_confirm_edit_time_textfield"}, style="milestones_small_textfield"}
     textfield.focus()
     textfield.select_all()
+
+    milestone_flow.add{type="drop-down", name="milestones_edit_time_dropdown", 
+    items={{"milestones.edit_time_minutes"}, {"milestones.edit_time_hours"}, {"milestones.edit_time_days"}}, 
+    selected_index=edit_time_dropdown_index, style="milestones_small_dropdown"}
+    
+    milestone_flow.add{type="label", name="milestones_display_time_after", caption={"milestones.edit_time_after_label"}}
+
     milestone_flow.add{type="sprite-button", name="milestones_confirm_edit_time", sprite="utility/check_mark_white", style="milestones_confirm_button", 
         tooltip={"milestones.edit_time_confirm"}, tags={action="milestones_confirm_edit_time"}}
 end
 
-local function timestring_to_ticks(timestring)
-    local numbers = {}
-    for number in string.gmatch(timestring, "%d+") do
-        table.insert(numbers, tonumber(number))
+local function get_ticks_from_quantity_and_unit(quantity, unit)
+    if unit == 1 then -- minutes
+        return quantity * 60*60
+    elseif unit == 2 then -- hours
+        return quantity * 60*60*60
+    elseif unit == 3 then -- days
+        return quantity * 24*60*60*60
     end
-    if #numbers == 0 or #numbers > 3 then return nil end
-    while #numbers < 3 do
-        table.insert(numbers, 1, 0)
-    end
-
-    local ticks = 
-        numbers[1] * 60*60*60 + -- Hours
-        numbers[2] * 60*60 +    -- Minutes
-        numbers[3] * 60         -- Seconds
-    log("Converted " ..timestring.. " to : " ..serpent.line(numbers).. " = " ..ticks.. " ticks")
-    if ticks <= 0 then return nil end
-    if ticks > 10*365*24*60*60*60 then return nil end -- Probably no one has a save longer than 10 years...
-    return ticks
 end
 
 function confirm_edit_time(player_index, element)
@@ -112,13 +111,16 @@ function confirm_edit_time(player_index, element)
     local milestone_index = milestone_flow.get_index_in_parent()
     local milestone = global.forces[force.name].complete_milestones[milestone_index]
 
-    local timestring = milestone_flow.milestones_edit_time_field.text
-    local completion_tick = timestring_to_ticks(timestring)
-    if completion_tick then
-        milestone.completion_tick = completion_tick
+    local time_quantity = milestone_flow.milestones_edit_time_field.text
+    local time_unit = milestone_flow.milestones_edit_time_dropdown.selected_index
+    if time_quantity ~= nil then
+        local nb_ticks_ago = get_ticks_from_quantity_and_unit(time_quantity, time_unit)
+        local absolute_ticks = game.tick - nb_ticks_ago
+        milestone.completion_tick = ceil_to_nearest_minute(absolute_ticks)
         milestone.lower_bound_tick = nil
+        sort_milestones(global.forces[force.name].complete_milestones)
     end
-    sort_milestones(global.forces[force.name].complete_milestones)
+    
     refresh_gui_for_force(force)
 end
 
