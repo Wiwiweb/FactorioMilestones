@@ -115,7 +115,7 @@ function confirm_edit_time(player_index, element)
     local time_unit = milestone_flow.milestones_edit_time_dropdown.selected_index
     if time_quantity ~= nil then
         local nb_ticks_ago = get_ticks_from_quantity_and_unit(time_quantity, time_unit)
-        local absolute_ticks = game.tick - nb_ticks_ago
+        local absolute_ticks = math.max(0, game.tick - nb_ticks_ago)
         milestone.completion_tick = ceil_to_nearest_minute(absolute_ticks)
         milestone.lower_bound_tick = nil
         sort_milestones(global.forces[force.name].complete_milestones)
