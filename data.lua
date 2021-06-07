@@ -96,7 +96,7 @@ data:extend{
     }
 }
 
-local shortcut_icon = "__milestones__/graphics/shortcut-icon.png"
+local shortcut_icon = "__Milestones__/graphics/shortcut-icon.png"
 data:extend{
   {
     type = "shortcut",
@@ -112,9 +112,9 @@ data:extend{
 }
 
 -- Sprites
-local toolbar_icons = "__milestones__/graphics/toolbar-icons.png"
-local arrows = "__milestones__/graphics/arrows.png"
-local item_icons = "__milestones__/graphics/item-icons.png"
+local toolbar_icons = "__Milestones__/graphics/toolbar-icons.png"
+local arrows = "__Milestones__/graphics/arrows.png"
+local item_icons = "__Milestones__/graphics/item-icons.png"
 data:extend{
   data_util.build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32, 2),
 
