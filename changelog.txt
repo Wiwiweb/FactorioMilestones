@@ -1,0 +1,13 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2021-06-13
+  Features:
+    - Add presets: K2, SE+K2, Bob's, Angel's, B&A, Pyanodon's (with and without AlienLife)
+  Changes:
+    - Fix missing items in Vanilla presets
+    - Add "significant data" to SE preset
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2021-06-06
+  Features:
+    - Initial release
