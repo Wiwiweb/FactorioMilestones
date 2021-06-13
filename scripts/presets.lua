@@ -350,10 +350,17 @@ presets = {
             {type="technology", name="rocket-silo",               quantity=1},
             {type="item",       name="rocket-part",               quantity=100},
             {type="item",       name="space-science-pack",        quantity=1},
+            {type="item",       name="token-bio",                 quantity=1},
+            {type="item",       name="electronic-circuit",        quantity=1},
+            {type="item",       name="advanced-circuit",          quantity=1},
+            {type="item",       name="processing-unit",           quantity=1},
+            {type="item",       name="angels-plate-titanium",     quantity=1},
+            {type="item",       name="angels-plate-tungsten",     quantity=1},
             {type="item",       name="angels-crawler",            quantity=1},
             {type="item",       name="spidertron",                quantity=1},
             {type="item",       name="uranium-fuel-cell",         quantity=1},
             {type="item",       name="solar-panel",               quantity=1},
+            {type="item",       name="crystal-full-harmonic",     quantity=1},
             {type="item",       name="automation-science-pack",   quantity=10000},
             {type="item",       name="logistic-science-pack",     quantity=10000},
             {type="item",       name="military-science-pack",     quantity=10000},
@@ -377,7 +384,8 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=1},
             {type="item",       name="utility-science-pack",           quantity=1},
             {type="item",       name="space-science-pack",             quantity=1},
- 
+            {type="item",       name="token-bio",                      quantity=1},
+
             {type="item",       name="electronic-circuit",             quantity=1},
             {type="item",       name="advanced-circuit",               quantity=1},
             {type="item",       name="processing-unit",                quantity=1},
@@ -433,6 +441,7 @@ presets = {
         }
     },
 
+    
     ["Pyanodon's Mods (Without AlienLife)"] = {
         required_mods = {"pycoalprocessing", "pyfusionenergy", "pyindustry", "pypetroleumhandling"},
         milestones = {
