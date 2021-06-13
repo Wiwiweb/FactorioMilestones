@@ -4,16 +4,16 @@ presets = {
         milestones = {
             {type="item",       name="automation-science-pack", quantity=1},
             {type="item",       name="logistic-science-pack",   quantity=1},
-            {type="item",       name="locomotive",              quantity=1},
             {type="item",       name="military-science-pack",   quantity=1},
             {type="fluid",      name="petroleum-gas",           quantity=1},
             {type="item",       name="chemical-science-pack",   quantity=1},
-            {type="item",       name="construction-robot",      quantity=1},
             {type="item",       name="production-science-pack", quantity=1},
             {type="item",       name="utility-science-pack",    quantity=1},
             {type="technology", name="rocket-silo",             quantity=1},
             {type="item",       name="rocket-part",             quantity=100},
             {type="item",       name="space-science-pack",      quantity=1},
+            {type="item",       name="locomotive",              quantity=1},
+            {type="item",       name="construction-robot",      quantity=1},
             {type="item",       name="spidertron",              quantity=1},
             {type="item",       name="uranium-fuel-cell",       quantity=1},
             {type="item",       name="solar-panel",             quantity=1},
@@ -28,7 +28,7 @@ presets = {
         }
     },
 
-    
+
     ["Vanilla (Extended)"] = {
         required_mods = {},
         milestones = {
@@ -232,7 +232,7 @@ presets = {
     },
 
 
-    ["Bob's Mods (Without bobtech)"] = {
+    ["Bob's Mods (Without Bob's Tech)"] = {
         required_mods = {"bobplates", "bobelectronics"},
         milestones = {
             {type="item",       name="automation-science-pack",        quantity=1},
@@ -430,6 +430,146 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=10000},
             {type="item",       name="utility-science-pack",           quantity=10000},
             {type="item",       name="space-science-pack",             quantity=10000},
+        }
+    },
+
+    ["Pyanodon's Mods (Without AlienLife)"] = {
+        required_mods = {"pycoalprocessing", "pyfusionenergy", "pyindustry", "pypetroleumhandling"},
+        milestones = {
+            {type="item",       name="flask",                         quantity=1},
+            {type="item",       name="fawogae-substrate",             quantity=1},
+            {type="item",       name="automation-science-pack",       quantity=1},
+
+            {type="item",       name="alien-sample01",                quantity=1},
+            {type="item",       name="lab-instrument",                quantity=1},
+            {type="item",       name="logistic-science-pack",         quantity=1},
+            {type="item",       name="military-science-pack",         quantity=1},
+
+            {type="item",       name="optical-fiber",                 quantity=1},
+            {type="item",       name="nexelit-plate",                 quantity=1},
+            {type="item",       name="advanced-circuit",              quantity=1},
+            {type="item",       name="rubber",                        quantity=1},
+            {type="item",       name="stainless-steel",               quantity=1},
+            {type="item",       name="tinned-cable",                  quantity=1},
+            {type="item",       name="chemical-science-pack",         quantity=1},
+
+            {type="item",       name="coated-container",              quantity=1},
+            {type="item",       name="control-unit",                  quantity=1},
+            {type="item",       name="nuclear-sample",                quantity=1},
+            {type="item",       name="production-science-pack",       quantity=1},
+
+            {type="item",       name="kevlar",                        quantity=1},
+            {type="item",       name="volumetric-capacitor",          quantity=1},
+            {type="item",       name="hyperelastic-material",         quantity=1},
+            {type="item",       name="intelligent-unit",              quantity=1},
+            {type="item",       name="nano-wires",                    quantity=1},
+            {type="item",       name="nems",                          quantity=1},
+            {type="item",       name="parametric-oscilator",          quantity=1},
+            {type="item",       name="superconductor-servomechanims", quantity=1},
+            {type="item",       name="super-steel",                   quantity=1},
+            {type="item",       name="utility-science-pack",          quantity=1},
+
+            {type="item",       name="nv-center",                     quantity=1},
+            {type="item",       name="pi-josephson-junction",         quantity=1},
+            {type="item",       name="quantum-dots",                  quantity=1},
+            {type="item",       name="quantum-vortex-storage-system", quantity=1},
+            {type="item",       name="var-josephson-junction",        quantity=1},
+            {type="fluid",      name="liquid-helium",                 quantity=1},
+            {type="fluid",      name="vacuum",                        quantity=1},
+            {type="item",       name="space-science-pack",            quantity=1},
+            
+            {type="item",       name="locomotive",                    quantity=1},
+            {type="item",       name="ht-locomotive",                 quantity=1},
+            {type="item",       name="py-construction-robot-01",      quantity=1},
+            {type="item",       name="py-construction-robot-02",      quantity=1},
+            {type="item",       name="construction-robot-ht",         quantity=1},
+            {type="item",       name="spidertron",                    quantity=1},
+
+            {type="item",       name="automation-science-pack",       quantity=10000},
+            {type="item",       name="logistic-science-pack",         quantity=10000},
+            {type="item",       name="military-science-pack",         quantity=10000},
+            {type="item",       name="chemical-science-pack",         quantity=10000},
+            {type="item",       name="production-science-pack",       quantity=10000},
+            {type="item",       name="utility-science-pack",          quantity=10000},
+            {type="item",       name="space-science-pack",            quantity=10000},
+        }
+    },
+
+
+    ["Pyanodon's Mods"] = {
+        required_mods = {"pycoalprocessing", "pyfusionenergy", "pyindustry", "pypetroleumhandling", "pyalienlife"},
+        milestones = {
+            {type="item",       name="flask",                         quantity=1},
+            {type="item",       name="fawogae-substrate",             quantity=1},
+            {type="item",       name="automation-science-pack",       quantity=1},
+
+            {type="item",       name="alien-sample01",                quantity=1},
+            {type="item",       name="lab-instrument",                quantity=1},
+            {type="item",       name="logistic-science-pack",         quantity=1},
+            {type="item",       name="military-science-pack",         quantity=1},
+
+            {type="item",       name="optical-fiber",                 quantity=1},
+            {type="item",       name="nexelit-plate",                 quantity=1},
+            {type="item",       name="alien-sample-02",               quantity=1},
+            {type="item",       name="advanced-circuit",              quantity=1},
+            {type="item",       name="rubber",                        quantity=1},
+            {type="item",       name="stainless-steel",               quantity=1},
+            {type="item",       name="tinned-cable",                  quantity=1},
+            {type="item",       name="chemical-science-pack",         quantity=1},
+                        
+            {type="item",       name="plastic-bar",                   quantity=1},
+            {type="item",       name="neuroprocessor",                quantity=1},
+            {type="item",       name="moss",                          quantity=1},
+            {type="item",       name="solidified-sarcorus",           quantity=1},
+            {type="item",       name="paragen",                       quantity=1},
+            {type="fluid",      name="flavonoids",                    quantity=1},
+            {type="item",       name="py-science-pack",               quantity=1},
+
+            {type="item",       name="coated-container",              quantity=1},
+            {type="item",       name="control-unit",                  quantity=1},
+            {type="item",       name="nuclear-sample",                quantity=1},
+            {type="item",       name="alien-enzymes",                 quantity=1},
+            {type="item",       name="small-parts-03",                quantity=1},
+            {type="item",       name="production-science-pack",       quantity=1},
+
+            {type="item",       name="perfect-samples",               quantity=1},
+            {type="item",       name="volumetric-capacitor",          quantity=1},
+            {type="item",       name="hyperelastic-material",         quantity=1},
+            {type="item",       name="intelligent-unit",              quantity=1},
+            {type="item",       name="nano-wires",                    quantity=1},
+            {type="item",       name="nems",                          quantity=1},
+            {type="item",       name="parametric-oscilator",          quantity=1},
+            {type="item",       name="superconductor-servomechanims", quantity=1},
+            {type="item",       name="super-steel",                   quantity=1},
+            {type="item",       name="utility-science-pack",          quantity=1},
+
+            {type="item",       name="strangelets",                   quantity=1},
+            {type="item",       name="destablilized-toxirus",         quantity=1},
+            {type="item",       name="nv-center",                     quantity=1},
+            {type="item",       name="pi-josephson-junction",         quantity=1},
+            {type="item",       name="quantum-dots",                  quantity=1},
+            {type="item",       name="quantum-vortex-storage-system", quantity=1},
+            {type="item",       name="var-josephson-junction",        quantity=1},
+            {type="item",       name="yellow-cake",                   quantity=1},
+            {type="fluid",      name="liquid-helium",                 quantity=1},
+            {type="fluid",      name="vacuum",                        quantity=1},
+            {type="item",       name="space-science-pack",            quantity=1},
+
+            {type="item",       name="locomotive",                    quantity=1},
+            {type="item",       name="ht-locomotive",                 quantity=1},
+            {type="item",       name="py-construction-robot-01",      quantity=1},
+            {type="item",       name="py-construction-robot-02",      quantity=1},
+            {type="item",       name="construction-robot-ht",         quantity=1},
+            {type="item",       name="spidertron",                    quantity=1},
+
+            {type="item",       name="automation-science-pack",       quantity=10000},
+            {type="item",       name="logistic-science-pack",         quantity=10000},
+            {type="item",       name="military-science-pack",         quantity=10000},
+            {type="item",       name="chemical-science-pack",         quantity=10000},
+            {type="item",       name="py-science-pack",               quantity=10000},
+            {type="item",       name="production-science-pack",       quantity=10000},
+            {type="item",       name="utility-science-pack",          quantity=10000},
+            {type="item",       name="space-science-pack",            quantity=10000},
         }
     },
 }
