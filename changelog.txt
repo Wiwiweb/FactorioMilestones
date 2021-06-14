@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: ????
+  Features:
+    - Add preset: Industrial Revolution 2
   Changes:
     - Tweak Angel presets to account for changes when using "industry overhaul"
 ---------------------------------------------------------------------------------------------------
