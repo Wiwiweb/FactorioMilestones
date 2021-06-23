@@ -67,7 +67,9 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
 end
 
 local function get_milestones_array_element(flow, allow_empty)
-    if flow.milestones_settings_item.elem_value == nil and not allow_empty then return nil end
+    if not allow_empty and (flow.milestones_settings_item == nil or flow.milestones_settings_item.elem_value == nil) then 
+        return nil 
+    end
     local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
     return {
         type=flow.milestones_settings_item.elem_type,

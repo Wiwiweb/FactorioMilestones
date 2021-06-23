@@ -5,6 +5,8 @@ Date: ????
     - Add preset: Industrial Revolution 2
   Changes:
     - Tweak Angel presets to account for changes when using "industry overhaul"
+  Bugfixes:
+    - Fix crash when trying to confirm settings with invalid items
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2021-06-13
