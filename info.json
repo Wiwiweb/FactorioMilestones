@@ -5,5 +5,8 @@
     "author": "Wiwiweb",
     "factorio_version": "1.1",
     "dependencies": ["base >= 1.1", "flib >= 0.7.0"],
-    "description": "Keeps track of your milestones and how fast you reached them. Compare with your friends and look back on your factory's progress. Customize what you want to track. Supports modded items and comes with presets for popular modpacks."
-  }
+    "description": "Keeps track of your milestones and how fast you reached them. Compare with your friends and look back on your factory's progress. Customize what you want to track. Supports modded items and comes with presets for popular modpacks.",
+    "package": {
+      "git_publish_branch": "main"
+    }
+}
