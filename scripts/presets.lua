@@ -441,7 +441,76 @@ presets = {
         }
     },
 
+
+    ["Seablock"] = {
+        required_mods = {"bobplates", "bobelectronics", "bobtech", "angelsbioprocessing", "SeaBlock"},
+        milestones = {
+            {type="item",       name="landfill",                       quantity=1},
+
+            {type="item",       name="automation-science-pack",        quantity=1},
+            {type="item",       name="logistic-science-pack",          quantity=1},
+            {type="item",       name="military-science-pack",          quantity=1},
+            {type="item",       name="chemical-science-pack",          quantity=1},
+            {type="item",       name="science-pack-gold",              quantity=1},
+            {type="item",       name="advanced-logistic-science-pack", quantity=1},
+            {type="item",       name="production-science-pack",        quantity=1},
+            {type="item",       name="utility-science-pack",           quantity=1},
+            {type="item",       name="space-science-pack",             quantity=1},
+            {type="item",       name="token-bio",                      quantity=1},
+
+            {type="item",       name="electronic-circuit",             quantity=1},
+            {type="item",       name="advanced-circuit",               quantity=1},
+            {type="item",       name="processing-unit",                quantity=1},
+            {type="item",       name="advanced-processing-unit",       quantity=1},
+
+            {type="item",       name="bronze-alloy",                   quantity=1},
+            {type="item",       name="invar-alloy",                    quantity=1},
+            {type="item",       name="brass-alloy",                    quantity=1},
+            {type="item",       name="silver-plate",                   quantity=1},
+            {type="item",       name="gold-plate",                     quantity=1},
+            {type="item",       name="aluminium-plate",                quantity=1},
+            {type="item",       name="cobalt-steel-alloy",             quantity=1},
+            {type="item",       name="plastic-bar",                    quantity=1},
+            {type="item",       name="silicon-nitride",                quantity=1},
+            {type="item",       name="titanium-plate",                 quantity=1},
+            {type="item",       name="tungsten-plate",                 quantity=1},
+            {type="item",       name="copper-tungsten-alloy",          quantity=1},
+            {type="item",       name="tungsten-carbide",               quantity=1},
+            {type="item",       name="nitinol-alloy",                  quantity=1},
+
+            {type="fluid",      name="gas-methane",                    quantity=1},
+            {type="item",       name="plastic-bar",                    quantity=1},
+            {type="item",       name="sulfur",                         quantity=1},
+            {type="fluid",      name="liquid-sulfuric-acid",           quantity=1},
+            {type="fluid",      name="liquid-resin",                   quantity=1},
+            {type="item",       name="solid-paper",                    quantity=1},
+
+            {type="item",       name="rocket-fuel",                    quantity=1},
+            {type="technology", name="rocket-silo",                    quantity=1},
+            {type="item",       name="rocket-part",                    quantity=100},
+            {type="item",       name="ftl-drive",                      quantity=1},
+            
+            {type="item",       name="construction-robot",             quantity=1},
+            {type="item",       name="locomotive",                     quantity=1},
+            {type="item",       name="antron",                         quantity=1},
+
+            {type="item",       name="uranium-fuel-cell",              quantity=1},
+            {type="item",       name="solar-panel",                    quantity=1},
+            {type="item",       name="crystal-full-harmonic",          quantity=1},
+
+            {type="item",       name="automation-science-pack",        quantity=10000},
+            {type="item",       name="logistic-science-pack",          quantity=10000},
+            {type="item",       name="military-science-pack",          quantity=10000},
+            {type="item",       name="chemical-science-pack",          quantity=10000},
+            {type="item",       name="science-pack-gold",              quantity=10000},
+            {type="item",       name="advanced-logistic-science-pack", quantity=10000},
+            {type="item",       name="production-science-pack",        quantity=10000},
+            {type="item",       name="utility-science-pack",           quantity=10000},
+            {type="item",       name="space-science-pack",             quantity=10000},
+        }
+    },
     
+
     ["Pyanodon's Mods (Without AlienLife)"] = {
         required_mods = {"pycoalprocessing", "pyfusionenergy", "pyindustry", "pypetroleumhandling"},
         milestones = {

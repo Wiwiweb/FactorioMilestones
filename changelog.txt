@@ -2,7 +2,7 @@
 Version: 1.0.2
 Date: ????
   Features:
-    - Add preset: Industrial Revolution 2
+    - Add presets: Industrial Revolution 2, Seablock
   Changes:
     - Tweak Angel presets to account for changes when using "industry overhaul"
   Bugfixes:
