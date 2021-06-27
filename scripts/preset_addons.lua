@@ -17,5 +17,15 @@ preset_addons = {
             {type="item", name="ftl-drive", quantity=1},
         }
     },
+        
+    ["BioIndustries Base"] = {
+        required_mods = {"Bio_Industries"},
+        milestones = {
+            {type="item", name="bi-bio-greenhouse", quantity=1},
+            {type="item", name="bi-bio-farm",       quantity=1},
+            {type="item", name="fertilizer",        quantity=1},
+            {type="item", name="bi-adv-fertilizer", quantity=1},
+        }
+    },
 
 }

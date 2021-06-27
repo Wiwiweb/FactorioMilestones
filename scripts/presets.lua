@@ -722,5 +722,5 @@ presets = {
             {type="item",       name="utility-science-pack",    quantity=10000},
             {type="item",       name="space-science-pack",      quantity=10000},
         }
-    }
+    },
 }
