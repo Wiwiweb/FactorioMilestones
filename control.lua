@@ -52,6 +52,12 @@ script.on_init(function()
     end
 end)
 
+script.on_load(function()
+    if global.delayed_chat_message ~= nil then
+        create_delayed_chat()
+    end
+end)
+
 script.on_event(defines.events.on_force_created, function(event)
     initialize_force(event.force)
 end)
@@ -77,9 +83,10 @@ script.on_event(defines.events.on_player_removed, function(event)
 end)
 
 script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
+
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
-    log("on_runtime_mod_setting_changed")
     if event.setting == "milestones_check_frequency" then
+        log("Milestones check frequency changed")
         script.on_nth_tick(nil) -- Unregister event
         script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
     end
