@@ -1,3 +1,10 @@
+-- Only one of these presets can be used. 
+-- Add milestones for a mod here if the mod is a major mod that changes the game a lot and would not work well combined with another major mod.
+-- If the mod is small and could be combined with any major mod, add the milestones in preset_addons.lua instead.
+
+-- The preset with the highest number of "required mods" matches will be selected. (e.g. Bob's and Angel's will be selected over just Bob's)
+-- If the mod is compatible with a limited amount of other major mods, you can have a preset for combinations (e.g. There is an SE preset, a K2 preset, and a SE+K2 preset)
+
 presets = {
     ["Vanilla"] = {
         required_mods = {},

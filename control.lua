@@ -33,10 +33,12 @@ local function clear_player(player_index)
 end
 
 script.on_init(function()
+    global.delayed_chat_messages = {}
     global.forces = {}
     global.players = {}
 
     load_presets()
+    load_preset_addons()
 
     -- Initialize for existing forces in existing save file
     for _, force in pairs(game.forces) do
@@ -47,13 +49,13 @@ script.on_init(function()
         initialize_player(player)
     end
 
-    if global.delayed_chat_message ~= nil then
+    if next(global.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
 end)
 
 script.on_load(function()
-    if global.delayed_chat_message ~= nil then
+    if next(global.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
 end)

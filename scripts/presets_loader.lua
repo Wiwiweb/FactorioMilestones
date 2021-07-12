@@ -1,4 +1,5 @@
 require("presets")
+require("preset_addons")
 
 local function get_delayed_chat_delay()
     local delay = 240
@@ -9,9 +10,12 @@ local function get_delayed_chat_delay()
 end
 
 local function print_chat_delayed(event)
+    log("Printing delayed chat")
     if event.tick == 0 then return end
-    game.print(global.delayed_chat_message)
-    global.delayed_chat_message = nil
+    for _, delayed_chat_message in pairs(global.delayed_chat_messages) do
+        game.print(delayed_chat_message)
+    end
+    global.delayed_chat_messages = {}
     script.on_nth_tick(get_delayed_chat_delay(), nil)
 end
 
@@ -22,6 +26,7 @@ function create_delayed_chat()
 end
 
 local function is_preset_valid(preset)
+    log(serpent.line(preset.required_modss))
     for _, mod_name in pairs(preset.required_mods) do
         if not game.active_mods[mod_name] then return false end
     end
@@ -45,9 +50,32 @@ function load_presets()
     log("Valid presets found: " .. serpent.line(global.valid_preset_names))
     log("Auto-detected preset used: " .. global.current_preset_name)
 
-    global.delayed_chat_message = {"milestones.message_loaded_presets", global.current_preset_name}
+    table.insert(global.delayed_chat_messages, {"milestones.message_loaded_presets", global.current_preset_name})
     global.loaded_milestones = presets[global.current_preset_name].milestones
 end
+
+function load_preset_addons()
+    log("Loading presets addons")
+    log(serpent.block(game.active_mods))
+    preset_addons_loaded = {}
+
+    for preset_addon_name, preset_addon in pairs(preset_addons) do
+        if is_preset_valid(preset_addon) then
+            table.insert(preset_addons_loaded, preset_addon_name)
+            for _, milestone in ipairs(preset_addon.milestones) do 
+                table.insert(global.loaded_milestones, milestone)
+            end
+        end
+    end
+    log("Preset addons loaded: " .. serpent.line(preset_addons_loaded))
+
+    if #preset_addons_loaded == 1 then
+        table.insert(global.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
+    elseif #preset_addons_loaded > 1 then
+        table.insert(global.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
+    end
+end
+
 
 local function table_contains(table, element)
     for _, value in pairs(table) do
@@ -72,9 +100,9 @@ function reload_presets()
     log("New presets found: " .. serpent.line(added_presets))
     log("New list of valid presets: " .. serpent.line(global.valid_preset_names))
     if #added_presets == 1 then
-        global.delayed_chat_message = {"milestones.message_reloaded_presets_singular", added_presets[1]}
+        table.insert(global.delayed_chat_messages, {"milestones.message_reloaded_presets_singular", added_presets[1]})
     elseif #added_presets > 1 then
-        global.delayed_chat_message = {"milestones.message_reloaded_presets_plural", table.concat(added_presets, ", ")}
+        table.insert(global.delayed_chat_messages, {"milestones.message_reloaded_presets_plural", table.concat(added_presets, ", ")})
     end
 end
 
@@ -85,7 +113,7 @@ script.on_configuration_changed(function(event)
 
     -- We also do this here because for some reason on_nth_tick sometimes doesn't work in on_init
     -- I don't know why
-    if global.delayed_chat_message ~= nil then
+    if next(global.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
 end)
