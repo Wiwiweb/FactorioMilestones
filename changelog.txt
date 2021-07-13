@@ -4,6 +4,8 @@ Date: ????
   Features:
     - Add preset addons: Small mods that can be used with any other major mod can now have preset milestones, which will be detected and added at the end of the major mod preset.
     - Add Power Armor Mk3 preset addon
+  Changes:
+    - Add missing holmium ingot to SE preset
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2021-06-27
