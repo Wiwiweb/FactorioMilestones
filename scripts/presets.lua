@@ -496,7 +496,6 @@ presets = {
             {type="item",       name="rocket-fuel",                    quantity=1},
             {type="technology", name="rocket-silo",                    quantity=1},
             {type="item",       name="rocket-part",                    quantity=100},
-            {type="item",       name="ftl-drive",                      quantity=1},
             
             {type="item",       name="construction-robot",             quantity=1},
             {type="item",       name="locomotive",                     quantity=1},

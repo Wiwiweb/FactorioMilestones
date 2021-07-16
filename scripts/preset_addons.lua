@@ -10,4 +10,12 @@ preset_addons = {
             {type="item", name="pamk3-pamk4", quantity=1},
         }
     },
+
+    ["Space Extension (SpaceX)"] = {
+        required_mods = {"SpaceMod"},
+        milestones = {
+            {type="item", name="ftl-drive", quantity=1},
+        }
+    },
+
 }
