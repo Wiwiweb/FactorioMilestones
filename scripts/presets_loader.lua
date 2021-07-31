@@ -1,5 +1,5 @@
-require("presets")
-require("preset_addons")
+require("presets.presets")
+require("presets.preset_addons")
 
 local function get_delayed_chat_delay()
     local delay = 240
@@ -26,7 +26,6 @@ function create_delayed_chat()
 end
 
 local function is_preset_valid(preset)
-    log(serpent.line(preset.required_modss))
     for _, mod_name in pairs(preset.required_mods) do
         if not game.active_mods[mod_name] then return false end
     end
@@ -39,6 +38,7 @@ function load_presets()
 
     local max_nb_mods_matched = -1
     for preset_name, preset in pairs(presets) do
+        log("hello")
         if is_preset_valid(preset) then
             table.insert(global.valid_preset_names, preset_name)
             if #preset.required_mods > max_nb_mods_matched then

@@ -1,5 +1,5 @@
 local table = require("__flib__.table")
-require("presets")
+require("presets.presets")
 require("milestones_util")
 
 local function refresh_arrow_buttons(gui_index, settings_flow)
