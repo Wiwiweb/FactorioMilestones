@@ -2,36 +2,12 @@ require("scripts.tracker")
 require("scripts.gui")
 require("scripts.presets_loader")
 require("scripts.milestones_util")
+require("scripts.global_init")
+local migrations = require("scripts.migrations")
+
 local table = require("__flib__.table")
+local migration = require("__flib__.migration")
 
-local function initialize_force(force)
-    if next(force.players) ~= nil then -- Don't bother with forces without players
-        global.forces[force.name] = {
-            complete_milestones = {},
-            incomplete_milestones = table.deep_copy(global.loaded_milestones)
-        }
-        backfill_completion_times(force)
-    end
-end
-
-local function initialize_player(player)
-    local outer_frame, main_frame, inner_frame = build_main_frame(player)
-    global.players[player.index] = {
-        outer_frame = outer_frame,
-        main_frame = main_frame,
-        inner_frame = inner_frame,
-        opened_once_before = false,
-        pinned = false
-    }
-end
-
-local function clear_force(force_name)
-    global.forces[force_name] = nil
-end
-
-local function clear_player(player_index)
-    global.players[player_index] = nil
-end
 
 script.on_init(function()
     global.delayed_chat_messages = {}
@@ -94,6 +70,23 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
         script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
     end
 end)
+
+
+script.on_configuration_changed(function(event)
+    if next(event.mod_changes) ~= nil and event.mod_changes["milestones"] == nil then
+        reload_presets()
+    end
+
+    -- We also do this here because for some reason on_nth_tick sometimes doesn't work in on_init
+    -- I don't know why
+    if next(global.delayed_chat_messages) ~= nil then
+        create_delayed_chat()
+    end
+
+    -- Run migrations for version changes
+    migration.on_config_changed(event, migrations)
+end)
+
 
 -- Debug command
 remote.add_interface("milestones", {

@@ -105,15 +105,3 @@ function reload_presets()
         table.insert(global.delayed_chat_messages, {"milestones.message_reloaded_presets_plural", table.concat(added_presets, ", ")})
     end
 end
-
-script.on_configuration_changed(function(event)
-    if next(event.mod_changes) ~= nil and event.mod_changes["milestones"] == nil then
-        reload_presets()
-    end
-
-    -- We also do this here because for some reason on_nth_tick sometimes doesn't work in on_init
-    -- I don't know why
-    if next(global.delayed_chat_messages) ~= nil then
-        create_delayed_chat()
-    end
-end)
