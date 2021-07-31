@@ -1,3 +1,4 @@
+require("util")
 require("presets.presets")
 require("presets.preset_addons")
 
@@ -73,14 +74,6 @@ function load_preset_addons()
     elseif #preset_addons_loaded > 1 then
         table.insert(global.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
     end
-end
-
-
-local function table_contains(table, element)
-    for _, value in pairs(table) do
-        if value == element then return true end
-    end
-    return false
 end
 
 function reload_presets()
