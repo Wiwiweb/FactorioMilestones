@@ -38,7 +38,6 @@ function load_presets()
 
     local max_nb_mods_matched = -1
     for preset_name, preset in pairs(presets) do
-        log("hello")
         if is_preset_valid(preset) then
             table.insert(global.valid_preset_names, preset_name)
             if #preset.required_mods > max_nb_mods_matched then

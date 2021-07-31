@@ -76,7 +76,9 @@ function import_settings(player_index)
         local settings_flow = global.players[player_index].settings_flow
         settings_flow.clear()
         fill_settings_flow(settings_flow, imported_milestones)
-        global.players[player_index].inner_frame.milestones_preset_flow.milestones_preset_dropdown.caption = {"milestones.settings_imported"}
+        local preset_dropdown = global.players[player_index].inner_frame.milestones_preset_flow.milestones_preset_dropdown
+        preset_dropdown.caption = {"milestones.settings_imported"}
+        preset_dropdown.tags = {action="milestones_change_preset", imported=true} -- For some reason, can't just change a single tag
         close_import_export_page(player_index)
     end
 end

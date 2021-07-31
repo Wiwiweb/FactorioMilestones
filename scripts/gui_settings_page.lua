@@ -113,13 +113,19 @@ function build_settings_page(player)
     preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
 
     -- Preset dropdown
-    local current_preset_index = 1
-    for _, value in pairs(global.valid_preset_names) do
-        if value == global.current_preset_name then break end
-        current_preset_index = current_preset_index + 1
+    local preset_dropdown = preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=global.valid_preset_names}
+    if global.current_preset_name == "Imported" then
+        preset_dropdown.caption = {"milestones.settings_imported"}
+        preset_dropdown.tags = {action="milestones_change_preset", imported=true}
+    else
+        local current_preset_index = 1
+        for _, value in pairs(global.valid_preset_names) do
+            if value == global.current_preset_name then break end
+            current_preset_index = current_preset_index + 1
+        end
+        preset_dropdown.selected_index = current_preset_index
+        preset_dropdown.tags = {action="milestones_change_preset", imported=false}
     end
-    preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=global.valid_preset_names, selected_index=current_preset_index, 
-        tags={action="milestones_change_preset"}}
 
     preset_flow.add{type="sprite-button", name="milestones_import_button", tooltip={"milestones.settings_import"}, sprite="utility/import_slot", style="tool_button",
         tags={action="milestones_open_import"}}
@@ -223,7 +229,11 @@ function confirm_settings_page(player_index)
     if not table.deep_compare(global.loaded_milestones, new_milestones) then -- If something changed
         local inner_frame = global.players[player_index].inner_frame
         local preset_dropdown = inner_frame.milestones_preset_flow.milestones_preset_dropdown
-        global.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
+        if preset_dropdown.tags.imported then
+            global.current_preset_name = "Imported"
+        else
+            global.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
+        end
         
         global.loaded_milestones = new_milestones
         
@@ -279,6 +289,7 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
     if not event.element then return end
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_change_preset" then
+        event.element.tags = {action="milestones_change_preset", imported=false}
         local selected_preset_name = event.element.get_item(event.element.selected_index)
         local settings_flow = global.players[event.player_index].settings_flow
         settings_flow.clear()
