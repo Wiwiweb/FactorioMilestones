@@ -15,8 +15,9 @@ local function initialize_force(force)
 end
 
 local function initialize_player(player)
-    local main_frame, inner_frame = build_main_frame(player)
+    local outer_frame, main_frame, inner_frame = build_main_frame(player)
     global.players[player.index] = {
+        outer_frame = outer_frame,
         main_frame = main_frame,
         inner_frame = inner_frame,
         opened_once_before = false,

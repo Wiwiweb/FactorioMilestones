@@ -78,7 +78,7 @@ local function get_milestones_array_element(flow, allow_empty)
     }
 end
 
-local function get_resulting_milestones_array(player_index)
+function get_resulting_milestones_array(player_index)
     local resulting_milestones = {}
     local settings_flow = global.players[player_index].settings_flow
     for _, child in pairs(settings_flow.children) do
@@ -90,7 +90,7 @@ local function get_resulting_milestones_array(player_index)
     return resulting_milestones
 end
 
-local function fill_settings_flow(settings_flow, milestones)
+function fill_settings_flow(settings_flow, milestones)
     for i, milestone in pairs(milestones) do
         local item_flow = add_milestone_setting(milestone, settings_flow, nil)
         if i < #milestones then
@@ -110,7 +110,7 @@ function build_settings_page(player)
     local inner_frame = global.players[player.index].inner_frame
 
     local preset_flow = inner_frame.add{type="flow", name="milestones_preset_flow", direction="horizontal"}
-    preset_flow.add{type="label", caption="Preset:", style="caption_label"}
+    preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
 
     -- Preset dropdown
     local current_preset_index = 1
@@ -118,7 +118,13 @@ function build_settings_page(player)
         if value == global.current_preset_name then break end
         current_preset_index = current_preset_index + 1
     end
-    preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=global.valid_preset_names, selected_index=current_preset_index, tags={action="milestones_change_preset"}}
+    preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=global.valid_preset_names, selected_index=current_preset_index, 
+        tags={action="milestones_change_preset"}}
+
+    preset_flow.add{type="sprite-button", name="milestones_import_button", tooltip={"milestones.settings_import"}, sprite="utility/import_slot", style="tool_button",
+        tags={action="milestones_open_import"}}
+    preset_flow.add{type="sprite-button", name="milestones_export_button", tooltip={"milestones.settings_export"}, sprite="utility/export_slot", style="tool_button",
+        tags={action="milestones_open_export"}}
 
     local settings_scroll = inner_frame.add{type="scroll-pane", name="milestones_settings_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
@@ -131,7 +137,7 @@ function build_settings_page(player)
             caption={"", "[img=milestones_icon_"..type.."_black] ", {"milestones.settings_add_"..type}},
             tags={action="milestones_add_setting", type=type}}
     end
-    main_frame.force_auto_center()
+    global.players[player.index].outer_frame.force_auto_center()
 end
 
 function swap_settings(player_index, button_element)
@@ -195,7 +201,14 @@ function cancel_settings_page(player_index)
     global.players[player_index].inner_frame.clear()
     local player = game.get_player(player_index)
     build_display_page(player)
-    global.players[player_index].main_frame.force_auto_center()
+    global.players[player_index].outer_frame.force_auto_center()
+
+    local outer_frame = global.players[player_index].outer_frame
+    local import_export_frame = outer_frame.milestones_settings_import_export
+    local inside_frame = import_export_frame.milestones_settings_import_export_inside
+
+    inside_frame.clear()
+    import_export_frame.visible = false
 end
 
 function confirm_settings_page(player_index)
@@ -270,7 +283,7 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
         local settings_flow = global.players[event.player_index].settings_flow
         settings_flow.clear()
         fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
-        global.players[event.player_index].main_frame.force_auto_center()
+        global.players[event.player_index].outer_frame.force_auto_center()
     end
 end)
 

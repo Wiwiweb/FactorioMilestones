@@ -75,6 +75,13 @@ styles.milestones_small_textfield = {
   natural_width = 50
 }
 
+styles.milestones_import_export_textbox = {
+  type = "textbox_style",
+  width = 600,
+  minimal_height = 300,
+  maximal_height = 1000
+}
+
 data:extend{
     {
         type = "custom-input",

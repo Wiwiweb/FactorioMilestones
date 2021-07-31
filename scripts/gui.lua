@@ -1,16 +1,17 @@
 require("gui_display_page")
 require("gui_settings_page")
+require("gui_import_export")
 
 function build_main_frame(player)
     local screen_element = player.gui.screen
-    local main_frame = screen_element.add{type="frame", name="milestones_main_frame", direction="vertical", visible=false}
+    local outer_frame = screen_element.add{type="frame", style="outer_frame", visible=false}
+    local main_frame = outer_frame.add{type="frame", name="milestones_main_frame", direction="vertical"}
 
     local titlebar = main_frame.add{type="flow", name="milestones_titlebar", style="flib_titlebar_flow", direction="horizontal"}
     titlebar.add{
         type="label",
         name="milestones_main_label",
         style="frame_title",
-        style_mods={left_margin=4},
         caption={"milestones.title"},
         ignored_by_interaction=true
     }
@@ -61,7 +62,7 @@ function build_main_frame(player)
             action="milestones_close_gui"
         }
     }
-    titlebar.drag_target = main_frame
+    titlebar.drag_target = outer_frame
 
     local inner_frame = main_frame.add{type="frame", name="milestones_inner_frame", direction="vertical", style="milestones_inner_frame"}
 
@@ -69,9 +70,24 @@ function build_main_frame(player)
     dialog_buttons_bar.add{type="button", style="back_button", caption={"milestones.settings_back"}, tags={action="milestones_cancel_settings"}}
     dialog_buttons_bar.add{type="empty-widget", style="flib_dialog_footer_drag_handle", ignored_by_interaction=true}
     dialog_buttons_bar.add{type="button", style="confirm_button", caption={"milestones.settings_confirm"}, tags={action="milestones_confirm_settings"}}
-    dialog_buttons_bar.drag_target = main_frame
+    dialog_buttons_bar.drag_target = outer_frame
 
-    return main_frame, inner_frame
+    -- Import/export side menu
+
+    local import_export_frame = outer_frame.add{type="frame", name="milestones_settings_import_export", style="inner_frame_in_outer_frame", direction="vertical", visible=false}
+    local import_export_titlebar = import_export_frame.add{type="flow", name="milestones_settings_import_export_titlebar", style="flib_titlebar_flow", direction="horizontal"}
+    import_export_titlebar.add{
+        type="label",
+        name="milestones_settings_import_export_titlebar_label",
+        style="frame_title",
+        ignored_by_interaction=true
+    }
+    import_export_titlebar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
+    import_export_titlebar.drag_target = outer_frame
+
+    import_export_frame.add{type="flow", name="milestones_settings_import_export_inside", direction="vertical"}
+
+    return outer_frame, main_frame, inner_frame
 end
 
 local function update_settings_button(player) -- In case permissions changed
@@ -97,20 +113,26 @@ local function open_gui(player)
     local global_player = global.players[player.index]
     build_display_page(player)
     update_settings_button(player)
-    global_player.main_frame.visible = true
+    global_player.outer_frame.visible = true
     player.opened = global_player.main_frame
     player.set_shortcut_toggled("milestones_toggle_gui", true)
 
     if not global_player.opened_once_before then -- Open in the center the first time
-        global_player.main_frame.force_auto_center()
+        global_player.outer_frame.force_auto_center()
         global_player.opened_once_before = true
     end
 end
 
 local function close_gui(player)
     local global_player = global.players[player.index]
-    global_player.main_frame.visible = false
+    global_player.outer_frame.visible = false
     global_player.inner_frame.clear()
+
+    local import_export_frame = global_player.outer_frame.milestones_settings_import_export
+    local import_export_inside_frame = import_export_frame.milestones_settings_import_export_inside
+    import_export_inside_frame.clear()
+    import_export_frame.visible = false
+
     player.set_shortcut_toggled("milestones_toggle_gui", false)
     if player.opened == global_player.main_frame then
         player.opened = nil
@@ -118,7 +140,7 @@ local function close_gui(player)
 end
 
 local function toggle_gui(player)
-    local visible = global.players[player.index].main_frame.visible
+    local visible = global.players[player.index].outer_frame.visible
     if visible == false then
         open_gui(player)
     else
@@ -229,6 +251,14 @@ script.on_event(defines.events.on_gui_click, function(event)
         enable_edit_time(event.player_index, event.element)
     elseif event.element.tags.action == "milestones_confirm_edit_time" then
         confirm_edit_time(event.player_index, event.element)
+    elseif event.element.tags.action == "milestones_open_import" then
+        toggle_import_export_page(event.player_index, event.element, true)
+    elseif event.element.tags.action == "milestones_open_export" then
+        toggle_import_export_page(event.player_index, event.element, false)
+    elseif event.element.tags.action == "milestones_close_import_export" then
+        close_import_export_page(event.player_index)
+    elseif event.element.tags.action == "milestones_import_settings" then
+        import_settings(event.player_index)
     end
 end)
 
