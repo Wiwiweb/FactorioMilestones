@@ -5,7 +5,6 @@ require("scripts.milestones_util")
 require("scripts.global_init")
 local migrations = require("scripts.migrations")
 
-local table = require("__flib__.table")
 local migration = require("__flib__.migration")
 
 

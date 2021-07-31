@@ -1,3 +1,5 @@
+local table = require("__flib__.table")
+
 function initialize_force(force)
     if next(force.players) ~= nil then -- Don't bother with forces without players
         global.forces[force.name] = {
