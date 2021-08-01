@@ -31,7 +31,7 @@ script.on_init(function()
 end)
 
 script.on_load(function()
-    if next(global.delayed_chat_messages) ~= nil then
+    if global.delayed_chat_messages ~= nil and next(global.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
 end)
