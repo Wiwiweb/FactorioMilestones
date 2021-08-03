@@ -72,7 +72,10 @@ end)
 
 
 script.on_configuration_changed(function(event)
-    if next(event.mod_changes) ~= nil and event.mod_changes["milestones"] == nil then
+    -- Run migrations for version changes
+    migration.on_config_changed(event, migrations)
+
+    if next(event.mod_changes) ~= nil then
         reload_presets()
     end
 
@@ -81,9 +84,6 @@ script.on_configuration_changed(function(event)
     if next(global.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
-
-    -- Run migrations for version changes
-    migration.on_config_changed(event, migrations)
 end)
 
 
