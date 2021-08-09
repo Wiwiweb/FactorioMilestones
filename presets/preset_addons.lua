@@ -17,7 +17,23 @@ preset_addons = {
             {type="item", name="ftl-drive", quantity=1},
         }
     },
-        
+
+    ["Omnienergy"] = {
+        required_mods = {"omnimatter_energy"},
+        milestones = {
+            {type="item", name="energy-science-pack", quantity=1},
+            {type="item", name="energy-science-pack", quantity=10000},
+        }
+    },
+
+    ["Omniscience"] = {
+        required_mods = {"omnimatter_science"},
+        milestones = {
+            {type="item", name="omni-pack", quantity=1},
+            {type="item", name="omni-pack", quantity=10000},
+        }
+    },
+
     ["BioIndustries Base"] = {
         required_mods = {"Bio_Industries"},
         milestones = {
