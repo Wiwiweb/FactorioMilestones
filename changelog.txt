@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.7
 Date: ????
+  Features:
+    - Add preset addon for Bio Industries (Thanks to snouz!)
+    - Add preset addon for Omnienergy and Omniscience (Thanks to NihlisticPandemonium!)
   Bugfixes:
     - Fix crash that could occur in some cases in multiplayer
 ---------------------------------------------------------------------------------------------------
