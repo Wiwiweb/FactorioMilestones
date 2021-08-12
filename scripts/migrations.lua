@@ -14,9 +14,18 @@ return {
 
         -- GUI changed and new outer_table global was added
         for _, player in pairs(game.players) do
-            global.players[player.index].main_frame.destroy()
-            global.players = {}
+            player.gui.screen.clear()
             initialize_player(player)
         end
-    end
+    end,
+
+    ["1.0.7"] = function()
+        log("Running 1.0.7 migration")
+        -- 1.0.4 migration contained an error that would affect multiplayer games
+        -- Recreate it for all players
+        for _, player in pairs(game.players) do
+            player.gui.screen.clear()
+            initialize_player(player)
+        end
+    end,
 }

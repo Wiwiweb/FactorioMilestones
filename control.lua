@@ -94,9 +94,22 @@ remote.add_interface("milestones", {
         game.print(serpent.block(global.forces))
         log(serpent.block(global.forces))
     end,
+
     -- /c remote.call("milestones", "debug_print_global")
     debug_print_global = function()
         game.print(serpent.block(global.loaded_milestones))
         log(serpent.block(global.loaded_milestones))
+    end,
+
+    -- /c remote.call("milestones", "reinitialize_global")
+    reinitialize_global = function()
+        for _, force in pairs(game.forces) do
+            initialize_force(force)
+        end
+
+        for _, player in pairs(game.players) do
+            global.players[player.index].main_frame.destroy()
+            initialize_player(player)
+        end
     end,
 })
