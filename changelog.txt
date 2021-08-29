@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.7
-Date: ????
+Date: 2021-08-29
   Features:
     - Add preset addon for Bio Industries (Thanks to snouz!)
     - Add preset addon for Omnienergy and Omniscience (Thanks to NihlisticPandemonium!)
