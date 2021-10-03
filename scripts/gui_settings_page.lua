@@ -268,7 +268,7 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
                 event.element.parent.milestones_settings_quantity.text = "1"
             end
         end
-        event.element.parent.milestones_settings_label.caption = prototype.localised_name
+        event.element.parent.milestones_settings_label.caption = prototype ~= nil and prototype.localised_name or ""
     end
 end)
 
