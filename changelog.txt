@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.9
 Date: ????
-  Changes:
+  Bugfixes:
+    - Fix issue where the completion time for technology milestones was not being saved properly. If you had completed technology milestones, updating to this version will allow you to enter those lost times yourself.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2021-10-03
