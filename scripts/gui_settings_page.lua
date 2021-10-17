@@ -123,6 +123,9 @@ function build_settings_page(player)
             if value == global.current_preset_name then break end
             current_preset_index = current_preset_index + 1
         end
+        if current_preset_index > #global.valid_preset_names then -- Preset not found, can happen when removing mods
+            current_preset_index = 1
+        end
         preset_dropdown.selected_index = current_preset_index
         preset_dropdown.tags = {action="milestones_change_preset", imported=false}
     end
