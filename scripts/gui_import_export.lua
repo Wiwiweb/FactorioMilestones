@@ -34,7 +34,8 @@ function build_import_export_page(player_index, button_element, import)
     local inside_frame = import_export_frame.milestones_settings_import_export_inside
     inside_frame.clear()
     
-    local textbox = inside_frame.add{type="text-box", name="milestones_settings_import_export_textbox", style="milestones_import_export_textbox", horizontal_scroll_policy="dont-show-but-allow-scrolling"}
+    local scroll = inside_frame.add{type="scroll-pane", name="milestones_import_export_scroll"}
+    local textbox = scroll.add{type="text-box", name="milestones_settings_import_export_textbox", style="milestones_import_export_textbox", horizontal_scroll_policy="dont-show-but-allow-scrolling"}
     if not import then
         textbox.text = milestones_table_to_json(get_resulting_milestones_array(player_index))
         textbox.read_only = true

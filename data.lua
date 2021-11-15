@@ -78,8 +78,7 @@ styles.milestones_small_textfield = {
 styles.milestones_import_export_textbox = {
   type = "textbox_style",
   width = 600,
-  minimal_height = 300,
-  maximal_height = 1000
+  minimal_height = 300
 }
 
 data:extend{

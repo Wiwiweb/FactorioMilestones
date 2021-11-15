@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.10
 Date: ????
-  Changes:
+  Bugfixes:
+    - Import-export window now gets a scrollbar instead of expanding beyond the screen for large milestone lists
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.9
 Date: 2021-10-17
