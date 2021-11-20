@@ -18,7 +18,7 @@ script.on_init(function()
 
     -- Initialize for existing forces in existing save file
     for _, force in pairs(game.forces) do
-        initialize_force(force)
+        initialize_force_if_needed(force)
     end
     -- Initialize for existing players in existing save file
     for _, player in pairs(game.players) do
@@ -37,11 +37,13 @@ script.on_load(function()
 end)
 
 script.on_event(defines.events.on_force_created, function(event)
-    initialize_force(event.force)
+    initialize_force_if_needed(event.force)
 end)
 
 script.on_event(defines.events.on_player_changed_force, function(event)
-    initialize_force(game.get_player(event.player_index).force)
+    local player = game.get_player(event.player_index)
+    initialize_force_if_needed(player.force)
+    refresh_gui_for_player(player)
 end)
 
 script.on_event(defines.events.on_forces_merged, function(event)
@@ -52,7 +54,7 @@ script.on_event(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
     initialize_player(player)
     if global.forces[player.force.name] == nil then -- Possible if new player is added to empty force e.g. vanilla freeplay
-        initialize_force(player.force)
+        initialize_force_if_needed(player.force)
     end
 end)
 
@@ -104,7 +106,7 @@ remote.add_interface("milestones", {
     -- /c remote.call("milestones", "reinitialize_global")
     reinitialize_global = function()
         for _, force in pairs(game.forces) do
-            initialize_force(force)
+            initialize_force_if_needed(force)
         end
 
         for _, player in pairs(game.players) do

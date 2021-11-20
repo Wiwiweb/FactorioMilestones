@@ -1,7 +1,8 @@
 local table = require("__flib__.table")
 
-function initialize_force(force)
-    if next(force.players) ~= nil then -- Don't bother with forces without players
+function initialize_force_if_needed(force)
+    if global.forces[force.name] == nil and next(force.players) ~= nil then -- Don't bother with forces without players
+        log("Initializing global for force " .. force.name)
         global.forces[force.name] = {
             complete_milestones = {},
             incomplete_milestones = table.deep_copy(global.loaded_milestones)

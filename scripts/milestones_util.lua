@@ -1,3 +1,5 @@
+local table = require("__flib__.table")
+
 -- Each production graph bracket, from highest to lowest, with associated frame count
 -- Used in find_higher_bound_production_tick()
 local FLOW_PRECISION_BRACKETS = {
@@ -37,8 +39,8 @@ function merge_new_milestones(global_force, new_milestones)
         end
     end
 
-    global_force.complete_milestones = new_complete
-    global_force.incomplete_milestones = new_incomplete
+    global_force.complete_milestones = table.deep_copy(new_complete)
+    global_force.incomplete_milestones = table.deep_copy(new_incomplete)
 end
 
 function get_default_unit_for_time_bucket(lower_bound_tick, upper_bound_tick)

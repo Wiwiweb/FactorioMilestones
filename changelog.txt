@@ -1,10 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.10
-Date: ????
+Date: 2021-11-20
   Changes:
     - Add missing holmium ingot to SE+K2 preset
   Bugfixes:
     - Import-export window now gets a scrollbar instead of expanding beyond the screen for large milestone lists
+    - Fix issues with multiple forces, where new forces could have completion times from existing forces, and players switching forces could erase completion times. This fixes issues with Editor Extensions's testing lab mode.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.9
 Date: 2021-10-17
