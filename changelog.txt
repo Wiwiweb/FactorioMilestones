@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.10
 Date: ????
+  Changes:
+    - Add missing holmium ingot to SE+K2 preset
   Bugfixes:
     - Import-export window now gets a scrollbar instead of expanding beyond the screen for large milestone lists
 ---------------------------------------------------------------------------------------------------

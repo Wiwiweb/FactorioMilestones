@@ -198,6 +198,7 @@ presets = {
             {type="item",       name="se-cryonite-rod",              quantity=1},
             {type="item",       name="se-vitamelange-roast",         quantity=1},
             {type="item",       name="se-beryllium-ingot",           quantity=1},
+            {type="item",       name="se-holmium-ingot",             quantity=1},
             {type="item",       name="se-iridium-ingot",             quantity=1},
             {type="fluid",      name="mineral-water",                quantity=1},
             {type="item",       name="rare-metals",                  quantity=1},
