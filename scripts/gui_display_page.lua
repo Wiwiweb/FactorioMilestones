@@ -132,6 +132,7 @@ function build_display_page(player)
     main_frame.milestones_dialog_buttons.visible = false
 
     local inner_frame = global.players[player.index].inner_frame
+    inner_frame.clear() -- Just in case the GUI didn't close through close_gui
     local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll"}
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
     local column_count = math.max(
