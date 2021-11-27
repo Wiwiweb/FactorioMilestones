@@ -94,7 +94,11 @@ local function convert_and_validate_imported_json(import_string, player)
 end
 
 function import_settings(player_index)
-    local import_string = global.players[player_index].outer_frame.milestones_settings_import_export.milestones_settings_import_export_inside.milestones_settings_import_export_textbox.text
+    local import_string = global.players[player_index].outer_frame
+                              .milestones_settings_import_export
+                              .milestones_settings_import_export_inside
+                              .milestones_import_export_scroll
+                              .milestones_settings_import_export_textbox.text
     local imported_milestones = convert_and_validate_imported_json(import_string, game.players[player_index])
     if imported_milestones ~= nil then
         local settings_flow = global.players[player_index].settings_flow
