@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
-Date: ????
+Date: 2021-11-28
   Features:
     - Add "Initial preset" mod setting. You can paste an exported preset string that Milestones will load at the beginning of every new game. Useful for speedrunning practice.
     - Add "Kill" milestone type. Used to track biter kills (or any other kills, such as killing yourself with locomotives :) )
