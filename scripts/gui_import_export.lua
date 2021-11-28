@@ -69,38 +69,16 @@ function close_import_export_page(player_index)
     button_flow.milestones_export_button.style = "tool_button"
 end
 
-local function convert_and_validate_imported_json(import_string, player)
-    local imported_milestones = game.json_to_table(import_string)
-
-    if imported_milestones == nil then
-        player.print{"milestones.message_invalid_import_json"}
-        return nil
-    end
-
-    local valid_categories = {'item', 'fluid', 'technology'}
-    for _, milestone in pairs(imported_milestones) do
-        if not table_contains(valid_categories, milestone.type) then
-            player.print{"", {"milestones.message_invalid_import_type"}, milestone.type}
-            return nil 
-        end
-        local num = tonumber(milestone.quantity)
-        if num == nil or num < 1 then
-            player.print{"", {"milestones.message_invalid_import_quantity"}, milestone.quantity}
-            return nil 
-        end
-    end
-
-    return imported_milestones
-end
-
 function import_settings(player_index)
     local import_string = global.players[player_index].outer_frame
                               .milestones_settings_import_export
                               .milestones_settings_import_export_inside
                               .milestones_import_export_scroll
                               .milestones_settings_import_export_textbox.text
-    local imported_milestones = convert_and_validate_imported_json(import_string, game.players[player_index])
-    if imported_milestones ~= nil then
+    local imported_milestones, error = convert_and_validate_imported_json(import_string)
+    if imported_milestones == nil then
+        game.players[player_index].print(error)
+    else
         local settings_flow = global.players[player_index].settings_flow
         settings_flow.clear()
         fill_settings_flow(settings_flow, imported_milestones)

@@ -43,15 +43,18 @@ function load_presets()
             table.insert(global.valid_preset_names, preset_name)
             if #preset.required_mods > max_nb_mods_matched then
                 max_nb_mods_matched = #preset.required_mods
-                global.current_preset_name = preset_name
+                chosen_preset_name = preset_name
             end
         end
     end
     log("Valid presets found: " .. serpent.line(global.valid_preset_names))
-    log("Auto-detected preset used: " .. global.current_preset_name)
 
-    table.insert(global.delayed_chat_messages, {"milestones.message_loaded_presets", global.current_preset_name})
-    global.loaded_milestones = presets[global.current_preset_name].milestones
+    if global.current_preset_name == nil then
+        global.current_preset_name = chosen_preset_name
+        log("Auto-detected preset used: " .. global.current_preset_name)
+        table.insert(global.delayed_chat_messages, {"milestones.message_loaded_presets", global.current_preset_name})
+        global.loaded_milestones = presets[global.current_preset_name].milestones
+    end
 end
 
 function load_preset_addons()

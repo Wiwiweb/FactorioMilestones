@@ -2,6 +2,7 @@ require("scripts.tracker")
 require("scripts.gui")
 require("scripts.presets_loader")
 require("scripts.milestones_util")
+require("scripts.util")
 require("scripts.global_init")
 local migrations = require("scripts.migrations")
 
@@ -13,8 +14,24 @@ script.on_init(function()
     global.forces = {}
     global.players = {}
 
+
+    initial_preset_string = settings.global["milestones_initial_preset"].value
+    if initial_preset_string ~= "" then
+        initial_preset, error = convert_and_validate_imported_json(initial_preset_string)
+        if initial_preset == nil then
+            table.insert(global.delayed_chat_messages, {"milestones.message_invalid_initial_preset"})
+            table.insert(global.delayed_chat_messages, error)
+        else
+            global.current_preset_name = "Imported"
+            global.loaded_milestones = initial_preset
+            table.insert(global.delayed_chat_messages, {"milestones.message_loaded_initial_preset"})
+        end
+    end
+
     load_presets()
-    load_preset_addons()
+    if initial_preset == nil then
+        load_preset_addons()
+    end
 
     -- Initialize for existing forces in existing save file
     for _, force in pairs(game.forces) do
