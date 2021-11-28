@@ -277,7 +277,7 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
             if not visible_textfield then
                 event.element.parent.milestones_settings_quantity.text = "1"
             end
-        elseif event.element.elem_type == "kill" then
+        elseif event.element.elem_type == "entity" then
             prototype = game.entity_prototypes[event.element.elem_value]
         end
         event.element.parent.milestones_settings_label.caption = prototype ~= nil and prototype.localised_name or ""
