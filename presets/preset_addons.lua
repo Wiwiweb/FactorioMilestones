@@ -44,4 +44,36 @@ preset_addons = {
         }
     },
 
+    ["Armoured Biters"] = {
+        required_mods = {"ArmouredBiters"},
+        milestones = {
+            {type="kill", name="behemoth-armoured-biter",  quantity=1},
+            {type="kill", name="leviathan-armoured-biter", quantity=1},
+        }
+    },
+
+    ["Cold Biters"] = {
+        required_mods = {"Cold_biters"},
+        milestones = {
+            {type="kill", name="behemoth-cold-biter",  quantity=1},
+            {type="kill", name="leviathan-cold-biter", quantity=1},
+        }
+    },
+
+    ["Explosive Biters"] = {
+        required_mods = {"Explosive_biters"},
+        milestones = {
+            {type="kill", name="behemoth-explosive-biter",  quantity=1},
+            {type="kill", name="explosive-leviathan-biter", quantity=1},
+        }
+    },
+
+    ["Bob's Enemies"] = {
+        required_mods = {"bobenemies"},
+        milestones = {
+            {type="kill", name="bob-titan-biter",     quantity=1},
+            {type="kill", name="bob-behemoth-biter",  quantity=1},
+            {type="kill", name="bob-leviathan-biter", quantity=1},
+        }
+    },
 }

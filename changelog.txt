@@ -4,6 +4,7 @@ Date: ????
   Features:
     - Add "Initial preset" mod setting. You can paste an exported preset string that Milestones will load at the beginning of every new game. Useful for speedrunning practice.
     - Add "Kill" milestone type. Used to track biter kills (or any other kills, such as killing yourself with locomotives :) )
+    - Add preset addons for Bob's Enemies, Armoured Biters, Cold Biters, Explosive Biters
   Changes:
     - Add kill milestones to existing presets
   Bugfixes:
