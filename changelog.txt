@@ -3,6 +3,9 @@ Version: 1.1.0
 Date: ????
   Features:
     - Add "Initial preset" mod setting. You can paste an exported preset string that Milestones will load at the beginning of every new game. Useful for speedrunning practice.
+    - Add "Kill" milestone type. Used to track biter kills (or any other kills, such as killing yourself with locomotives :) )
+  Changes:
+    - Add kill milestones to existing presets
   Bugfixes:
     - Fix crash when GUI was opened after being closed in some way that didn't trigger the on_gui_closed event
     - Fix crash when using the import feature, introduced in 1.0.10

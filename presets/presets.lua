@@ -32,6 +32,10 @@ presets = {
             {type="item",       name="production-science-pack", quantity=10000},
             {type="item",       name="utility-science-pack",    quantity=10000},
             {type="item",       name="space-science-pack",      quantity=10000},
+            {type="kill",       name="medium-biter",            quantity=1},
+            {type="kill",       name="big-biter",               quantity=1},
+            {type="kill",       name="behemoth-biter",          quantity=1},
+            {type="kill",       name="character",               quantity=1},
         }
     },
 
@@ -87,6 +91,10 @@ presets = {
             {type="item",       name="space-science-pack",      quantity=10000},
             {type="item",       name="space-science-pack",      quantity=100000},
             {type="item",       name="space-science-pack",      quantity=1000000},
+            {type="kill",       name="medium-biter",            quantity=1},
+            {type="kill",       name="big-biter",               quantity=1},
+            {type="kill",       name="behemoth-biter",          quantity=1},
+            {type="kill",       name="character",               quantity=1},
         }
     },
 
@@ -137,6 +145,10 @@ presets = {
             {type="item",       name="se-significant-data",          quantity=1000},
             {type="item",       name="se-significant-data",          quantity=10000},
             {type="item",       name="se-significant-data",          quantity=100000},
+            {type="kill",       name="medium-biter",                 quantity=1},
+            {type="kill",       name="big-biter",                    quantity=1},
+            {type="kill",       name="behemoth-biter",               quantity=1},
+            {type="kill",       name="character",                    quantity=1},
         }
     },
     
@@ -175,6 +187,10 @@ presets = {
             {type="item",       name="matter-tech-card",             quantity=10000},
             {type="item",       name="advanced-tech-card",           quantity=10000},
             {type="item",       name="singularity-tech-card",        quantity=10000},
+            {type="kill",       name="medium-biter",                 quantity=1},
+            {type="kill",       name="big-biter",                    quantity=1},
+            {type="kill",       name="behemoth-biter",               quantity=1},
+            {type="kill",       name="character",                    quantity=1},
         }
     },
 
@@ -237,6 +253,10 @@ presets = {
             {type="item",       name="se-significant-data",          quantity=1000},
             {type="item",       name="se-significant-data",          quantity=10000},
             {type="item",       name="se-significant-data",          quantity=100000},
+            {type="kill",       name="medium-biter",                 quantity=1},
+            {type="kill",       name="big-biter",                    quantity=1},
+            {type="kill",       name="behemoth-biter",               quantity=1},
+            {type="kill",       name="character",                    quantity=1},
         }
     },
 
@@ -284,6 +304,7 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=10000},
             {type="item",       name="utility-science-pack",           quantity=10000},
             {type="item",       name="space-science-pack",             quantity=10000},
+            {type="kill",       name="character",                      quantity=1},
         }
     },
 
@@ -335,6 +356,7 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=10000},
             {type="item",       name="utility-science-pack",           quantity=10000},
             {type="item",       name="space-science-pack",             quantity=10000},
+            {type="kill",       name="character",                      quantity=1},
         }
     },
 
@@ -377,6 +399,7 @@ presets = {
             {type="item",       name="production-science-pack",   quantity=10000},
             {type="item",       name="utility-science-pack",      quantity=10000},
             {type="item",       name="space-science-pack",        quantity=10000},
+            {type="kill",       name="character",                 quantity=1},
         }
     },
 
@@ -447,6 +470,7 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=10000},
             {type="item",       name="utility-science-pack",           quantity=10000},
             {type="item",       name="space-science-pack",             quantity=10000},
+            {type="kill",       name="character",                      quantity=1},
         }
     },
 
@@ -515,6 +539,8 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=10000},
             {type="item",       name="utility-science-pack",           quantity=10000},
             {type="item",       name="space-science-pack",             quantity=10000},
+
+            {type="kill",       name="character",                      quantity=1},
         }
     },
     
@@ -578,6 +604,8 @@ presets = {
             {type="item",       name="production-science-pack",       quantity=10000},
             {type="item",       name="utility-science-pack",          quantity=10000},
             {type="item",       name="space-science-pack",            quantity=10000},
+
+            {type="kill",       name="character",                      quantity=1},
         }
     },
 
@@ -656,6 +684,8 @@ presets = {
             {type="item",       name="production-science-pack",       quantity=10000},
             {type="item",       name="utility-science-pack",          quantity=10000},
             {type="item",       name="space-science-pack",            quantity=10000},
+
+            {type="kill",       name="character",                     quantity=1},
         }
     },
 
@@ -722,6 +752,11 @@ presets = {
             {type="item",       name="production-science-pack", quantity=10000},
             {type="item",       name="utility-science-pack",    quantity=10000},
             {type="item",       name="space-science-pack",      quantity=10000},
+
+            {type="kill",       name="medium-biter",            quantity=1},
+            {type="kill",       name="big-biter",               quantity=1},
+            {type="kill",       name="behemoth-biter",          quantity=1},
+            {type="kill",       name="character",               quantity=1},
         }
     },
 }

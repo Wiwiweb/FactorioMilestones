@@ -21,6 +21,8 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
         prototype = game.fluid_prototypes[milestone.name]
     elseif milestone.type == "technology" then
         prototype = game.technology_prototypes[milestone.name]
+    elseif milestone.type == "kill" then
+        prototype = game.entity_prototypes[milestone.name]
     end
 
     if prototype == nil then
@@ -28,9 +30,10 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
         milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}}
         return
     end
-    
+
     -- Sprite
-    local sprite_path = milestone.type .. "/" .. milestone.name
+    local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
+    local sprite_path = sprite_path_prefix .. "/" .. milestone.name
     local sprite_number
     local tooltip
     if milestone.quantity > 1 then
@@ -40,6 +43,9 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
     if milestone.type == "technology" then
         local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "Level "..milestone.quantity
         tooltip = {"", prototype.localised_name, " (", postfix, ")"}
+    elseif milestone.type == "kill" then
+        local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
+        tooltip = {"", prefix, prototype.localised_name, " (", {"milestones.type_kill"}, ")"}
     else
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
         tooltip = {"", prefix, prototype.localised_name}

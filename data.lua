@@ -140,4 +140,6 @@ data:extend{
   data_util.build_sprite("milestones_icon_fluid_black", {16, 16}, item_icons, 16),
   data_util.build_sprite("milestones_icon_technology", {32, 0}, item_icons, 16),
   data_util.build_sprite("milestones_icon_technology_black", {32, 16}, item_icons, 16),
+  data_util.build_sprite("milestones_icon_kill", {48, 0}, item_icons, 16),
+  data_util.build_sprite("milestones_icon_kill_black", {48, 16}, item_icons, 16),
 }

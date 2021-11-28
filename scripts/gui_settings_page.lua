@@ -29,39 +29,46 @@ end
 local function add_milestone_setting(milestone, settings_flow, gui_index)
     local prototype
     local elem_button
-    local sprite
 
     local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow", index=gui_index}
     milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
-    
+
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, item=milestone.name, tags={action="milestones_change_setting"}}
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item",
+            item=milestone.name, tags={action="milestones_change_setting", milestone_type="item"}}
     elseif milestone.type == "fluid" then
         prototype = game.fluid_prototypes[milestone.name]
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, fluid=milestone.name, tags={action="milestones_change_setting"}}
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="fluid",
+            fluid=milestone.name, tags={action="milestones_change_setting", milestone_type="fluid"}}
     elseif milestone.type == "technology" then
         prototype = game.technology_prototypes[milestone.name]
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type=milestone.type, technology=milestone.name, tags={action="milestones_change_setting"}}
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="technology",
+            technology=milestone.name, tags={action="milestones_change_setting", milestone_type="technology"}}
+    elseif milestone.type == "kill" then
+        prototype = game.entity_prototypes[milestone.name]
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="entity",
+            entity=milestone.name, tags={action="milestones_change_setting", milestone_type="kill"},
+            elem_filters={{filter="entity-with-health"}}}
     end
 
     if milestone.name ~= nil and prototype == nil then
         milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}}
     else
         milestone_flow.add(elem_button)
-        
+
         local caption = (prototype ~= nil) and prototype.localised_name or ""
         milestone_flow.add{type="label", name="milestones_settings_label", caption=caption}
     end
 
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
-    
+
     local visible_textfield = milestone.type ~= "technology" or (prototype ~= nil and prototype.research_unit_count_formula ~= nil) -- No text field for unique technologies
     milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, clear_and_focus_on_right_click=true, 
         tags={action="milestones_change_setting_quantity"}, style="short_number_textfield", visible=visible_textfield}
 
     milestone_flow.add{type="sprite-button", sprite="utility/trash", style="milestones_trash_button", tags={action="milestones_delete_setting"}}
-    local arrows_flow = milestone_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
+    milestone_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
 
     return milestone_flow
 end
@@ -72,7 +79,7 @@ local function get_milestones_array_element(flow, allow_empty)
     end
     local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
     return {
-        type=flow.milestones_settings_item.elem_type,
+        type=flow.milestones_settings_item.tags.milestone_type,
         name=flow.milestones_settings_item.elem_value,
         quantity=quantity
     }
@@ -139,9 +146,9 @@ function build_settings_page(player)
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
     global.players[player.index].settings_flow = settings_flow
     fill_settings_flow(settings_flow, global.loaded_milestones)
-    
+
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
-    for _, type in pairs({"item", "fluid", "technology"}) do
+    for _, type in pairs({"item", "fluid", "technology", "kill"}) do
         buttons_flow.add{type="button", 
             caption={"", "[img=milestones_icon_"..type.."_black] ", {"milestones.settings_add_"..type}},
             tags={action="milestones_add_setting", type=type}}
@@ -191,7 +198,7 @@ function add_setting(player_index, button_element)
     local previous_last_element_index = #settings_flow.children
     local only_element = previous_last_element_index == 0
     local new_element_index = previous_last_element_index + (only_element and 1 or 2) -- No line if we are adding the 1st element
-    
+
     local milestone = {type=milestone_type, quantity=1}
     if not only_element then
         settings_flow.add{type="line"}
@@ -215,7 +222,7 @@ function cancel_settings_page(player_index)
     local outer_frame = global.players[player_index].outer_frame
     local import_export_frame = outer_frame.milestones_settings_import_export
     local inside_frame = import_export_frame.milestones_settings_import_export_inside
-
+ 
     inside_frame.clear()
     import_export_frame.visible = false
 end
@@ -237,9 +244,9 @@ function confirm_settings_page(player_index)
         else
             global.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
         end
-        
+
         global.loaded_milestones = new_milestones
-        
+
         for _, force in pairs(game.forces) do
             local global_force = global.forces[force.name]
             if global_force ~= nil then
@@ -270,6 +277,8 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
             if not visible_textfield then
                 event.element.parent.milestones_settings_quantity.text = "1"
             end
+        elseif event.element.elem_type == "kill" then
+            prototype = game.entity_prototypes[event.element.elem_value]
         end
         event.element.parent.milestones_settings_label.caption = prototype ~= nil and prototype.localised_name or ""
     end

@@ -1,4 +1,3 @@
-require("util")
 require("gui_settings_page")
 
 function toggle_import_export_page(player_index, button_element, import)

@@ -100,13 +100,15 @@ local function find_production_tick_bounds(force, milestone, stats)
 end
 
 
-local function find_completion_tick_bounds(force, milestone, item_stats, fluid_stats)
+local function find_completion_tick_bounds(force, milestone, item_stats, fluid_stats, kill_stats)
     if milestone.type == "technology" then
         return 0, game.tick -- No way to know past research time
     elseif milestone.type == "item" then
         return find_production_tick_bounds(force, milestone, item_stats)
     elseif milestone.type == "fluid" then
         return find_production_tick_bounds(force, milestone, fluid_stats)
+    elseif milestone.type == "kill" then
+        return find_production_tick_bounds(force, milestone, kill_stats)
     end
 end
 
@@ -120,16 +122,20 @@ function backfill_completion_times(force)
     log("Backfilling completion times for " .. force.name)
     local item_stats = force.item_production_statistics
     local fluid_stats = force.fluid_production_statistics
+    local kill_stats = force.kill_count_statistics
+
     local item_counts = item_stats.input_counts
     local fluid_counts = fluid_stats.input_counts
+    local kill_counts = kill_stats.input_counts
+
     local technologies = force.technologies
 
     local global_force = global.forces[force.name]
     local i = 1
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
-        if is_milestone_reached(force, milestone, item_counts, fluid_counts, technologies) then
-            local lower_bound, upper_bound = find_completion_tick_bounds(force, milestone, item_stats, fluid_stats)
+        if is_milestone_reached(force, milestone, item_counts, fluid_counts, kill_counts, technologies) then
+            local lower_bound, upper_bound = find_completion_tick_bounds(force, milestone, item_stats, fluid_stats, kill_stats)
             log("Tick bounds for " ..milestone.name.. " : " ..lower_bound.. " - " ..upper_bound)
             mark_milestone_reached(force, milestone, upper_bound, i, lower_bound)
         else
@@ -139,8 +145,19 @@ function backfill_completion_times(force)
     sort_milestones(global_force.complete_milestones)
 end
 
-function is_production_milestone_reached(force, milestone, item_counts, fluid_counts)
-    local type_count = milestone.type == "item" and item_counts or fluid_counts
+function is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts)
+
+    local type_count
+    if milestone.type == "item" then
+        type_count = item_counts
+    elseif milestone.type == "fluid" then
+        type_count = fluid_counts   
+    elseif milestone.type == "kill" then
+        type_count = kill_counts
+    else
+        error("Invalid milestone type! " .. milestone.type)
+    end
+
     local milestone_count = type_count[milestone.name]
     if milestone_count ~= nil and milestone_count >= milestone.quantity then
         return true
@@ -158,11 +175,11 @@ function is_tech_milestone_reached(force, milestone, technology)
     return false
 end
 
-function is_milestone_reached(force, milestone, item_counts, fluid_counts, technologies)
+function is_milestone_reached(force, milestone, item_counts, fluid_counts, kill_counts, technologies)
     if milestone.type == "technology" then
         local technology = technologies[milestone.name]
         return is_tech_milestone_reached(force, milestone, technology)
     else
-        return is_production_milestone_reached(force, milestone, item_counts, fluid_counts)
+        return is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts)
     end
 end
