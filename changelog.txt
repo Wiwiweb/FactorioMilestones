@@ -1,9 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: ????
-  Features:
-    - Add "Advanced pickaxe" to K2 and SE+K2
   Changes:
+    - Add "Advanced pickaxe" to K2 and SE+K2 presets
+  Bugfixes:
+    - Fix kill milestones unable to be imported
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2021-11-29

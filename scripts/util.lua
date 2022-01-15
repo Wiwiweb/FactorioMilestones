@@ -12,7 +12,7 @@ function convert_and_validate_imported_json(import_string)
         return nil, {"milestones.message_invalid_import_json"}
     end
 
-    local valid_categories = {'item', 'fluid', 'technology'}
+    local valid_categories = {'item', 'fluid', 'technology', 'kill'}
     for _, milestone in pairs(imported_milestones) do
         if not table_contains(valid_categories, milestone.type) then
             return nil, {"", {"milestones.message_invalid_import_type"}, milestone.type}
