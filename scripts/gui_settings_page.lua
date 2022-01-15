@@ -311,5 +311,5 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
 end)
 
 function is_settings_page_visible(player_index)
-    return global.players[player_index].inner_frame.milestones_settings_scroll ~= nil
+    return global.players[player_index].inner_frame.valid and global.players[player_index].inner_frame.milestones_settings_scroll ~= nil
 end

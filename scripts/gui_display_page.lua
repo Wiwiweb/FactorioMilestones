@@ -161,5 +161,5 @@ function build_display_page(player)
 end
 
 function is_display_page_visible(player_index)
-    return global.players[player_index].inner_frame.milestones_display_scroll ~= nil
+    return global.players[player_index].inner_frame.valid and global.players[player_index].inner_frame.milestones_display_scroll ~= nil
 end
