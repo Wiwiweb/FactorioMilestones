@@ -1,3 +1,4 @@
+require("scripts.commands")
 require("scripts.tracker")
 require("scripts.gui")
 require("scripts.presets_loader")
@@ -11,7 +12,7 @@ local migration = require("__flib__.migration")
 
 script.on_init(function()
     global.delayed_chat_messages = {}
-    global.forces = {}
+    global.forces = {}    
     global.players = {}
 
 
@@ -104,31 +105,3 @@ script.on_configuration_changed(function(event)
         create_delayed_chat()
     end
 end)
-
-
--- Debug command
-remote.add_interface("milestones", {
-    -- /c remote.call("milestones", "debug_print_forces")
-    debug_print_forces = function()
-        game.print(serpent.block(global.forces))
-        log(serpent.block(global.forces))
-    end,
-
-    -- /c remote.call("milestones", "debug_print_global")
-    debug_print_global = function()
-        game.print(serpent.block(global.loaded_milestones))
-        log(serpent.block(global.loaded_milestones))
-    end,
-
-    -- /c remote.call("milestones", "reinitialize_global")
-    reinitialize_global = function()
-        for _, force in pairs(game.forces) do
-            initialize_force_if_needed(force)
-        end
-
-        for _, player in pairs(game.players) do
-            global.players[player.index].main_frame.destroy()
-            initialize_player(player)
-        end
-    end,
-})

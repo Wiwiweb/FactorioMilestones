@@ -3,6 +3,7 @@ Version: 1.1.2
 Date: ????
   Changes:
     - Add "Advanced pickaxe" to K2 and SE+K2 presets
+    - Add debug commands to help debug and fix future crashes (use /h in-game to see them)
   Bugfixes:
     - Fix kill milestones unable to be imported
     - Attempt to fix a rare crash when a player's GUI becomes invalid for an unknown reason
