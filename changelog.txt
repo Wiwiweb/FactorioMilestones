@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
-Date: ????
+Date: 2022-01-16
   Changes:
     - Add "Advanced pickaxe" to K2 and SE+K2 presets
     - Add debug commands to help debug and fix future crashes (use /h in-game to see them)
