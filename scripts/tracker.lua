@@ -27,10 +27,14 @@ local function print_milestone_reached(force, milestone)
         end
 
         local message_type = milestone.type == "kill" and "kill" or "item"
+        local postscript
+        if milestone.name == "character" then
+            postscript = " (haha! 😁)"
+        end
         if milestone.quantity == 1 then
-            force.print{"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, localised_name, human_timestamp}
+            force.print{"", {"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, localised_name, human_timestamp}, postscript}
         else
-            force.print{"milestones.message_milestone_reached_" ..message_type.. "_more", milestone.quantity, sprite_name, localised_name, human_timestamp}
+            force.print{"", {"milestones.message_milestone_reached_" ..message_type.. "_more", milestone.quantity, sprite_name, localised_name, human_timestamp}, postscript}
         end
     end
     force.play_sound{path="utility/achievement_unlocked"}
