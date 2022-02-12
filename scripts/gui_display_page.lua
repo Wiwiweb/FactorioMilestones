@@ -12,7 +12,7 @@ local function get_timestamp(ticks, print_milliseconds)
 
 end
 
-local function add_milestone_item(gui_table, milestone, print_milliseconds)
+local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list)
     local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow"}
     local prototype = nil
     if milestone.type == "item" then
@@ -58,15 +58,17 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
     if milestone.completion_tick == nil then
         caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
     elseif milestone.lower_bound_tick == nil then
-        local message_name
-        if milestone.type == "kill" then
-            message_name = "milestones.killed_label"
+        local label_name
+        if compact_list then
+            label_name = ""
+        elseif milestone.type == "kill" then
+            label_name = {"milestones.killed_label"}
         elseif milestone.type == "technology" then
-            message_name = "milestones.researched_label"
+            label_name = {"milestones.researched_label"}
         else
-            message_name = "milestones.completed_label"
+            label_name = {"milestones.completed_label"}
         end
-        caption = {"", {message_name}, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
+        caption = {"", label_name, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     else
         tooltip = {"milestones.completed_before_tooltip"}
         caption = "[font=default-bold]" ..get_timestamp(milestone.lower_bound_tick, false).. "[img=quantity-time][/font] - " ..
@@ -159,12 +161,13 @@ function build_display_page(player)
     local global_force = global.forces[player.force.name]
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
+    local compact_list = settings.get_player_settings(player)["milestones_compact_list"].value
     for _, milestone in pairs(global_force.complete_milestones) do
-        add_milestone_item(content_table, milestone, print_milliseconds)
+        add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
     end
 
     for _, milestone in pairs(global_force.incomplete_milestones) do
-        add_milestone_item(content_table, milestone, print_milliseconds)
+        add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
     end
 end
 

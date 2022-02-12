@@ -13,5 +13,11 @@ data:extend{
         allow_blank = true,
         default_value = "",
         auto_trim = true
+    },
+    {
+        type = "bool-setting",
+        name = "milestones_compact_list",
+        setting_type = "runtime-per-user",
+        default_value = false,
     }
-  }
+}

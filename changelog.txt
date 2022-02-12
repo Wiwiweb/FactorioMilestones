@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: ????
+  Features:
+    - New "Compact list" Player Mod Setting, removes the "Completed at:" labels from the main view. Defaults to off.
   Changes:
     - Labels now say "Killed at" and "Researched at" for kills and technologies
     - Replace "cargo rocket section" with "cargo rocket" in SE and SE+K2 presets
