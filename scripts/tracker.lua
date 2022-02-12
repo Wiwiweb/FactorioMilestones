@@ -13,7 +13,11 @@ local function print_milestone_reached(force, milestone)
         force.print{"milestones.message_milestone_reached_technology", sprite_name, localised_name, level_string, human_timestamp}
     else
         if milestone.type == "item" then
-            localised_name = game.item_prototypes[milestone.name].localised_name
+            if milestone.name == "se-rocket-launch-pad-silo-dummy-result-item" then
+                localised_name = "Cargo rocket"
+            else
+                localised_name = game.item_prototypes[milestone.name].localised_name
+            end
         elseif milestone.type == "fluid" then
             localised_name = game.fluid_prototypes[milestone.name].localised_name
         elseif milestone.type == "kill" then
