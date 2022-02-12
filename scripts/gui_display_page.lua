@@ -58,7 +58,15 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds)
     if milestone.completion_tick == nil then
         caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
     elseif milestone.lower_bound_tick == nil then
-        caption = {"", {"milestones.completed_label"}, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
+        local message_name
+        if milestone.type == "kill" then
+            message_name = "milestones.killed_label"
+        elseif milestone.type == "technology" then
+            message_name = "milestones.researched_label"
+        else
+            message_name = "milestones.completed_label"
+        end
+        caption = {"", {message_name}, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
     else
         tooltip = {"milestones.completed_before_tooltip"}
         caption = "[font=default-bold]" ..get_timestamp(milestone.lower_bound_tick, false).. "[img=quantity-time][/font] - " ..
