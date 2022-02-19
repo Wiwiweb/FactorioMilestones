@@ -1,5 +1,5 @@
 local misc = require("__flib__.misc")
-require("milestones_util")
+require("scripts.milestones_util")
 
 local function get_timestamp(ticks, print_milliseconds)
     if print_milliseconds then

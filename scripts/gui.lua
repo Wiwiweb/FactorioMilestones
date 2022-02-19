@@ -1,6 +1,6 @@
-require("gui_display_page")
-require("gui_settings_page")
-require("gui_import_export")
+require("scripts.gui_display_page")
+require("scripts.gui_settings_page")
+require("scripts.gui_import_export")
 
 function build_main_frame(player)
     local screen_element = player.gui.screen

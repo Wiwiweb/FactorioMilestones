@@ -1,6 +1,6 @@
 local misc = require("__flib__.misc")
-require("gui")
-require("milestones_util")
+require("scripts.gui")
+require("scripts.milestones_util")
 
 local function print_milestone_reached(force, milestone)
     local human_timestamp = misc.ticks_to_timestring(milestone.completion_tick)
@@ -58,6 +58,9 @@ function track_item_creation(event)
             while i <= #global_force.incomplete_milestones do
                 local milestone = global_force.incomplete_milestones[i]
                 if milestone.type ~= "technology" and is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts) then
+                    if milestone.next then
+                        create_next_milestone(force, milestone)
+                    end
                     mark_milestone_reached(force, milestone, game.tick, i)
                     print_milestone_reached(force, milestone)
                     refresh_gui_for_force(force)

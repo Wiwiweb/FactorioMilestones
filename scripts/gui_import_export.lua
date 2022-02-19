@@ -1,4 +1,4 @@
-require("gui_settings_page")
+require("scripts.gui_settings_page")
 
 function toggle_import_export_page(player_index, button_element, import)
     if button_element.style.name == "flib_selected_tool_button" then

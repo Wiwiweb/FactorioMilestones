@@ -64,6 +64,34 @@ function mark_milestone_reached(force, milestone, tick, milestone_index, lower_b
     table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
 end
 
+function parse_next_formula(next_formula)
+    if #next_formula < 2 then return nil, nil end
+    local operator = string.sub(next_formula, 1, 1)
+    local next_value = tonumber(string.sub(next_formula, 2))
+    if operator == '*' then operator = 'x' end
+    if (operator ~= 'x' and operator ~= '+') or next_value == nil then
+        return nil, nil
+    end
+    return operator, next_value
+end
+
+function create_next_milestone(force, milestone)
+    local operator, next_value = parse_next_formula(milestone.next)
+    if operator == nil then
+        force.print({"", {"milestones.message_invalid_next"}, milestone.next})
+        return
+    end
+
+    local new_milestone = table.deep_copy(milestone)
+    if operator == '+' then
+        new_milestone.quantity = milestone.quantity + next_value
+    elseif operator == 'x' then
+        new_milestone.quantity = milestone.quantity * next_value
+    end
+
+    table.insert(global.forces[force.name].incomplete_milestones, new_milestone)
+end
+
 function floor_to_nearest_minute(tick)
     return (tick - (tick % (60*60)))
 end
