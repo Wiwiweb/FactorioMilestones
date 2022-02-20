@@ -3,6 +3,7 @@ Version: 1.2.1
 Date: ????
   Bugfixes:
     - Fix infinite milestone not creating next step when backfilling a milestone with an estimation range.
+    - Fix infinite milestones affecting the loaded set when it shouldn't.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2022-02-20

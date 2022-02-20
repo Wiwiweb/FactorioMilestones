@@ -8,7 +8,7 @@ return {
         -- delayed_chat_message became a table
         if global.delayed_chat_message == nil then
             global.delayed_chat_messages = {}
-        else 
+        else
             global.delayed_chat_messages = {global.delayed_chat_message}
             global.delayed_chat_message = nil
         end
@@ -35,7 +35,8 @@ return {
         for force_name, global_force in pairs(global.forces) do
             local affected = false
             for _, milestone in pairs(global_force.complete_milestones) do
-                if milestone.type == "technology" and milestone.completion_tick == nil then
+                if milestone.type == "technology" and milestone.completion_tick ==
+                    nil then
                     affected = true
                     milestone.lower_bound_tick = 0
                     milestone.completion_tick = game.tick
@@ -44,8 +45,10 @@ return {
 
             if affected then
                 local force = game.forces[force_name]
-                force.print("[img=milestones_main_icon_white] If you see this message, you were affected by a Milestones bug which lost the completion time of your [font=default-large-bold]technology[/font] milestones.")
-                force.print("The issue is now fixed but you will need to re-enter your lost times in the Milestones window.")
+                force.print(
+                    "[img=milestones_main_icon_white] If you see this message, you were affected by a Milestones bug which lost the completion time of your [font=default-large-bold]technology[/font] milestones.")
+                force.print(
+                    "The issue is now fixed but you will need to re-enter your lost times in the Milestones window.")
                 refresh_gui_for_force(force)
             end
         end
@@ -67,4 +70,14 @@ return {
             end
         end
     end,
+
+    ["1.2.1"] = function()
+        log("Running 1.2.1 migration")
+        -- Table reference error could have introduced completion times in global.loaded_milestones during merge_new_milestones
+        global.loaded_milestones = table.deep_copy(global.loaded_milestones)
+        for _, milestone in pairs(global.loaded_milestones) do
+            milestone.completion_tick = nil
+            milestone.lower_bound_tick = nil
+        end
+    end
 }

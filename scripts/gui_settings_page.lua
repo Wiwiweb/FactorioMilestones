@@ -203,7 +203,6 @@ function swap_settings(player_index, button_element)
     local milestone2 = get_milestones_array_element(settings_flow.children[gui_index2], true)
 
     -- index1 is always smaller, destroying and rebuilding in this order works
-    local is_last_element = gui_index2 == #settings_flow.children
     settings_flow.children[gui_index2].destroy()
     settings_flow.children[gui_index1].destroy()
     add_milestone_setting(milestone2, settings_flow, gui_index1)
@@ -259,7 +258,7 @@ function cancel_settings_page(player_index)
     local outer_frame = global.players[player_index].outer_frame
     local import_export_frame = outer_frame.milestones_settings_import_export
     local inside_frame = import_export_frame.milestones_settings_import_export_inside
- 
+
     inside_frame.clear()
     import_export_frame.visible = false
 end
@@ -282,7 +281,7 @@ function confirm_settings_page(player_index)
             global.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
         end
 
-        global.loaded_milestones = new_milestones
+        global.loaded_milestones = table.deep_copy(new_milestones)
 
         for force_name, force in pairs(game.forces) do
             local global_force = global.forces[force_name]
