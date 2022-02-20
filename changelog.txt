@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
-Date: ????
+Date: 2022-02-20
   Features:
     - Infinite Milestones: 
       You can now set a "next" value for a milestone. When that milestone is completed, a new milestone is automatically created at a higher count, depending on that "next" value. 
