@@ -13,7 +13,7 @@ local function get_timestamp(ticks, print_milliseconds)
 end
 
 local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list)
-    local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow"}
+    local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big"}
     local prototype = nil
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]

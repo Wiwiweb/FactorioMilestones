@@ -5,6 +5,7 @@ Date: ????
     - Infinite Milestones: 
       You can now set a "next" value for a milestone. When that milestone is completed, a new milestone is automatically created at a higher count, depending on that "next" value. 
       Example: "1000 science packs, next: x10" would create "10000 science packs" when completed, then "100000 science packs", etc. You can also use "+" for adding instead of multiplying.
+    - You can now export or import encoded milestone sets (for a shorter, but non-human-readable string).
     - New "Compact list" Player Mod Setting, removes the "Completed at:" labels from the main view. Defaults to off.
   Changes:
     - Change presets to use infinite milestones. Existing sets won't be updated unless you reload them from the preset.

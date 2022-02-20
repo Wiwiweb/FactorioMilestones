@@ -30,7 +30,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     local prototype
     local elem_button
 
-    local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow", index=gui_index}
+    local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big", index=gui_index}
     milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
 
     if milestone.type == "item" then

@@ -12,7 +12,7 @@ local migration = require("__flib__.migration")
 
 script.on_init(function()
     global.delayed_chat_messages = {}
-    global.forces = {}    
+    global.forces = {}
     global.players = {}
 
 

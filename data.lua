@@ -22,10 +22,15 @@ styles.milestones_deep_frame_in_shallow_frame = {
   minimal_width = 400
 }
 
-styles.milestones_horizontal_flow = {
+styles.milestones_horizontal_flow_center = {
   type = "horizontal_flow_style",
   parent = "horizontal_flow",
   vertical_align = "center",
+}
+
+styles.milestones_horizontal_flow_big = {
+  type = "horizontal_flow_style",
+  parent = "milestones_horizontal_flow_center",
   minimal_width = 150,
   horizontal_spacing = 8
 }

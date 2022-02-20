@@ -32,14 +32,21 @@ function build_import_export_page(player_index, button_element, import)
 
     local inside_frame = import_export_frame.milestones_settings_import_export_inside
     inside_frame.clear()
-    
+
+    if import then
+        inside_frame.add{type="label", caption={"milestones.settings_import_description"}, style="bold_label"}
+    else
+        local sub_title_flow = inside_frame.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_center"}
+        sub_title_flow.add{type="label", caption={"milestones.settings_export_encoded"}, style="bold_label"}
+        sub_title_flow.add{type="checkbox", name="milestones_export_encoded_checkbox", state=false}
+    end
     local scroll = inside_frame.add{type="scroll-pane", name="milestones_import_export_scroll"}
     local textbox = scroll.add{type="text-box", name="milestones_settings_import_export_textbox", style="milestones_import_export_textbox", horizontal_scroll_policy="dont-show-but-allow-scrolling"}
     if not import then
         textbox.text = milestones_table_to_json(get_resulting_milestones_array(player_index))
         textbox.read_only = true
     end
-    
+
     local button_frame = inside_frame.add{type="flow", direction="horizontal"}
     button_frame.add{type="empty-widget", style="flib_horizontal_pusher"}
     if import then
@@ -47,12 +54,25 @@ function build_import_export_page(player_index, button_element, import)
     else
         button_frame.add{type="button", style="dialog_button", caption={"gui.close"}, tags={action="milestones_close_import_export"}}
     end
-    
+
     textbox.select_all()
     textbox.focus()
     import_export_frame.visible = true
 
     button_element.style = "flib_selected_tool_button"
+end
+
+function toggle_export_encoded(checkbox_element)
+    local export_textbox = checkbox_element.parent.parent.milestones_import_export_scroll.milestones_settings_import_export_textbox
+    if checkbox_element.state then
+        export_textbox.text = game.encode_string(export_textbox.text)
+        export_textbox.word_wrap = true
+    else
+        export_textbox.text = game.decode_string(export_textbox.text)
+        export_textbox.word_wrap = false
+    end
+    export_textbox.select_all()
+    export_textbox.focus()
 end
 
 function close_import_export_page(player_index)
@@ -74,6 +94,10 @@ function import_settings(player_index)
                               .milestones_settings_import_export_inside
                               .milestones_import_export_scroll
                               .milestones_settings_import_export_textbox.text
+
+    local decoded_string = game.decode_string(import_string)
+    if decoded_string then import_string = decoded_string end
+
     local imported_milestones, error = convert_and_validate_imported_json(import_string)
     if imported_milestones == nil then
         game.players[player_index].print(error)

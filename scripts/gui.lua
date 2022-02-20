@@ -271,3 +271,10 @@ script.on_event(defines.events.on_gui_confirmed, function(event)
     end
 end)
 
+script.on_event(defines.events.on_gui_checked_state_changed, function(event)
+    if not event.element then return end
+    if not event.element.tags then return end
+    if event.element.name == "milestones_export_encoded_checkbox" then
+        toggle_export_encoded(event.element)
+    end
+end)
