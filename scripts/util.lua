@@ -21,6 +21,12 @@ function convert_and_validate_imported_json(import_string)
         if num == nil or num < 1 then
             return nil, {"", {"milestones.message_invalid_import_quantity"}, milestone.quantity}
         end
+        if milestone.next ~= nil then
+            local operator, _ = parse_next_formula(milestone.next)
+            if operator == nil then
+                return nil, {"", {"milestones.message_invalid_import_next"}, milestone.next}
+            end
+        end
     end
 
     return imported_milestones, nil

@@ -59,7 +59,8 @@ function track_item_creation(event)
                 local milestone = global_force.incomplete_milestones[i]
                 if milestone.type ~= "technology" and is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts) then
                     if milestone.next then
-                        create_next_milestone(force, milestone)
+                        local next_milestone = create_next_milestone(force_name, milestone)
+                        table.insert(global_force.incomplete_milestones, next_milestone)
                     end
                     mark_milestone_reached(force, milestone, game.tick, i)
                     print_milestone_reached(force, milestone)

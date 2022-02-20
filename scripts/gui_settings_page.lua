@@ -284,11 +284,10 @@ function confirm_settings_page(player_index)
 
         global.loaded_milestones = new_milestones
 
-        for _, force in pairs(game.forces) do
-            local global_force = global.forces[force.name]
+        for force_name, force in pairs(game.forces) do
+            local global_force = global.forces[force_name]
             if global_force ~= nil then
-                -- TODO: make sure this works with "next" values"
-                merge_new_milestones(global_force, new_milestones)
+                merge_new_milestones(force_name, new_milestones)
                 backfill_completion_times(force)
             end
         end

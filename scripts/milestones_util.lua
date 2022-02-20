@@ -24,15 +24,20 @@ local function find_possible_existing_completion_time(global_force, new_mileston
     return nil, nil
 end
 
-function merge_new_milestones(global_force, new_milestones)
+function merge_new_milestones(force_name, new_milestones)
     local new_complete = {}
     local new_incomplete = {}
+    local global_force = global.forces[force_name]
 
     for _, new_milestone in pairs(new_milestones) do
         local completion_tick, lower_bound_tick = find_possible_existing_completion_time(global_force, new_milestone)
         if completion_tick == nil then
             table.insert(new_incomplete, new_milestone)
         else
+            if new_milestone.next then
+                local next_milestone = create_next_milestone(force_name, new_milestone)
+                table.insert(new_milestones, next_milestone)
+            end
             new_milestone.completion_tick = completion_tick
             new_milestone.lower_bound_tick = lower_bound_tick
             table.insert(new_complete, new_milestone)
@@ -83,10 +88,10 @@ function parse_next_formula(next_formula)
     return operator, next_value
 end
 
-function create_next_milestone(force, milestone)
+function create_next_milestone(force_name, milestone)
     local operator, next_value = parse_next_formula(milestone.next)
     if operator == nil then
-        force.print({"", {"milestones.message_invalid_next"}, milestone.next})
+        game.forces[force_name].print({"", {"milestones.message_invalid_next"}, milestone.next})
         return
     end
 
@@ -97,7 +102,7 @@ function create_next_milestone(force, milestone)
         new_milestone.quantity = milestone.quantity * next_value
     end
 
-    table.insert(global.forces[force.name].incomplete_milestones, new_milestone)
+    return new_milestone
 end
 
 function floor_to_nearest_minute(tick)
