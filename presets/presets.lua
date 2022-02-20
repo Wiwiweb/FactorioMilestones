@@ -35,7 +35,7 @@ presets = {
             {type="kill",       name="medium-biter",            quantity=1},
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
-            {type="kill",       name="character",               quantity=1, next="x2"},
+            {type="kill",       name="character",               quantity=1, next="x5"},
         }
     },
 
@@ -72,7 +72,7 @@ presets = {
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1000, next="x10"},
-            {type="kill",       name="character",               quantity=1, next="x2"},
+            {type="kill",       name="character",               quantity=1, next="x5"},
         }
     },
 
@@ -124,7 +124,7 @@ presets = {
             {type="kill",       name="medium-biter",                 quantity=1},
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
-            {type="kill",       name="character",                    quantity=1, next="x2"},
+            {type="kill",       name="character",                    quantity=1, next="x5"},
         }
     },
 
@@ -167,7 +167,7 @@ presets = {
             {type="kill",       name="medium-biter",                 quantity=1},
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
-            {type="kill",       name="character",                    quantity=1, next="x2"},
+            {type="kill",       name="character",                    quantity=1, next="x5"},
         }
     },
 
@@ -232,7 +232,7 @@ presets = {
             {type="kill",       name="medium-biter",                 quantity=1},
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},
-            {type="kill",       name="character",                    quantity=1, next="x2"},
+            {type="kill",       name="character",                    quantity=1, next="x5"},
         }
     },
 
@@ -280,7 +280,7 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=1000, next="x10"},
             {type="item",       name="utility-science-pack",           quantity=1000, next="x10"},
             {type="item",       name="space-science-pack",             quantity=1000, next="x10"},
-            {type="kill",       name="character",                      quantity=1, next="x2"},
+            {type="kill",       name="character",                      quantity=1, next="x5"},
         }
     },
 
@@ -332,7 +332,7 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=1000, next="x10"},
             {type="item",       name="utility-science-pack",           quantity=1000, next="x10"},
             {type="item",       name="space-science-pack",             quantity=1000, next="x10"},
-            {type="kill",       name="character",                      quantity=1, next="x2"},
+            {type="kill",       name="character",                      quantity=1, next="x5"},
         }
     },
 
@@ -446,7 +446,7 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=1000, next="x10"},
             {type="item",       name="utility-science-pack",           quantity=1000, next="x10"},
             {type="item",       name="space-science-pack",             quantity=1000, next="x10"},
-            {type="kill",       name="character",                      quantity=1, next="x2"},
+            {type="kill",       name="character",                      quantity=1, next="x5"},
         }
     },
 
@@ -516,7 +516,7 @@ presets = {
             {type="item",       name="utility-science-pack",           quantity=1000, next="x10"},
             {type="item",       name="space-science-pack",             quantity=1000, next="x10"},
 
-            {type="kill",       name="character",                      quantity=1, next="x2"},
+            {type="kill",       name="character",                      quantity=1, next="x5"},
         }
     },
     
@@ -581,7 +581,7 @@ presets = {
             {type="item",       name="utility-science-pack",          quantity=1000, next="x10"},
             {type="item",       name="space-science-pack",            quantity=1000, next="x10"},
 
-            {type="kill",       name="character",                     quantity=1, next="x2"},
+            {type="kill",       name="character",                     quantity=1, next="x5"},
         }
     },
 
@@ -661,7 +661,7 @@ presets = {
             {type="item",       name="utility-science-pack",          quantity=1000, next="x10"},
             {type="item",       name="space-science-pack",            quantity=1000, next="x10"},
 
-            {type="kill",       name="character",                     quantity=1, next="x2"},
+            {type="kill",       name="character",                     quantity=1, next="x5"},
         }
     },
 
@@ -732,7 +732,7 @@ presets = {
             {type="kill",       name="medium-biter",            quantity=1},
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
-            {type="kill",       name="character",               quantity=1, next="x2"},
+            {type="kill",       name="character",               quantity=1, next="x5"},
         }
     },
 }

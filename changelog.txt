@@ -4,6 +4,8 @@ Date: ????
   Bugfixes:
     - Fix infinite milestone not creating next step when backfilling a milestone with an estimation range.
     - Fix infinite milestones affecting the loaded set when it shouldn't.
+  Changes:
+    - Change all character kills in presets to increase by x5 instead of x2.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2022-02-20
