@@ -42,6 +42,22 @@ styles.milestones_small_button = {
   height = 16
 }
 
+styles.milestones_grey_button = {
+  type = "button_style",
+  parent = "tool_button",
+  width = 24,
+  height = 24,
+  padding = 0
+}
+
+styles.milestones_selected_grey_button = {
+  type = "button_style",
+  parent = "flib_selected_tool_button",
+  width = 24,
+  height = 24,
+  padding = 0
+}
+
 styles.milestones_trash_button = {
   type = "button_style",
   parent = "tool_button_red",
@@ -79,6 +95,16 @@ styles.milestones_import_export_textbox = {
   type = "textbox_style",
   width = 600,
   minimal_height = 300
+}
+
+styles.milestones_very_short_textfield = {
+  type = "textbox_style",
+  width = 40
+}
+
+styles.milestones_very_short_spacer = {
+  type = "empty_widget_style",
+  width = 40
 }
 
 data:extend{
@@ -119,10 +145,13 @@ data:extend{
 
 -- Sprites
 local toolbar_icons = "__Milestones__/graphics/toolbar-icons.png"
+local infinity_icon = "__Milestones__/graphics/infinity-icon.png"
 local arrows = "__Milestones__/graphics/arrows.png"
 local item_icons = "__Milestones__/graphics/item-icons.png"
 data:extend{
   data_util.build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32, 2),
+
+  data_util.build_sprite("milestones_infinity_icon", {0, 0}, infinity_icon, 32),
 
   data_util.build_sprite("milestones_settings_black", {0, 0}, toolbar_icons, 32),
   data_util.build_sprite("milestones_settings_white", {32, 0}, toolbar_icons, 32),

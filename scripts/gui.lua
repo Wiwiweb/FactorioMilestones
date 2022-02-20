@@ -180,7 +180,6 @@ local function toggle_pinned(player, element)
 end
 
 script.on_event(defines.events.on_gui_closed, function(event)
-    local player = game.get_player(event.player_index)
     if event.element and event.element.name == "milestones_main_frame" then
 
         local player = game.get_player(event.player_index)
@@ -259,6 +258,8 @@ script.on_event(defines.events.on_gui_click, function(event)
         close_import_export_page(event.player_index)
     elseif event.element.tags.action == "milestones_import_settings" then
         import_settings(event.player_index)
+    elseif event.element.tags.action == "milestones_settings_infinity_button" then
+        toggle_infinity_button(event.element)
     end
 end)
 

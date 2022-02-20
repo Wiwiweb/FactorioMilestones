@@ -1,6 +1,6 @@
 local table = require("__flib__.table")
 require("presets.presets")
-require("milestones_util")
+require("scripts.milestones_util")
 
 local function refresh_arrow_buttons(gui_index, settings_flow)
     local arrows_flow = settings_flow.children[gui_index].milestones_arrows_flow
@@ -63,9 +63,19 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
 
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
 
-    local visible_textfield = milestone.type ~= "technology" or (prototype ~= nil and prototype.research_unit_count_formula ~= nil) -- No text field for unique technologies
-    milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, clear_and_focus_on_right_click=true, 
-        tags={action="milestones_change_setting_quantity"}, style="short_number_textfield", visible=visible_textfield}
+    local unique_technology = milestone.type ~= "technology" or (prototype ~= nil and prototype.research_unit_count_formula ~= nil) -- No text field or infinity button for unique technologies
+
+    milestone_flow.add{type="textfield", name="milestones_settings_quantity", text=milestone.quantity, numeric=true, clear_and_focus_on_right_click=true,
+        tags={action="milestones_change_setting_quantity"}, style="short_number_textfield", visible=unique_technology, tooltip={"milestones.settings_quantity_tooltip"}}
+
+    local infinity_button = milestone_flow.add({type="sprite-button", sprite="milestones_infinity_icon", tags={action="milestones_settings_infinity_button"}, style="milestones_grey_button", visible=unique_technology,
+        tooltip={"milestones.settings_infinity_button_tooltip"}})
+    milestone_flow.add({type="textfield", name="milestones_settings_next_textfield", text=milestone.next, style="milestones_very_short_textfield", visible=false,
+        clear_and_focus_on_right_click=true, tooltip={"milestones.settings_next_textfield_tooltip"}})
+    milestone_flow.add{type="empty-widget", name="milestones_settings_next_spacer", style="milestones_very_short_spacer", visible=true}
+    if milestone.next ~= nil then
+        toggle_infinity_button(infinity_button)
+    end
 
     milestone_flow.add{type="sprite-button", sprite="utility/trash", style="milestones_trash_button", tags={action="milestones_delete_setting"}}
     milestone_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
@@ -73,15 +83,42 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     return milestone_flow
 end
 
-local function get_milestones_array_element(flow, allow_empty)
-    if not allow_empty and (flow.milestones_settings_item == nil or flow.milestones_settings_item.elem_value == nil) then 
-        return nil 
+function toggle_infinity_button(button_element)
+    local textfield_element = button_element.parent.milestones_settings_next_textfield
+    local spacer_element = button_element.parent.milestones_settings_next_spacer
+    if button_element.style.name == "milestones_selected_grey_button" then
+        button_element.style = "milestones_grey_button"
+        textfield_element.visible = false
+        spacer_element.visible = true
+    else
+        button_element.style = "milestones_selected_grey_button"
+        textfield_element.visible = true
+        spacer_element.visible = false
+        if textfield_element.text == nil or textfield_element.text == "" then
+            textfield_element.text = "x10"
+        end
+    end
+end
+
+local function get_milestones_array_element(flow, allow_empty, player_index)
+    if not allow_empty and (flow.milestones_settings_item == nil or flow.milestones_settings_item.elem_value == nil) then
+        return nil
     end
     local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
+    local next_formula = flow.milestones_settings_next_textfield.text
+    if next_formula == "" then next_formula = nil end
+    if next_formula ~= nil then
+        local operator, _ = parse_next_formula(next_formula)
+        if operator == nil then
+            game.players[player_index].print({"", {"milestones.message_invalid_next"}, next_formula})
+            next_formula = nil
+        end
+    end
     return {
         type=flow.milestones_settings_item.tags.milestone_type,
         name=flow.milestones_settings_item.elem_value,
-        quantity=quantity
+        quantity=quantity,
+        next=next_formula
     }
 end
 
@@ -90,7 +127,7 @@ function get_resulting_milestones_array(player_index)
     local settings_flow = global.players[player_index].settings_flow
     for _, child in pairs(settings_flow.children) do
         if child.type == "flow" then
-            local milestone = get_milestones_array_element(child, false)
+            local milestone = get_milestones_array_element(child, false, player_index)
             table.insert(resulting_milestones, milestone)
         end
     end
@@ -149,7 +186,7 @@ function build_settings_page(player)
 
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
     for _, type in pairs({"item", "fluid", "technology", "kill"}) do
-        buttons_flow.add{type="button", 
+        buttons_flow.add{type="button",
             caption={"", "[img=milestones_icon_"..type.."_black] ", {"milestones.settings_add_"..type}},
             tags={action="milestones_add_setting", type=type}}
     end
@@ -250,6 +287,7 @@ function confirm_settings_page(player_index)
         for _, force in pairs(game.forces) do
             local global_force = global.forces[force.name]
             if global_force ~= nil then
+                -- TODO: make sure this works with "next" values"
                 merge_new_milestones(global_force, new_milestones)
                 backfill_completion_times(force)
             end

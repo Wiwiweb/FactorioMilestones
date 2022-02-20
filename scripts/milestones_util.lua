@@ -65,13 +65,21 @@ function mark_milestone_reached(force, milestone, tick, milestone_index, lower_b
 end
 
 function parse_next_formula(next_formula)
-    if #next_formula < 2 then return nil, nil end
+    if next_formula == nil or string.len(next_formula) < 2 then return nil, nil end
     local operator = string.sub(next_formula, 1, 1)
     local next_value = tonumber(string.sub(next_formula, 2))
+
+    if next_value == nil then return nil, nil end
     if operator == '*' then operator = 'x' end
-    if (operator ~= 'x' and operator ~= '+') or next_value == nil then
+
+    if operator == 'x' then
+        if next_value <= 1 then return nil, nil end
+    elseif operator == '+' then
+        if next_value <= 0 then return nil, nil end
+    else
         return nil, nil
     end
+
     return operator, next_value
 end
 
