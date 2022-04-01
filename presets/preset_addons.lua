@@ -47,6 +47,44 @@ preset_addons = {
         }
     },
 
+    ["Cargo Ships"] = {
+        required_mods = {"cargo-ships"},
+        milestones = {
+            {type="item", name="boat",       quantity=1},
+            {type="item", name="cargo_ship", quantity=1},
+        }
+    },
+
+    ["Spidertron Extended"] = {
+        required_mods = {"spidertron-extended"},
+        milestones = {
+            {type="item", name="spidertronmk2", quantity=1},
+            {type="item", name="spidertronmk3", quantity=1},
+        }
+    },
+
+    ["Spidertron Tiers"] = {
+        required_mods = {"spidertrontiers"},
+        milestones = {
+            {type="item", name="prototype_spidertron", quantity=1},
+            {type="item", name="spidertron_mkn1", quantity=1},
+            {type="item", name="spidertron_mk0", quantity=1},
+            {type="item", name="spidertron_mk2", quantity=1},
+            {type="item", name="spidertron_mk3", quantity=1},
+        }
+    },
+
+    ["Spidertron Tiers (SE+K2 fix)"] = { -- Remove this one if that issue ever gets fixed
+        required_mods = {"spidertrontiers-circulardependency"},
+        milestones = {
+            {type="item", name="prototype_spidertron", quantity=1},
+            {type="item", name="spidertron_mkn1", quantity=1},
+            {type="item", name="spidertron_mk0", quantity=1},
+            {type="item", name="spidertron_mk2", quantity=1},
+            {type="item", name="spidertron_mk3", quantity=1},
+        }
+    },
+
     ["Armoured Biters"] = {
         required_mods = {"ArmouredBiters"},
         milestones = {
