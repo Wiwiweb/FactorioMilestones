@@ -87,6 +87,7 @@ preset_addons = {
 
     ["Armoured Biters"] = {
         required_mods = {"ArmouredBiters"},
+        forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="kill", name="behemoth-armoured-biter",  quantity=1},
             {type="kill", name="leviathan-armoured-biter", quantity=1},
@@ -95,6 +96,7 @@ preset_addons = {
 
     ["Cold Biters"] = {
         required_mods = {"Cold_biters"},
+        forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="kill", name="behemoth-cold-biter",  quantity=1},
             {type="kill", name="leviathan-cold-biter", quantity=1},
@@ -103,6 +105,7 @@ preset_addons = {
 
     ["Explosive Biters"] = {
         required_mods = {"Explosive_biters"},
+        forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="kill", name="behemoth-explosive-biter",  quantity=1},
             {type="kill", name="explosive-leviathan-biter", quantity=1},
@@ -111,6 +114,7 @@ preset_addons = {
 
     ["Bob's Enemies"] = {
         required_mods = {"bobenemies"},
+        forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="kill", name="bob-titan-biter",     quantity=1},
             {type="kill", name="bob-behemoth-biter",  quantity=1},

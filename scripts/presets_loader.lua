@@ -27,8 +27,12 @@ function create_delayed_chat()
 end
 
 local function is_preset_valid(preset)
+    local forbidden_mods = preset.forbidden_mods or {}
     for _, mod_name in pairs(preset.required_mods) do
         if not game.active_mods[mod_name] then return false end
+    end
+    for _, mod_name in pairs(forbidden_mods) do
+        if game.active_mods[mod_name] then return false end
     end
     return true
 end
