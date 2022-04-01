@@ -1,11 +1,14 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.2
 Date: ????
+
   Features:
     - Add preset for Nullius (Thanks to Anachrony's help).
     - Add preset addons for Cargo Ships, Spidertron Extended, Spidertron Tiers
+
   Changes:
     - Tweaks to various presets, most notably for Sea Block.
+
   Locale:
     - New translations from Crowdin. If you would like to translate this mod please find FactorioMilestones here: https://crowdin.com/project/factorio-mods-localization
       - French translation by yours truly.
@@ -13,20 +16,24 @@ Date: ????
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 2022-02-20
+
   Bugfixes:
     - Fix infinite milestone not creating next step when backfilling a milestone with an estimation range.
     - Fix infinite milestones affecting the loaded set when it shouldn't.
+
   Changes:
     - Change all character kills in presets to increase by x5 instead of x2.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2022-02-20
+
   Features:
     - Infinite Milestones: 
       You can now set a "next" value for a milestone. When that milestone is completed, a new milestone is automatically created at a higher count, depending on that "next" value. 
       Example: "1000 science packs, next: x10" would create "10000 science packs" when completed, then "100000 science packs", etc. You can also use "+" for adding instead of multiplying.
     - You can now export or import encoded milestone sets (for a shorter, but non-human-readable string).
     - New "Compact list" Player Mod Setting, removes the "Completed at:" labels from the main view. Defaults to off.
+
   Changes:
     - Change presets to use infinite milestones. Existing sets won't be updated unless you reload them from the preset.
     - Labels now say "Killed at" and "Researched at" for kills and technologies
@@ -34,99 +41,122 @@ Date: 2022-02-20
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2022-01-16
+
   Changes:
     - Add "Advanced pickaxe" to K2 and SE+K2 presets
     - Add debug commands to help debug and fix future crashes (use /h in-game to see them)
+
   Bugfixes:
     - Fix kill milestones unable to be imported
     - Attempt to fix a rare crash when a player's GUI becomes invalid for an unknown reason
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2021-11-29
+
   Bugfixes:
     - Fix crash when using research milestones
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2021-11-28
+
   Features:
     - Add "Initial preset" mod setting. You can paste an exported preset string that Milestones will load at the beginning of every new game. Useful for speedrunning practice.
     - Add "Kill" milestone type. Used to track biter kills (or any other kills, such as killing yourself with locomotives :) )
     - Add preset addons for Bob's Enemies, Armoured Biters, Cold Biters, Explosive Biters
+
   Changes:
     - Add kill milestones to existing presets
+
   Bugfixes:
     - Fix crash when GUI was opened after being closed in some way that didn't trigger the on_gui_closed event
     - Fix crash when using the import feature, introduced in 1.0.10
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.10
 Date: 2021-11-20
+
   Changes:
     - Add missing holmium ingot to SE+K2 preset
+
   Bugfixes:
     - Import-export window now gets a scrollbar instead of expanding beyond the screen for large milestone lists
     - Fix issues with multiple forces, where new forces could have completion times from existing forces, and players switching forces could erase completion times. This fixes issues with Editor Extensions's testing lab mode.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.9
 Date: 2021-10-17
+
   Bugfixes:
     - Fix issue where the completion time for technology milestones was not being saved properly. If you had completed technology milestones, updating to this version will allow you to enter those lost times yourself.
     - Fix crash when going to settings after removing the mod that was currently selected as preset.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2021-10-03
+
   Bugfixes:
     - Fix crash when right-clicking an item selector in the settings menu
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.7
 Date: 2021-08-29
+
   Features:
     - Add preset addon for Bio Industries (Thanks to snouz!)
     - Add preset addon for Omnienergy and Omniscience (Thanks to NihlisticPandemonium!)
+
   Bugfixes:
     - Fix crash that could occur in some cases in multiplayer
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.6
 Date: 2021-08-03
+
   Bugfixes:
     - Fix another crash when loading from old version (oops!)
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 2021-08-01
+
   Bugfixes:
     - Fix crash when loading from old version
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 2021-08-01
+
   Features:
     - Add settings import/export. Useful if you want to mass-edit your milestones in a text editor, or quickly import something from another save.
     - Add preset addons: Small mods that can be used with any other major mod can now have preset milestones, which will be detected and added at the end of the major mod preset.
     - Add preset addons: Power Armor Mk3, Space Extension (SpaceX)
+
   Changes:
     - Add missing holmium ingot to SE preset
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2021-06-27
+
   Bugfixes:
     - Fix multiplayer desync when a player joins before Milestones' intro message
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2021-06-23
+
   Features:
     - Add presets: Industrial Revolution 2, Seablock
+
   Changes:
     - Tweak Angel presets to account for changes when using "industry overhaul"
+
   Bugfixes:
     - Fix crash when trying to confirm settings with invalid items
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2021-06-13
+
   Features:
     - Add presets: K2, SE+K2, Bob's, Angel's, B&A, Pyanodon's (with and without AlienLife)
+
   Changes:
     - Fix missing items in Vanilla presets
     - Add "significant data" to SE preset
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2021-06-06
+
   Features:
     - Initial release
