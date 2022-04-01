@@ -3,6 +3,8 @@ Version: 1.2.2
 Date: ????
   Features:
     - Add preset for Nullius (Thanks to Anachrony's help).
+  Changes:
+    - Tweaks to various presets, most notably for Sea Block.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 2022-02-20

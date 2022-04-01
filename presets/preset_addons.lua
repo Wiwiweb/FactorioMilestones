@@ -14,7 +14,10 @@ preset_addons = {
     ["Space Extension (SpaceX)"] = {
         required_mods = {"SpaceMod"},
         milestones = {
-            {type="item", name="ftl-drive", quantity=1},
+            {type="item", name="satellite",        quantity=7},
+            {type="item", name="drydock-assembly", quantity=2},
+            {type="item", name="command",          quantity=1},
+            {type="item", name="ftl-drive",        quantity=1},
         }
     },
 
