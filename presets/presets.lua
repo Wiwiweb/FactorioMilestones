@@ -451,6 +451,91 @@ presets = {
     },
 
 
+    ["Nullius"] = {
+        required_mods = {"angelssmelting", "nullius"},
+        milestones = {
+            {type="item",       name="nullius-geology-pack",             quantity=1},
+            {type="item",       name="nullius-climatology-pack",         quantity=1},
+            {type="item",       name="nullius-mechanical-pack",          quantity=1},
+            {type="item",       name="nullius-electrical-pack",          quantity=1},
+            {type="item",       name="nullius-chemical-pack",            quantity=1},
+            {type="item",       name="nullius-physics-pack",             quantity=1},
+            {type="item",       name="nullius-astronomy-pack",           quantity=1},
+
+            {type="item",       name="nullius-biochemistry-pack",        quantity=1},
+            {type="item",       name="nullius-microbiology-pack",        quantity=1},
+            {type="item",       name="nullius-botany-pack",              quantity=1},
+            {type="item",       name="nullius-nematology-pack",          quantity=1},
+            {type="item",       name="nullius-dendrology-pack",          quantity=1},
+            {type="item",       name="nullius-ichthyology-pack",         quantity=1},
+            {type="item",       name="nullius-zoology-pack",             quantity=1},
+
+            {type="item",       name="nullius-iron-ingot",               quantity=1},
+            {type="item",       name="nullius-plastic",                  quantity=1},
+            {type="item",       name="nullius-glass",                    quantity=1},
+            {type="item",       name="nullius-aluminum-ingot",           quantity=1},
+            {type="item",       name="nullius-silicon-ingot",            quantity=1},
+            {type="item",       name="nullius-steel-ingot",              quantity=1},
+            {type="item",       name="nullius-fiberglass",               quantity=1},
+            {type="item",       name="nullius-titanium-ingot",           quantity=1},
+            {type="item",       name="nullius-copper-ingot",             quantity=1},
+
+            {type="item",       name="nullius-processor-1",              quantity=1},
+            {type="item",       name="nullius-processor-2",              quantity=1},
+            {type="item",       name="nullius-processor-3",              quantity=1},
+
+            {type="item",       name="nullius-terraforming-drone-brown", quantity=1},
+            {type="item",       name="nullius-rocket",                   quantity=1},
+            {type="item",       name="nullius-algaculture-drone",        quantity=1},
+            {type="item",       name="nullius-horticulture-drone",       quantity=1},
+            {type="item",       name="nullius-arboriculture-drone",      quantity=1},
+            {type="item",       name="nullius-entomology-drone",         quantity=1},
+            {type="item",       name="nullius-aquaculture-drone",        quantity=1},
+            {type="item",       name="nullius-husbandry-drone",          quantity=1},
+            {type="item",       name="nullius-guide-drone-copper-1",     quantity=1},
+            {type="item",       name="nullius-guide-drone-uranium-1",    quantity=1},
+            {type="item",       name="nullius-antimatter",               quantity=1},
+            {type="item",       name="nullius-probe",                    quantity=1},
+            {type="item",       name="nullius-probe",                    quantity=10},
+
+            {type="item",       name="nullius-locomotive-1",             quantity=1},
+            {type="item",       name="nullius-logistic-bot-1",           quantity=1},
+            {type="item",       name="cliff-explosives",                 quantity=1},
+            {type="item",       name="nullius-android-1",                quantity=1},
+            {type="item",       name="nullius-android-2",                quantity=1},
+            {type="item",       name="nullius-mecha",                    quantity=1},
+
+            {type="item",       name="nullius-wind-turbine-1",           quantity=1},
+            {type="item",       name="nullius-solar-collector-1",        quantity=1},
+            {type="item",       name="nullius-solar-panel-1",            quantity=16},
+            {type="item",       name="nullius-geothermal-plant-1",       quantity=1},
+            {type="item",       name="nullius-grid-battery-1",           quantity=11},
+            {type="item",       name="nullius-fusion-cell",              quantity=1},
+            {type="item",       name="nullius-breeder-cell",             quantity=1},
+            {type="item",       name="nullius-fission-cell",             quantity=1},
+            {type="item",       name="nullius-antimatter",               quantity=1},
+
+            {type="item",       name="nullius-geology-pack",             quantity=1000, next="x10"},
+            {type="item",       name="nullius-climatology-pack",         quantity=1000, next="x10"},
+            {type="item",       name="nullius-mechanical-pack",          quantity=1000, next="x10"},
+            {type="item",       name="nullius-electrical-pack",          quantity=1000, next="x10"},
+            {type="item",       name="nullius-chemical-pack",            quantity=1000, next="x10"},
+            {type="item",       name="nullius-physics-pack",             quantity=1000, next="x10"},
+            {type="item",       name="nullius-astronomy-pack",           quantity=1000, next="x10"},
+
+            {type="item",       name="nullius-biochemistry-pack",        quantity=1000, next="x10"},
+            {type="item",       name="nullius-microbiology-pack",        quantity=1000, next="x10"},
+            {type="item",       name="nullius-botany-pack",              quantity=1000, next="x10"},
+            {type="item",       name="nullius-nematology-pack",          quantity=1000, next="x10"},
+            {type="item",       name="nullius-dendrology-pack",          quantity=1000, next="x10"},
+            {type="item",       name="nullius-ichthyology-pack",         quantity=1000, next="x10"},
+            {type="item",       name="nullius-zoology-pack",             quantity=1000, next="x10"},
+
+            {type="kill",       name="character",                        quantity=1},
+        }
+    },
+
+
     ["Seablock"] = {
         required_mods = {"bobplates", "bobelectronics", "bobtech", "angelsbioprocessing", "SeaBlock"},
         milestones = {
