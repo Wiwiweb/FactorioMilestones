@@ -6,6 +6,10 @@ Date: ????
     - Add preset addons for Cargo Ships, Spidertron Extended, Spidertron Tiers
   Changes:
     - Tweaks to various presets, most notably for Sea Block.
+  Locale:
+    - New translations from Crowdin. If you would like to translate this mod please find FactorioMilestones here: https://crowdin.com/project/factorio-mods-localization
+      - French translation by yours truly.
+      - Korean translation thanks to x2605.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 2022-02-20
