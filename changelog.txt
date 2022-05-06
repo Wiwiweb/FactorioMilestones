@@ -2,6 +2,7 @@
 Version: 1.2.3
 Date: ????
   Changes:
+    - Milestones settings can now only be changed by admins, instead of relying on "Mod Settings Changed" permissions. Seems more consistent with Factorio's own conditions on modifying Mod Settings.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.2
 Date: 2022-04-01

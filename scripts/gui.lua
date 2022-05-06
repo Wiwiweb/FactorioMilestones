@@ -29,7 +29,7 @@ function build_main_frame(player)
             action="milestones_open_settings"
         }
     }
-    if player.permission_group == nil or not player.permission_group.allows_action(defines.input_action.mod_settings_changed) then
+    if not player.admin then
         settings_button.enabled = false
         settings_button.tooltip = {"milestones.settings_disabled"}
         settings_button.sprite = "milestones_settings_disabled"
@@ -93,8 +93,8 @@ end
 local function update_settings_button(player) -- In case permissions changed
     local main_frame = global.players[player.index].main_frame
     settings_button = main_frame.milestones_titlebar.milestones_settings_button
-    
-    if player.permission_group and player.permission_group.allows_action(defines.input_action.mod_settings_changed) then
+
+    if player.admin then
         settings_button.enabled = true
         settings_button.tooltip = {"milestones.settings_instructions"}
         settings_button.sprite = "milestones_settings_white"
