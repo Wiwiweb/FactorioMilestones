@@ -291,7 +291,11 @@ function confirm_settings_page(player_index)
             end
         end
 
-        game.print({"milestones.message_settings_changed"})
+        if game.is_multiplayer() then
+            game.print({"milestones.message_settings_changed_multiplayer", player.name})
+        else
+            game.print({"milestones.message_settings_changed"})
+        end
     end
 
     cancel_settings_page(player_index)
