@@ -145,13 +145,13 @@ function fill_settings_flow(settings_flow, milestones)
 end
 
 function build_settings_page(player)
-    local main_frame = global.players[player.index].main_frame
+    local main_frame = get_main_frame(player.index)
     main_frame.milestones_titlebar.milestones_main_label.caption = {"milestones.settings_title"}
     main_frame.milestones_titlebar.milestones_settings_button.visible = false
     main_frame.milestones_titlebar.milestones_close_button.visible = false
     main_frame.milestones_dialog_buttons.visible = true
 
-    local inner_frame = global.players[player.index].inner_frame
+    local inner_frame = get_inner_frame(player.index)
 
     local preset_flow = inner_frame.add{type="flow", name="milestones_preset_flow", direction="horizontal"}
     preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
@@ -190,7 +190,7 @@ function build_settings_page(player)
             caption={"", "[img=milestones_icon_"..type.."_black] ", {"milestones.settings_add_"..type}},
             tags={action="milestones_add_setting", type=type}}
     end
-    global.players[player.index].outer_frame.force_auto_center()
+    get_outer_frame(player.index).force_auto_center()
 end
 
 function swap_settings(player_index, button_element)
@@ -245,20 +245,20 @@ function add_setting(player_index, button_element)
         refresh_arrow_buttons(previous_last_element_index, settings_flow)
     end
 
-    local inner_frame = global.players[player_index].inner_frame
+    local inner_frame = get_inner_frame(player_index)
     inner_frame.milestones_settings_scroll.scroll_to_bottom()
 end
 
 function cancel_settings_page(player_index)
-    global.players[player_index].inner_frame.clear()
+    get_inner_frame(player_index).clear()
     local player = game.get_player(player_index)
     build_display_page(player)
-    global.players[player_index].outer_frame.force_auto_center()
 
-    local outer_frame = global.players[player_index].outer_frame
+    local outer_frame = get_outer_frame(player_index)
     local import_export_frame = outer_frame.milestones_settings_import_export
     local inside_frame = import_export_frame.milestones_settings_import_export_inside
 
+    outer_frame.force_auto_center()
     inside_frame.clear()
     import_export_frame.visible = false
 end
@@ -273,7 +273,7 @@ function confirm_settings_page(player_index)
     local new_milestones = get_resulting_milestones_array(player_index)
 
     if not table.deep_compare(global.loaded_milestones, new_milestones) then -- If something changed
-        local inner_frame = global.players[player_index].inner_frame
+        local inner_frame = get_inner_frame(player_index)
         local preset_dropdown = inner_frame.milestones_preset_flow.milestones_preset_dropdown
         if preset_dropdown.tags.imported then
             global.current_preset_name = "Imported"
@@ -346,10 +346,10 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
         local settings_flow = global.players[event.player_index].settings_flow
         settings_flow.clear()
         fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
-        global.players[event.player_index].outer_frame.force_auto_center()
+        get_outer_frame(event.player_index).force_auto_center()
     end
 end)
 
 function is_settings_page_visible(player_index)
-    return global.players[player_index].inner_frame.valid and global.players[player_index].inner_frame.milestones_settings_scroll ~= nil
+    return get_inner_frame(player_index).milestones_settings_scroll ~= nil
 end

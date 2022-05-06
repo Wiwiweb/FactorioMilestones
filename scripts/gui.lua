@@ -2,6 +2,26 @@ require("scripts.gui_display_page")
 require("scripts.gui_settings_page")
 require("scripts.gui_import_export")
 
+local function get_frame(player_index, frame_name)
+    local global_player = global.players[player_index]
+    if not global_player[frame_name] or not global_player[frame_name].valid then
+        reinitialize_player(player_index)
+    end
+    return global.players[player_index][frame_name]
+end
+
+function get_outer_frame(player_index)
+    return get_frame(player_index, "outer_frame")
+end
+
+function get_main_frame(player_index)
+    return get_frame(player_index, "main_frame")
+end
+
+function get_inner_frame(player_index)
+    return get_frame(player_index, "inner_frame")
+end
+
 function build_main_frame(player)
     local screen_element = player.gui.screen
     local outer_frame = screen_element.add{type="frame", style="outer_frame", visible=false}
@@ -91,7 +111,7 @@ function build_main_frame(player)
 end
 
 local function update_settings_button(player) -- In case permissions changed
-    local main_frame = global.players[player.index].main_frame
+    local main_frame = get_main_frame(player.index)
     settings_button = main_frame.milestones_titlebar.milestones_settings_button
 
     if player.admin then
@@ -111,36 +131,38 @@ end
 
 local function open_gui(player)
     local global_player = global.players[player.index]
+    local outer_frame = get_outer_frame(player.index)
     build_display_page(player)
     update_settings_button(player)
-    global_player.outer_frame.visible = true
-    player.opened = global_player.main_frame
+    outer_frame.visible = true
+    player.opened = get_main_frame(player.index)
     player.set_shortcut_toggled("milestones_toggle_gui", true)
 
     if not global_player.opened_once_before then -- Open in the center the first time
-        global_player.outer_frame.force_auto_center()
+        outer_frame.force_auto_center()
         global_player.opened_once_before = true
     end
 end
 
 local function close_gui(player)
     local global_player = global.players[player.index]
-    global_player.outer_frame.visible = false
-    global_player.inner_frame.clear()
+    local outer_frame = get_outer_frame(player.index)
+    outer_frame.visible = false
+    get_inner_frame(player.index).clear()
 
-    local import_export_frame = global_player.outer_frame.milestones_settings_import_export
+    local import_export_frame = outer_frame.milestones_settings_import_export
     local import_export_inside_frame = import_export_frame.milestones_settings_import_export_inside
     import_export_inside_frame.clear()
     import_export_frame.visible = false
 
     player.set_shortcut_toggled("milestones_toggle_gui", false)
-    if player.opened == global_player.main_frame then
+    if player.opened == get_main_frame(player.index) then
         player.opened = nil
     end
 end
 
 local function toggle_gui(player)
-    local visible = global.players[player.index].outer_frame.visible
+    local visible = get_outer_frame(player.index).visible
     if visible == false then
         open_gui(player)
     else
@@ -150,7 +172,7 @@ end
 
 function refresh_gui_for_player(player)
     if is_display_page_visible(player.index) then
-        global.players[player.index].inner_frame.clear()
+        get_inner_frame(player.index).clear()
         build_display_page(player)
     end
 end
@@ -171,9 +193,10 @@ local function toggle_pinned(player, element)
     else
         element.style = "frame_action_button"
         element.sprite = "milestones_pin_white"
+        local main_frame = get_main_frame(player.index)
         if player.opened == nil then
-            player.opened = global_player.main_frame
-        elseif player.opened ~= global_player.main_frame then
+            player.opened = main_frame
+        elseif player.opened ~= main_frame then
             close_gui(player)
         end
     end
@@ -186,7 +209,7 @@ script.on_event(defines.events.on_gui_closed, function(event)
         local global_player = global.players[event.player_index]
         if global_player.one_time_prevent_close then
             global_player.one_time_prevent_close = false
-            player.opened = global_player.main_frame
+            player.opened = get_main_frame(player.index)
         elseif not global_player.pinned then
             close_gui(player)
         end
@@ -234,7 +257,7 @@ script.on_event(defines.events.on_gui_click, function(event)
         toggle_pinned(player, event.element)
     elseif event.element.tags.action == "milestones_open_settings" then
         local player = game.get_player(event.player_index)
-        global.players[player.index].inner_frame.clear()
+        get_inner_frame(player.index).clear()
         build_settings_page(player)
     elseif event.element.tags.action == "milestones_cancel_settings" then
         cancel_settings_page(event.player_index)

@@ -12,9 +12,7 @@ end
 commands.add_command("milestones-debug-print-loaded-milestones", {"milestones.commands.debug-print-loaded-milestones"}, debug_print_loaded_milestones)
 
 function reinitialize_gui(command_data)
-    global.players[command_data.player_index].main_frame.destroy()
-    local player = game.get_player(command_data.player_index)
-    initialize_player(player)
+    reinitialize_player(command_data.player_index)
 end
 commands.add_command("milestones-reinitialize-gui", {"milestones.commands.reinitialize-gui"}, reinitialize_gui)
 
@@ -24,8 +22,7 @@ function reinitialize_global()
     end
 
     for _, player in pairs(game.players) do
-        global.players[player.index].main_frame.destroy()
-        initialize_player(player)
+        reinitialize_player(player.index)
     end
 end
 commands.add_command("milestones-reinitialize-global", {"milestones.commands.reinitialize-global"}, reinitialize_global)

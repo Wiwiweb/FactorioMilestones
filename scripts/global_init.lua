@@ -11,6 +11,15 @@ function initialize_force_if_needed(force)
     end
 end
 
+function reinitialize_player(player_index)
+    local outer_frame = global.players[player_index].outer_frame
+    if outer_frame.valid then
+        outer_frame.destroy()
+    end
+    local player = game.get_player(player_index)
+    initialize_player(player)
+end
+
 function initialize_player(player)
     local outer_frame, main_frame, inner_frame = build_main_frame(player)
     global.players[player.index] = {

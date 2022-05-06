@@ -1,9 +1,13 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.3
 Date: ????
+
   Changes:
     - Milestones settings can now only be changed by admins, instead of relying on "Mod Settings Changed" permissions. Seems more consistent with Factorio's own conditions on modifying Mod Settings.
     - Changing the settings in a multiplayer game will now indicate who did the change in the chat message.
+
+  Bugfixes:
+    - Fix crash when the GUI was cleared through another mod or command.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.2
 Date: 2022-04-01

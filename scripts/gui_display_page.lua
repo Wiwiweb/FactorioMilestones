@@ -141,13 +141,13 @@ function confirm_edit_time(player_index, element)
 end
 
 function build_display_page(player)
-    local main_frame = global.players[player.index].main_frame
+    local main_frame = get_main_frame(player.index)
     main_frame.milestones_titlebar.milestones_main_label.caption = {"milestones.title"}
     main_frame.milestones_titlebar.milestones_settings_button.visible = true
     main_frame.milestones_titlebar.milestones_close_button.visible = true
     main_frame.milestones_dialog_buttons.visible = false
 
-    local inner_frame = global.players[player.index].inner_frame
+    local inner_frame = get_inner_frame(player.index)
     inner_frame.clear() -- Just in case the GUI didn't close through close_gui
     local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll"}
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
@@ -172,5 +172,5 @@ function build_display_page(player)
 end
 
 function is_display_page_visible(player_index)
-    return global.players[player_index].inner_frame.valid and global.players[player_index].inner_frame.milestones_display_scroll ~= nil
+    return get_inner_frame(player_index).milestones_display_scroll ~= nil
 end
