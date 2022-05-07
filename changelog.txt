@@ -11,6 +11,7 @@ Date: ????
 
   Bugfixes:
     - Fix crash when the GUI was cleared through another mod or command.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.2
 Date: 2022-04-01
@@ -26,6 +27,7 @@ Date: 2022-04-01
     - New translations from Crowdin. If you would like to translate this mod please find FactorioMilestones here: https://crowdin.com/project/factorio-mods-localization
       - French translation by yours truly.
       - Korean translation thanks to x2605.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 2022-02-20
@@ -36,6 +38,7 @@ Date: 2022-02-20
 
   Changes:
     - Change all character kills in presets to increase by x5 instead of x2.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2022-02-20
@@ -51,6 +54,7 @@ Date: 2022-02-20
     - Change presets to use infinite milestones. Existing sets won't be updated unless you reload them from the preset.
     - Labels now say "Killed at" and "Researched at" for kills and technologies
     - Replace "cargo rocket section" with "cargo rocket" in SE and SE+K2 presets
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2022-01-16
@@ -62,12 +66,14 @@ Date: 2022-01-16
   Bugfixes:
     - Fix kill milestones unable to be imported
     - Attempt to fix a rare crash when a player's GUI becomes invalid for an unknown reason
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2021-11-29
 
   Bugfixes:
     - Fix crash when using research milestones
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2021-11-28
@@ -83,6 +89,7 @@ Date: 2021-11-28
   Bugfixes:
     - Fix crash when GUI was opened after being closed in some way that didn't trigger the on_gui_closed event
     - Fix crash when using the import feature, introduced in 1.0.10
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.10
 Date: 2021-11-20
@@ -93,6 +100,7 @@ Date: 2021-11-20
   Bugfixes:
     - Import-export window now gets a scrollbar instead of expanding beyond the screen for large milestone lists
     - Fix issues with multiple forces, where new forces could have completion times from existing forces, and players switching forces could erase completion times. This fixes issues with Editor Extensions's testing lab mode.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.9
 Date: 2021-10-17
@@ -100,12 +108,14 @@ Date: 2021-10-17
   Bugfixes:
     - Fix issue where the completion time for technology milestones was not being saved properly. If you had completed technology milestones, updating to this version will allow you to enter those lost times yourself.
     - Fix crash when going to settings after removing the mod that was currently selected as preset.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.8
 Date: 2021-10-03
 
   Bugfixes:
     - Fix crash when right-clicking an item selector in the settings menu
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.7
 Date: 2021-08-29
@@ -116,18 +126,21 @@ Date: 2021-08-29
 
   Bugfixes:
     - Fix crash that could occur in some cases in multiplayer
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.6
 Date: 2021-08-03
 
   Bugfixes:
     - Fix another crash when loading from old version (oops!)
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 2021-08-01
 
   Bugfixes:
     - Fix crash when loading from old version
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 2021-08-01
@@ -139,12 +152,14 @@ Date: 2021-08-01
 
   Changes:
     - Add missing holmium ingot to SE preset
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2021-06-27
 
   Bugfixes:
     - Fix multiplayer desync when a player joins before Milestones' intro message
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2021-06-23
@@ -157,6 +172,7 @@ Date: 2021-06-23
 
   Bugfixes:
     - Fix crash when trying to confirm settings with invalid items
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2021-06-13
@@ -167,6 +183,7 @@ Date: 2021-06-13
   Changes:
     - Fix missing items in Vanilla presets
     - Add "significant data" to SE preset
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2021-06-06
