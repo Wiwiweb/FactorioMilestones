@@ -92,8 +92,8 @@ styles.milestones_small_dropdown = {
 
 styles.milestones_small_textfield = {
   type = "textbox_style",
-  width = 50,
-  natural_width = 50
+  width = 70,
+  natural_width = 70
 }
 
 styles.milestones_import_export_textbox = {

@@ -92,23 +92,35 @@ function enable_edit_time(player_index, element)
     milestone_flow.milestones_display_time.destroy()
     milestone_flow.milestones_edit_time.destroy()
 
-    milestone_flow.add{type="label", name="milestones_display_time_before", caption={"milestones.edit_time_before_label"}}
-
     local edit_time_dropdown_index, edit_time_default_value = get_default_unit_for_time_bucket(milestone.lower_bound_tick, milestone.completion_tick)
-    local textfield = milestone_flow.add{type="textfield", name="milestones_edit_time_field", 
+    local textfield = milestone_flow.add{type="textfield", name="milestones_edit_time_field",
         text=string.format("%.1f", edit_time_default_value), numeric=true, allow_decimal=true,
         tags={action="milestones_confirm_edit_time_textfield"}, style="milestones_small_textfield"}
     textfield.focus()
     textfield.select_all()
 
-    milestone_flow.add{type="drop-down", name="milestones_edit_time_dropdown", 
-    items={{"milestones.edit_time_minutes"}, {"milestones.edit_time_hours"}, {"milestones.edit_time_days"}}, 
-    selected_index=edit_time_dropdown_index, style="milestones_small_dropdown"}
-    
-    milestone_flow.add{type="label", name="milestones_display_time_after", caption={"milestones.edit_time_after_label"}}
+    milestone_flow.add{type="drop-down", name="milestones_edit_time_dropdown",
+    items={{"milestones.edit_time_minutes"}, {"milestones.edit_time_hours"}, {"milestones.edit_time_days"}, {"milestones.edit_time_exact_time"}},
+    selected_index=edit_time_dropdown_index, style="milestones_small_dropdown", tags={action="milestones_edit_time_dropdown"}}
 
-    milestone_flow.add{type="sprite-button", name="milestones_confirm_edit_time", sprite="utility/check_mark_white", style="milestones_confirm_button", 
+    milestone_flow.add{type="sprite-button", name="milestones_confirm_edit_time", sprite="utility/check_mark_white", style="milestones_confirm_button",
         tooltip={"milestones.edit_time_confirm"}, tags={action="milestones_confirm_edit_time"}}
+end
+
+local function parse_exact_time_to_ticks(time_string)
+    local time_parts = {}
+    for part in string.gmatch(time_string, "[^:]+") do
+        local number = tonumber(part)
+        if not number or number < 0 then return nil end
+        table.insert(time_parts, number)
+    end
+    if #time_parts == 3 then
+        return time_parts[1]*60*60*60 + time_parts[2]*60*60 + time_parts[3]*60
+    elseif #time_parts == 2 then
+        return time_parts[1]*60*60 + time_parts[2]*60
+    else
+        return nil
+    end
 end
 
 local function get_ticks_from_quantity_and_unit(quantity, unit)
@@ -121,6 +133,31 @@ local function get_ticks_from_quantity_and_unit(quantity, unit)
     end
 end
 
+local function get_quantity_from_ticks_and_unit(ticks, unit)
+    if unit == 1 then -- minutes
+        return ticks / (60*60)
+    elseif unit == 2 then -- hours
+        return ticks / (60*60*60)
+    elseif unit == 3 then -- days
+        return ticks / (24*60*60*60)
+    end
+end
+
+function get_default_unit_for_time_bucket(lower_bound_tick, upper_bound_tick)
+    local lower_bound_ticks_ago = game.tick - lower_bound_tick - 10*60*60 -- Add 10 minutes leeway to avoid bumping something to the next unit 1 tick after we calculate it
+    local upper_bound_ticks_ago = game.tick - upper_bound_tick
+
+    local default_unit_index
+    if lower_bound_ticks_ago <= 1*60*60*60 then -- 1 hour ago
+        default_unit_index = 1 -- minutes
+    elseif lower_bound_ticks_ago < 50*60*60*60 then -- 50 hours ago
+        default_unit_index = 2 -- hours
+    else -- More than 50 hours ago
+        default_unit_index = 3 -- days
+    end
+    return default_unit_index, get_quantity_from_ticks_and_unit(upper_bound_ticks_ago, default_unit_index)
+end
+
 function confirm_edit_time(player_index, element)
     local force = game.players[player_index].force
     local milestone_flow = element.parent
@@ -130,15 +167,45 @@ function confirm_edit_time(player_index, element)
     local time_quantity = milestone_flow.milestones_edit_time_field.text
     local time_unit = milestone_flow.milestones_edit_time_dropdown.selected_index
     if time_quantity ~= nil then
-        local nb_ticks_ago = get_ticks_from_quantity_and_unit(time_quantity, time_unit)
-        local absolute_ticks = math.max(0, game.tick - nb_ticks_ago)
-        milestone.completion_tick = ceil_to_nearest_minute(absolute_ticks)
-        milestone.lower_bound_tick = nil
-        sort_milestones(global.forces[force.name].complete_milestones)
+        local completion_tick
+        if time_unit == 4 then -- Exact time
+            completion_tick = parse_exact_time_to_ticks(time_quantity)
+        else
+            local nb_ticks_ago = get_ticks_from_quantity_and_unit(time_quantity, time_unit)
+            local absolute_ticks = math.max(0, game.tick - nb_ticks_ago)
+            completion_tick = ceil_to_nearest_minute(absolute_ticks)
+        end
+        if completion_tick then -- Could still be nil in case of parse error
+            milestone.completion_tick = completion_tick
+            milestone.lower_bound_tick = nil
+            sort_milestones(global.forces[force.name].complete_milestones)
+        end
     end
-    
+
     refresh_gui_for_force(force)
 end
+
+function edit_time_dropdown_changed(event)
+    -- Update the default value shown in the textfield
+    local dropdown = event.element
+    local milestone_flow = dropdown.parent
+    local textfield = milestone_flow.milestones_edit_time_field
+
+    local player = game.get_player(event.player_index)
+    local milestone_index = milestone_flow.get_index_in_parent()
+    local milestone = global.forces[player.force.name].complete_milestones[milestone_index]
+
+    if dropdown.selected_index == 4 then -- Exact time
+        textfield.numeric = false
+        textfield.text = misc.ticks_to_timestring(milestone.completion_tick)
+    else
+        local upper_bound_ticks_ago = game.tick - milestone.completion_tick
+        local quantity = get_quantity_from_ticks_and_unit(upper_bound_ticks_ago, dropdown.selected_index)
+        textfield.numeric = true
+        textfield.text = string.format("%.1f", quantity)
+    end
+end
+
 
 function build_display_page(player)
     local main_frame = get_main_frame(player.index)
@@ -153,8 +220,8 @@ function build_display_page(player)
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
     local column_count = math.max(
                             math.min(
-                                math.ceil(math.sqrt(#global.loaded_milestones / 3)), 
-                                8), 
+                                math.ceil(math.sqrt(#global.loaded_milestones / 3)),
+                                8),
                             1) 
     local content_table = display_scroll.add{type="table", name="milestones_content_table", column_count=column_count, style="milestones_table_style"}
 

@@ -286,6 +286,7 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
 end)
 
+-- Textfield enter
 script.on_event(defines.events.on_gui_confirmed, function(event)
     if not event.element then return end
     if not event.element.tags then return end
@@ -294,10 +295,22 @@ script.on_event(defines.events.on_gui_confirmed, function(event)
     end
 end)
 
+-- Checkboxes
 script.on_event(defines.events.on_gui_checked_state_changed, function(event)
     if not event.element then return end
     if not event.element.tags then return end
     if event.element.name == "milestones_export_encoded_checkbox" then
         toggle_export_encoded(event.element)
+    end
+end)
+
+-- Dropdowns
+script.on_event(defines.events.on_gui_selection_state_changed, function(event)
+    if not event.element then return end
+    if not event.element.tags then return end
+    if event.element.tags.action == "milestones_change_preset" then
+        preset_dropdown_changed(event)
+    elseif event.element.tags.action == "milestones_edit_time_dropdown" then
+        edit_time_dropdown_changed(event)
     end
 end)

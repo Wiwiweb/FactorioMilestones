@@ -336,19 +336,14 @@ script.on_event(defines.events.on_gui_text_changed, function(event)
     end
 end)
 
--- Preset dropdown
-script.on_event(defines.events.on_gui_selection_state_changed, function(event)
-    if not event.element then return end
-    if not event.element.tags then return end
-    if event.element.tags.action == "milestones_change_preset" then
-        event.element.tags = {action="milestones_change_preset", imported=false}
-        local selected_preset_name = event.element.get_item(event.element.selected_index)
-        local settings_flow = global.players[event.player_index].settings_flow
-        settings_flow.clear()
-        fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
-        get_outer_frame(event.player_index).force_auto_center()
-    end
-end)
+function preset_dropdown_changed(event)
+    event.element.tags = {action="milestones_change_preset", imported=false}
+    local selected_preset_name = event.element.get_item(event.element.selected_index)
+    local settings_flow = global.players[event.player_index].settings_flow
+    settings_flow.clear()
+    fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
+    get_outer_frame(event.player_index).force_auto_center()
+end
 
 function is_settings_page_visible(player_index)
     return get_inner_frame(player_index).milestones_settings_scroll ~= nil

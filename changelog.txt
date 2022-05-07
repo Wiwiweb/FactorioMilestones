@@ -2,8 +2,11 @@
 Version: 1.2.3
 Date: ????
 
+  Features:
+    - Add "Exact time" option for editing estimation ranges. This can be useful if you've lost your times but have a screenshot of your previous milestones.
+
   Changes:
-    - Milestones settings can now only be changed by admins, instead of relying on "Mod Settings Changed" permissions. Seems more consistent with Factorio's own conditions on modifying Mod Settings.
+    - Milestones settings can now only be changed by admins, instead of relying on "Mod Settings Changed" permissions. This seems to match with Factorio's own conditions on modifying Mod Settings.
     - Changing the settings in a multiplayer game will now indicate who did the change in the chat message.
 
   Bugfixes:
