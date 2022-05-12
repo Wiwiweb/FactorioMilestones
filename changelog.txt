@@ -4,6 +4,7 @@ Date: ????
 
   Features:
     - Add "Exact time" option for editing estimation ranges. This can be useful if you've lost your times but have a screenshot of your previous milestones.
+    - Add preset for 248k Mod (Thanks to PreLeyZero!)
 
   Changes:
     - Milestones settings can now only be changed by admins, instead of relying on "Mod Settings Changed" permissions. This seems to match with Factorio's own conditions on modifying Mod Settings.
