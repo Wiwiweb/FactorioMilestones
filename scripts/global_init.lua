@@ -5,8 +5,24 @@ function initialize_force_if_needed(force)
         log("Initializing global for force " .. force.name)
         global.forces[force.name] = {
             complete_milestones = {},
-            incomplete_milestones = table.deep_copy(global.loaded_milestones)
+            incomplete_milestones = {},
+            milestones_by_group = {}
         }
+
+        local current_group = "Other"
+        for i, milestone in pairs(global.loaded_milestones) do
+            if milestone.type == "group" then
+                current_group = milestone.name
+            else
+                local inserted_milestone = table.deep_copy(milestone)
+                inserted_milestone.sort_index = i
+                inserted_milestone.group = current_group
+                global.forces[force.name].milestones_by_group[current_group] = global.forces[force.name].milestones_by_group[current_group] or {}
+                -- Intentionally insert the same reference in both tables
+                table.insert(global.forces[force.name].incomplete_milestones, inserted_milestone)
+                table.insert(global.forces[force.name].milestones_by_group[current_group], inserted_milestone)
+            end
+        end
         backfill_completion_times(force)
     end
 end

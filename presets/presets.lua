@@ -1,4 +1,4 @@
--- Only one of these presets can be used. 
+-- Only one of these presets can be used.
 -- Add milestones for a mod here if the mod is a major mod that changes the game a lot and would not work well combined with another major mod.
 -- If the mod is small and could be combined with any major mod, add the milestones in preset_addons.lua instead.
 
@@ -9,22 +9,14 @@ presets = {
     ["Vanilla"] = {
         required_mods = {},
         milestones = {
+            {type="group",      name="Science"},
             {type="item",       name="automation-science-pack", quantity=1},
             {type="item",       name="logistic-science-pack",   quantity=1},
             {type="item",       name="military-science-pack",   quantity=1},
-            {type="fluid",      name="petroleum-gas",           quantity=1},
             {type="item",       name="chemical-science-pack",   quantity=1},
             {type="item",       name="production-science-pack", quantity=1},
             {type="item",       name="utility-science-pack",    quantity=1},
-            {type="technology", name="rocket-silo",             quantity=1},
-            {type="item",       name="rocket-part",             quantity=100},
             {type="item",       name="space-science-pack",      quantity=1},
-            {type="item",       name="locomotive",              quantity=1},
-            {type="item",       name="construction-robot",      quantity=1},
-            {type="item",       name="spidertron",              quantity=1},
-            {type="item",       name="uranium-fuel-cell",       quantity=1},
-            {type="item",       name="solar-panel",             quantity=1},
-            {type="item",       name="solar-panel",             quantity=1000, next="x10"},
             {type="item",       name="automation-science-pack", quantity=1000, next="x10"},
             {type="item",       name="logistic-science-pack",   quantity=1000, next="x10"},
             {type="item",       name="military-science-pack",   quantity=1000, next="x10"},
@@ -32,6 +24,23 @@ presets = {
             {type="item",       name="production-science-pack", quantity=1000, next="x10"},
             {type="item",       name="utility-science-pack",    quantity=1000, next="x10"},
             {type="item",       name="space-science-pack",      quantity=10000, next="x10"},
+
+            {type="group",      name="Progress"},
+            {type="fluid",      name="petroleum-gas",           quantity=1},
+            {type="technology", name="rocket-silo",             quantity=1},
+            {type="item",       name="rocket-part",             quantity=100},
+
+            {type="group",      name="Logistics"},
+            {type="item",       name="locomotive",              quantity=1},
+            {type="item",       name="construction-robot",      quantity=1},
+            {type="item",       name="spidertron",              quantity=1},
+
+            {type="group",      name="Power"},
+            {type="item",       name="uranium-fuel-cell",       quantity=1},
+            {type="item",       name="solar-panel",             quantity=1},
+            {type="item",       name="solar-panel",             quantity=1000, next="x10"},
+
+            {type="group",      name="Kills"},
             {type="kill",       name="medium-biter",            quantity=1},
             {type="kill",       name="big-biter",               quantity=1},
             {type="kill",       name="behemoth-biter",          quantity=1},
@@ -80,23 +89,13 @@ presets = {
     ["Space Exploration (No Spoilers)"] = {
         required_mods = {"space-exploration"},
         milestones = {
+            {type="group",      name="Science"},
             {type="item",       name="automation-science-pack",      quantity=1},
             {type="item",       name="logistic-science-pack",        quantity=1},
             {type="item",       name="military-science-pack",        quantity=1},
-            {type="fluid",      name="petroleum-gas",                quantity=1},
             {type="item",       name="chemical-science-pack",        quantity=1},
-            {type="item",       name="construction-robot",           quantity=1},
             {type="item",       name="production-science-pack",      quantity=1},
             {type="item",       name="utility-science-pack",         quantity=1},
-            {type="item",       name="se-rocket-launch-pad-silo-dummy-result-item", quantity=1, next="x10"},
-            {type="technology", name="se-spaceship",                 quantity=1},
-            {type="item",       name="se-vulcanite-block",           quantity=1},
-            {type="item",       name="se-cryonite-rod",              quantity=1},
-            {type="item",       name="se-vitamelange-roast",         quantity=1},
-            {type="item",       name="se-beryllium-ingot",           quantity=1},
-            {type="item",       name="se-holmium-ingot",             quantity=1},
-            {type="item",       name="se-iridium-ingot",             quantity=1},
-            {type="item",       name="se-naquium-ingot",             quantity=1},
             {type="item",       name="se-rocket-science-pack",       quantity=1},
             {type="item",       name="se-significant-data",          quantity=1},
             {type="item",       name="se-astronomic-science-pack-1", quantity=1},
@@ -119,8 +118,25 @@ presets = {
             {type="item",       name="se-deep-space-science-pack-2", quantity=1},
             {type="item",       name="se-deep-space-science-pack-3", quantity=1},
             {type="item",       name="se-deep-space-science-pack-4", quantity=1},
-            {type="technology", name="se-spaceship-victory",         quantity=1},
             {type="item",       name="se-significant-data",          quantity=1000, next="x10"},
+
+            {type="group",      name="Resources"},
+            {type="item",       name="se-vulcanite-block",           quantity=1},
+            {type="item",       name="se-cryonite-rod",              quantity=1},
+            {type="item",       name="se-vitamelange-roast",         quantity=1},
+            {type="item",       name="se-beryllium-ingot",           quantity=1},
+            {type="item",       name="se-holmium-ingot",             quantity=1},
+            {type="item",       name="se-iridium-ingot",             quantity=1},
+            {type="item",       name="se-naquium-ingot",             quantity=1},
+
+            {type="group",      name="Progress"},
+            {type="fluid",      name="petroleum-gas",                quantity=1},
+            {type="item",       name="construction-robot",           quantity=1},
+            {type="item",       name="se-rocket-launch-pad-silo-dummy-result-item", quantity=1, next="x10"},
+            {type="technology", name="se-spaceship",                 quantity=1},
+            {type="technology", name="se-spaceship-victory",         quantity=1},
+
+            {type="group",      name="Kills"},
             {type="kill",       name="medium-biter",                 quantity=1},
             {type="kill",       name="big-biter",                    quantity=1},
             {type="kill",       name="behemoth-biter",               quantity=1},

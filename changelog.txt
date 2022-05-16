@@ -1,8 +1,10 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.2.3
+Version: 1.3.0
 Date: ????
 
   Features:
+    - Add milestone groups. You can categorize milestones, and either view them sorted by group, or sorted chronologically.
+      Existing games won't automatically change. To add groups to your loaded milestones, please reload your preset in the settings.
     - Add "Exact time" option for editing estimation ranges. This can be useful if you've lost your times but have a screenshot of your previous milestones.
     - Add preset for 248k Mod (Thanks to PreLeyZero!)
 

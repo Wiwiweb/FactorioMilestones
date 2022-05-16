@@ -79,5 +79,23 @@ return {
             milestone.completion_tick = nil
             milestone.lower_bound_tick = nil
         end
-    end
+    end,
+
+    ["1.3.0"] = function()
+        log("Running 1.3.0 migration")
+        -- Add new milestones_by_group field, but just put all existing milestones in the Other group
+        for _, global_force in pairs(global.forces) do
+            global_force.milestones_by_group = { ["Other"] = {} }
+            for i, milestone in pairs(global_force.complete_milestones) do
+                milestone.sort_index = i
+                milestone.group = "Other"
+                table.insert(global_force.milestones_by_group["Other"], milestone)
+            end
+            for i, milestone in pairs(global_force.incomplete_milestones) do
+                milestone.sort_index = i
+                milestone.group = "Other"
+                table.insert(global_force.milestones_by_group["Other"], milestone)
+            end
+        end
+    end,
 }

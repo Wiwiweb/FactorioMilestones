@@ -51,8 +51,10 @@ end
 function mark_milestone_reached(force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional
     milestone.completion_tick = tick
     if lower_bound_tick then milestone.lower_bound_tick = lower_bound_tick end
-    table.insert(global.forces[force.name].complete_milestones, milestone)
-    table.remove(global.forces[force.name].incomplete_milestones, milestone_index)
+    local global_force = global.forces[force.name]
+    table.insert(global_force.complete_milestones, milestone)
+    table.remove(global_force.incomplete_milestones, milestone_index)
+    sort_milestones(global_force.milestones_by_group[milestone.group])
 end
 
 function parse_next_formula(next_formula)
@@ -140,8 +142,11 @@ local function find_completion_tick_bounds(force, milestone, item_stats, fluid_s
 end
 
 function sort_milestones(milestones)
-    table.sort(milestones, function(a,b) 
-        return a.completion_tick < b.completion_tick 
+    table.sort(milestones, function(a,b)
+        if a.completion_tick and not b.completion_tick then return true end -- a comes first
+        if not a.completion_tick and b.completion_tick then return false end -- b comes first
+        if not a.completion_tick and not b.completion_tick then return a.sort_index < b.sort_index end
+        return a.completion_tick < b.completion_tick
     end)
 end
 
@@ -174,6 +179,9 @@ function backfill_completion_times(force)
         end
     end
     sort_milestones(global_force.complete_milestones)
+    for _group_name, group_milestones in pairs(global_force.milestones_by_group) do
+        sort_milestones(group_milestones)
+    end
 end
 
 function is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts)

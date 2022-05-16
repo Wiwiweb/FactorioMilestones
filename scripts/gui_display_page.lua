@@ -178,7 +178,8 @@ function confirm_edit_time(player_index, element)
         if completion_tick then -- Could still be nil in case of parse error
             milestone.completion_tick = completion_tick
             milestone.lower_bound_tick = nil
-            sort_milestones(global.forces[force.name].complete_milestones)
+            sort_milestones(global.forces[force.name].completed_milestones)
+            sort_milestones(global.forces[force.name].milestones_by_group[milestone.group])
         end
     end
 
@@ -222,19 +223,31 @@ function build_display_page(player)
                             math.min(
                                 math.ceil(math.sqrt(#global.loaded_milestones / 3)),
                                 8),
-                            1) 
-    local content_table = display_scroll.add{type="table", name="milestones_content_table", column_count=column_count, style="milestones_table_style"}
+                            1)
 
     local global_force = global.forces[player.force.name]
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local compact_list = settings.get_player_settings(player)["milestones_compact_list"].value
-    for _, milestone in pairs(global_force.complete_milestones) do
-        add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
-    end
+    local view_by_group = true
+    if view_by_group then
+        for group_name, group_milestones in pairs(global_force.milestones_by_group) do
+            display_scroll.add{type="label", caption=group_name, style="caption_label"}
+            local group_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
+            for _, milestone in pairs(group_milestones) do
+                add_milestone_item(group_table, milestone, print_milliseconds, compact_list)
+            end
+            display_scroll.add{type="line"}
+        end
+    else
+        local content_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
+        for _, milestone in pairs(global_force.complete_milestones) do
+            add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
+        end
 
-    for _, milestone in pairs(global_force.incomplete_milestones) do
-        add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
+        for _, milestone in pairs(global_force.incomplete_milestones) do
+            add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
+        end
     end
 end
 
