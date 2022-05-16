@@ -26,6 +26,20 @@ local function refresh_all_arrow_buttons(settings_flow)
     end
 end
 
+local function add_group(settings_flow, default_name, gui_index)
+    local group_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big", index=gui_index}
+    group_flow.add{type="sprite", sprite="milestones_icon_group", tooltip={"milestones.type_group"}}
+    group_flow.add{type="label", name="milestones_settings_label", caption={"", {"milestones.type_group"}, ":"}}
+    local textfield = group_flow.add{type="textfield", name="milestones_settings_group_name", text=default_name, clear_and_focus_on_right_click=true}
+
+    group_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
+
+    group_flow.add{type="sprite-button", sprite="utility/trash", style="milestones_trash_button", tags={action="milestones_delete_setting"}}
+    group_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
+    return textfield
+end
+
+
 local function add_milestone_setting(milestone, settings_flow, gui_index)
     local prototype
     local elem_button
@@ -83,6 +97,14 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     return milestone_flow
 end
 
+local function add_settings_element_from_json_item(settings_element, settings_flow, gui_index)
+    if settings_element.type == "group" then
+        return add_group(settings_flow, settings_element.name, gui_index)
+    else
+        return add_milestone_setting(settings_element, settings_flow, gui_index)
+    end
+end
+
 function toggle_infinity_button(button_element)
     local textfield_element = button_element.parent.milestones_settings_next_textfield
     local spacer_element = button_element.parent.milestones_settings_next_spacer
@@ -104,6 +126,10 @@ local function get_milestones_array_element(flow, allow_empty, player_index)
     if not allow_empty and (flow.milestones_settings_item == nil or flow.milestones_settings_item.elem_value == nil) then
         return nil
     end
+    if flow.milestones_settings_group_name then
+        return {type="group", name=flow.milestones_settings_group_name.text}
+    end
+
     local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
     local next_formula = flow.milestones_settings_next_textfield.text
     if next_formula == "" then next_formula = nil end
@@ -136,7 +162,7 @@ end
 
 function fill_settings_flow(settings_flow, milestones)
     for i, milestone in pairs(milestones) do
-        local item_flow = add_milestone_setting(milestone, settings_flow, nil)
+        add_settings_element_from_json_item(milestone, settings_flow, nil)
         if i < #milestones then
             settings_flow.add{type="line"}
         end
@@ -185,7 +211,7 @@ function build_settings_page(player)
     fill_settings_flow(settings_flow, global.loaded_milestones)
 
     local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
-    for _, type in pairs({"item", "fluid", "technology", "kill"}) do
+    for _, type in pairs({"group", "item", "fluid", "technology", "kill"}) do
         buttons_flow.add{type="button",
             caption={"", "[img=milestones_icon_"..type.."_black] ", {"milestones.settings_add_"..type}},
             tags={action="milestones_add_setting", type=type}}
@@ -205,8 +231,8 @@ function swap_settings(player_index, button_element)
     -- index1 is always smaller, destroying and rebuilding in this order works
     settings_flow.children[gui_index2].destroy()
     settings_flow.children[gui_index1].destroy()
-    add_milestone_setting(milestone2, settings_flow, gui_index1)
-    add_milestone_setting(milestone1, settings_flow, gui_index2)
+    add_settings_element_from_json_item(milestone2, settings_flow, gui_index1)
+    add_settings_element_from_json_item(milestone1, settings_flow, gui_index2)
     refresh_arrow_buttons(gui_index1, settings_flow)
     refresh_arrow_buttons(gui_index2, settings_flow)
 end
@@ -235,12 +261,35 @@ function add_setting(player_index, button_element)
     local only_element = previous_last_element_index == 0
     local new_element_index = previous_last_element_index + (only_element and 1 or 2) -- No line if we are adding the 1st element
 
-    local milestone = {type=milestone_type, quantity=1}
     if not only_element then
         settings_flow.add{type="line"}
     end
-    add_milestone_setting(milestone, settings_flow, new_element_index)
+
+    if milestone_type == "group" then
+        local group_name = "Group " -- Can't localize default textfield values
+        local group_digit = 1
+        for i = previous_last_element_index, 1, -1 do
+            local child = settings_flow.children[i]
+            if child.type == "flow" and child.milestones_settings_group_name then
+                local previous_group_name = child.milestones_settings_group_name.text
+                local previous_name_digit = string.match(previous_group_name, "(%d+)$")
+                if previous_name_digit then
+                    previous_name_digit = tonumber(previous_name_digit)
+                    group_digit = previous_name_digit + 1
+                end
+                break
+            end
+        end
+        group_name = group_name .. group_digit
+        local textfield = add_group(settings_flow, group_name)
+        textfield.focus()
+        textfield.select_all()
+    else
+        local milestone = {type=milestone_type, quantity=1}
+        add_milestone_setting(milestone, settings_flow, new_element_index)
+    end
     refresh_arrow_buttons(new_element_index, settings_flow)
+
     if not only_element then
         refresh_arrow_buttons(previous_last_element_index, settings_flow)
     end
