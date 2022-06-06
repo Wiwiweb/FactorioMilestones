@@ -123,7 +123,9 @@ function toggle_infinity_button(button_element)
 end
 
 local function get_milestones_array_element(flow, allow_empty, player_index)
-    if not allow_empty and (flow.milestones_settings_item == nil or flow.milestones_settings_item.elem_value == nil) then
+    if not allow_empty
+       and (flow.milestones_settings_item == nil or flow.milestones_settings_item.elem_value == nil)
+       and (flow.milestones_settings_group_name == nil or flow.milestones_settings_group_name.text == nil) then
         return nil
     end
     if flow.milestones_settings_group_name then
@@ -319,9 +321,9 @@ function confirm_settings_page(player_index)
         return
     end
 
-    local new_milestones = get_resulting_milestones_array(player_index)
+    local new_loaded_milestones = get_resulting_milestones_array(player_index)
 
-    if not table.deep_compare(global.loaded_milestones, new_milestones) then -- If something changed
+    if not table.deep_compare(global.loaded_milestones, new_loaded_milestones) then -- If something changed
         local inner_frame = get_inner_frame(player_index)
         local preset_dropdown = inner_frame.milestones_preset_flow.milestones_preset_dropdown
         if preset_dropdown.tags.imported then
@@ -330,12 +332,12 @@ function confirm_settings_page(player_index)
             global.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
         end
 
-        global.loaded_milestones = table.deep_copy(new_milestones)
+        global.loaded_milestones = table.deep_copy(new_loaded_milestones)
 
         for force_name, force in pairs(game.forces) do
             local global_force = global.forces[force_name]
             if global_force ~= nil then
-                merge_new_milestones(force_name, new_milestones)
+                merge_new_milestones(force_name, new_loaded_milestones)
                 backfill_completion_times(force)
             end
         end

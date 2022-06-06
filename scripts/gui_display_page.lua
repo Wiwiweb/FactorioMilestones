@@ -219,6 +219,7 @@ function build_display_page(player)
     inner_frame.clear() -- Just in case the GUI didn't close through close_gui
     local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll"}
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
+    -- TODO: Account for groups or not?
     local column_count = math.max(
                             math.min(
                                 math.ceil(math.sqrt(#global.loaded_milestones / 3)),

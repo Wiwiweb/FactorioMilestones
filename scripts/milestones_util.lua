@@ -24,28 +24,42 @@ local function find_possible_existing_completion_time(global_force, new_mileston
     return nil, nil
 end
 
-function merge_new_milestones(force_name, new_milestones)
+function merge_new_milestones(force_name, new_loaded_milestones)
+    local global_force = global.forces[force_name]
     local new_complete = {}
     local new_incomplete = {}
-    local global_force = global.forces[force_name]
+    local new_milestones_by_group = {}
 
-    for _, new_milestone in pairs(new_milestones) do
-        local completion_tick, lower_bound_tick = find_possible_existing_completion_time(global_force, new_milestone)
-        if completion_tick == nil then
-            table.insert(new_incomplete, new_milestone)
+    local current_group = "Other"
+    for i, new_loaded_milestone in pairs(new_loaded_milestones) do
+        if new_loaded_milestone.type == "group" then
+            current_group = new_loaded_milestone.name
         else
-            if new_milestone.next then
-                local next_milestone = create_next_milestone(force_name, new_milestone)
-                table.insert(new_milestones, next_milestone)
+            local new_milestone = table.deep_copy(new_loaded_milestone)
+            new_milestone.sort_index = i
+            new_milestone.group = current_group
+            new_milestones_by_group[current_group] = new_milestones_by_group[current_group] or {}
+            -- Intentionally insert the same reference in both new_milestones_by_group and new_incomplete/new_incomplete
+            table.insert(new_milestones_by_group[current_group], new_milestone)
+
+            local completion_tick, lower_bound_tick = find_possible_existing_completion_time(global_force, new_milestone)
+            if completion_tick == nil then
+                table.insert(new_incomplete, new_milestone)
+            else
+                if new_milestone.next then
+                    local next_milestone = create_next_milestone(force_name, new_milestone)
+                    table.insert(new_milestone, next_milestone)
+                end
+                new_milestone.completion_tick = completion_tick
+                new_milestone.lower_bound_tick = lower_bound_tick
+                table.insert(new_complete, new_milestone)
             end
-            new_milestone.completion_tick = completion_tick
-            new_milestone.lower_bound_tick = lower_bound_tick
-            table.insert(new_complete, new_milestone)
         end
     end
 
-    global_force.complete_milestones = table.deep_copy(new_complete)
-    global_force.incomplete_milestones = table.deep_copy(new_incomplete)
+    global_force.complete_milestones = new_complete
+    global_force.incomplete_milestones = new_incomplete
+    global_force.milestones_by_group = new_milestones_by_group
 end
 
 function mark_milestone_reached(force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional

@@ -10,11 +10,11 @@ function initialize_force_if_needed(force)
         }
 
         local current_group = "Other"
-        for i, milestone in pairs(global.loaded_milestones) do
-            if milestone.type == "group" then
-                current_group = milestone.name
+        for i, loaded_milestone in pairs(global.loaded_milestones) do
+            if loaded_milestone.type == "group" then
+                current_group = loaded_milestone.name
             else
-                local inserted_milestone = table.deep_copy(milestone)
+                local inserted_milestone = table.deep_copy(loaded_milestone)
                 inserted_milestone.sort_index = i
                 inserted_milestone.group = current_group
                 global.forces[force.name].milestones_by_group[current_group] = global.forces[force.name].milestones_by_group[current_group] or {}
