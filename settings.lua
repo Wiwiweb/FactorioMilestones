@@ -19,5 +19,11 @@ data:extend{
         name = "milestones_compact_list",
         setting_type = "runtime-per-user",
         default_value = false,
+    },
+    {
+        type = "bool-setting",
+        name = "milestones_list_by_group",
+        setting_type = "runtime-per-user",
+        default_value = true,
     }
 }

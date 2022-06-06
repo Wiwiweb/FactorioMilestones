@@ -229,7 +229,7 @@ function build_display_page(player)
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local compact_list = settings.get_player_settings(player)["milestones_compact_list"].value
-    local view_by_group = true
+    local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
     if view_by_group then
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
             display_scroll.add{type="label", caption=group_name, style="caption_label"}
