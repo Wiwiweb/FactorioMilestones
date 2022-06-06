@@ -12,19 +12,21 @@ function convert_and_validate_imported_json(import_string)
         return nil, {"milestones.message_invalid_import_json"}
     end
 
-    local valid_categories = {'item', 'fluid', 'technology', 'kill'}
+    local valid_categories = {'item', 'fluid', 'technology', 'kill', 'group'}
     for _, milestone in pairs(imported_milestones) do
         if not table_contains(valid_categories, milestone.type) then
             return nil, {"", {"milestones.message_invalid_import_type"}, milestone.type}
         end
-        local num = tonumber(milestone.quantity)
-        if num == nil or num < 1 then
-            return nil, {"", {"milestones.message_invalid_import_quantity"}, milestone.quantity}
-        end
-        if milestone.next ~= nil then
-            local operator, _ = parse_next_formula(milestone.next)
-            if operator == nil then
-                return nil, {"", {"milestones.message_invalid_import_next"}, milestone.next}
+        if milestone.type ~= 'group' then
+            local num = tonumber(milestone.quantity)
+            if num == nil or num < 1 then
+                return nil, {"", {"milestones.message_invalid_import_quantity"}, milestone.quantity}
+            end
+            if milestone.next ~= nil then
+                local operator, _ = parse_next_formula(milestone.next)
+                if operator == nil then
+                    return nil, {"", {"milestones.message_invalid_import_next"}, milestone.next}
+                end
             end
         end
     end
