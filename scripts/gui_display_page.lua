@@ -240,6 +240,7 @@ function build_display_page(player)
             end
             display_scroll.add{type="line"}
         end
+        display_scroll.children[#display_scroll.children].destroy() -- Remove last line
     else
         local content_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
         for _, milestone in pairs(global_force.complete_milestones) do
