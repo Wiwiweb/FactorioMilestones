@@ -69,7 +69,7 @@ function load_preset_addons()
     for preset_addon_name, preset_addon in pairs(preset_addons) do
         if is_preset_valid(preset_addon) then
             table.insert(preset_addons_loaded, preset_addon_name)
-            for _, milestone in ipairs(preset_addon.milestones) do 
+            for _, milestone in ipairs(preset_addon.milestones) do
                 table.insert(global.loaded_milestones, milestone)
             end
         end

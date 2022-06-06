@@ -6,6 +6,7 @@ preset_addons = {
     ["Power Armor MK3"] = {
         required_mods = {"Power Armor MK3"},
         milestones = {
+            {type="group", name="Progress"},
             {type="item", name="pamk3-pamk3", quantity=1},
             {type="item", name="pamk3-pamk4", quantity=1},
         }
@@ -14,6 +15,7 @@ preset_addons = {
     ["Space Extension (SpaceX)"] = {
         required_mods = {"SpaceMod"},
         milestones = {
+            {type="group", name="Progress"},
             {type="item", name="satellite",        quantity=7},
             {type="item", name="drydock-assembly", quantity=2},
             {type="item", name="command",          quantity=1},
@@ -24,22 +26,25 @@ preset_addons = {
     ["Omnienergy"] = {
         required_mods = {"omnimatter_energy"},
         milestones = {
+            {type="group", name="Science"},
             {type="item", name="energy-science-pack", quantity=1},
-            {type="item", name="energy-science-pack", quantity=10000},
+            {type="item", name="energy-science-pack", quantity=1000, next="x10"},
         }
     },
 
     ["Omniscience"] = {
         required_mods = {"omnimatter_science"},
         milestones = {
+            {type="group", name="Science"},
             {type="item", name="omni-pack", quantity=1},
-            {type="item", name="omni-pack", quantity=10000},
+            {type="item", name="omni-pack", quantity=1000, next="x10"},
         }
     },
 
     ["BioIndustries Base"] = {
         required_mods = {"Bio_Industries"},
         milestones = {
+            {type="group", name="Bio Industries"},
             {type="item", name="bi-bio-greenhouse", quantity=1},
             {type="item", name="bi-bio-farm",       quantity=1},
             {type="item", name="fertilizer",        quantity=1},
@@ -50,6 +55,7 @@ preset_addons = {
     ["Cargo Ships"] = {
         required_mods = {"cargo-ships"},
         milestones = {
+            {type="group", name="Progress"},
             {type="item", name="boat",       quantity=1},
             {type="item", name="cargo_ship", quantity=1},
         }
@@ -58,6 +64,7 @@ preset_addons = {
     ["Spidertron Extended"] = {
         required_mods = {"spidertron-extended"},
         milestones = {
+            {type="group", name="Progress"},
             {type="item", name="spidertronmk2", quantity=1},
             {type="item", name="spidertronmk3", quantity=1},
         }
@@ -66,6 +73,7 @@ preset_addons = {
     ["Spidertron Tiers"] = {
         required_mods = {"spidertrontiers"},
         milestones = {
+            {type="group", name="Progress"},
             {type="item", name="prototype_spidertron", quantity=1},
             {type="item", name="spidertron_mkn1", quantity=1},
             {type="item", name="spidertron_mk0", quantity=1},
@@ -77,6 +85,7 @@ preset_addons = {
     ["Spidertron Tiers (SE+K2 fix)"] = { -- Remove this one if that issue ever gets fixed
         required_mods = {"spidertrontiers-circulardependency"},
         milestones = {
+            {type="group", name="Progress"},
             {type="item", name="prototype_spidertron", quantity=1},
             {type="item", name="spidertron_mkn1", quantity=1},
             {type="item", name="spidertron_mk0", quantity=1},
@@ -89,6 +98,7 @@ preset_addons = {
         required_mods = {"ArmouredBiters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
+            {type="group", name="Kills"},
             {type="kill", name="behemoth-armoured-biter",  quantity=1},
             {type="kill", name="leviathan-armoured-biter", quantity=1},
         }
@@ -98,6 +108,7 @@ preset_addons = {
         required_mods = {"Cold_biters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
+            {type="group", name="Kills"},
             {type="kill", name="behemoth-cold-biter",  quantity=1},
             {type="kill", name="leviathan-cold-biter", quantity=1},
         }
@@ -107,6 +118,7 @@ preset_addons = {
         required_mods = {"Explosive_biters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
+            {type="group", name="Kills"},
             {type="kill", name="behemoth-explosive-biter",  quantity=1},
             {type="kill", name="explosive-leviathan-biter", quantity=1},
         }
@@ -116,6 +128,7 @@ preset_addons = {
         required_mods = {"bobenemies"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
+            {type="group", name="Kills"},
             {type="kill", name="bob-titan-biter",     quantity=1},
             {type="kill", name="bob-behemoth-biter",  quantity=1},
             {type="kill", name="bob-leviathan-biter", quantity=1},
