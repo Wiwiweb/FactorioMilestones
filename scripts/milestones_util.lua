@@ -172,6 +172,7 @@ function backfill_completion_times(force)
             if milestone.next then
                 local next_milestone = create_next_milestone(force.name, milestone)
                 table.insert(global_force.incomplete_milestones, next_milestone)
+                table.insert(global_force.milestones_by_group[next_milestone.group], next_milestone)
             end
             mark_milestone_reached(force, milestone, upper_bound, i, lower_bound)
         else
