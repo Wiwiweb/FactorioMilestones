@@ -207,6 +207,28 @@ function edit_time_dropdown_changed(event)
     end
 end
 
+local function get_column_count_with_groups(milestones_by_group)
+    local nb_groups = table_size(milestones_by_group)
+
+    local row_count = nb_groups * 2
+    local column_count = 1
+    local milestone_counts_by_group = {}
+    for _group_name, group_milestones in pairs(milestones_by_group) do
+        table.insert(milestone_counts_by_group, #group_milestones)
+        column_count = math.max(column_count, #group_milestones)
+    end
+
+    -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
+    while row_count < column_count * 3 do
+        row_count = nb_groups
+        column_count = column_count - 1
+        for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
+            row_count = row_count + math.ceil(milestone_count_in_group / column_count)
+        end
+    end
+
+    return column_count
+end
 
 function build_display_page(player)
     local main_frame = get_main_frame(player.index)
@@ -218,20 +240,15 @@ function build_display_page(player)
     local inner_frame = get_inner_frame(player.index)
     inner_frame.clear() -- Just in case the GUI didn't close through close_gui
     local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll"}
-    -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-    -- TODO: Account for groups or not?
-    local column_count = math.max(
-                            math.min(
-                                math.ceil(math.sqrt(#global.loaded_milestones / 3)),
-                                8),
-                            1)
 
     local global_force = global.forces[player.force.name]
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local compact_list = settings.get_player_settings(player)["milestones_compact_list"].value
     local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
+
     if view_by_group then
+        local column_count = get_column_count_with_groups(global_force.milestones_by_group)
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
             display_scroll.add{type="label", caption=group_name, style="caption_label"}
             local group_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
@@ -241,7 +258,16 @@ function build_display_page(player)
             display_scroll.add{type="line"}
         end
         display_scroll.children[#display_scroll.children].destroy() -- Remove last line
+
     else
+        -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
+        local nb_milestones = #global_force.complete_milestones + #global_force.incomplete_milestones
+        local column_count = math.max(
+            math.min(
+                math.ceil(math.sqrt(nb_milestones / 3)),
+                8),
+            1)
+
         local content_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
         for _, milestone in pairs(global_force.complete_milestones) do
             add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
