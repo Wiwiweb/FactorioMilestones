@@ -62,7 +62,7 @@ local function add_milestone_label(milestone_flow, milestone, compact_list, prin
 end
 
 local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list)
-    local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big"}
+    local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big", tags={index=milestone.sort_index}}
     local prototype = nil
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]
@@ -105,25 +105,30 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     add_milestone_label(milestone_flow, milestone, compact_list, print_milliseconds)
 end
 
+local function find_complete_milestone_from_UI_flow(milestone_flow, global_force)
+    local milestone_index = milestone_flow.tags.index
+    for _, milestone in pairs(global_force.complete_milestones) do
+        if milestone.sort_index == milestone_index then
+            return milestone
+        end
+    end
+    error("Couldn't find milestone from UI flow")
+end
+
 function enable_edit_time(player_index, element)
     local force = game.players[player_index].force
     local milestone_flow = element.parent
-    local milestone_index = milestone_flow.get_index_in_parent()
-    local milestone = global.forces[force.name].complete_milestones[milestone_index]
+    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, global.forces[force.name])
 
     milestone_flow.milestones_display_time.destroy()
     milestone_flow.milestones_edit_time.destroy()
 
-    local edit_time_dropdown_index, edit_time_default_value = get_default_unit_for_time_bucket(milestone.lower_bound_tick, milestone.completion_tick)
+    local default_value = misc.ticks_to_timestring(ceil_to_nearest_minute(milestone.completion_tick))
     local textfield = milestone_flow.add{type="textfield", name="milestones_edit_time_field",
-        text=string.format("%.1f", edit_time_default_value), numeric=true, allow_decimal=true,
+        text=default_value, numeric=false,
         tags={action="milestones_confirm_edit_time_textfield"}, style="milestones_small_textfield"}
     textfield.focus()
     textfield.select_all()
-
-    milestone_flow.add{type="drop-down", name="milestones_edit_time_dropdown",
-    items={{"milestones.edit_time_minutes"}, {"milestones.edit_time_hours"}, {"milestones.edit_time_days"}, {"milestones.edit_time_exact_time"}},
-    selected_index=edit_time_dropdown_index, style="milestones_small_dropdown", tags={action="milestones_edit_time_dropdown"}}
 
     milestone_flow.add{type="sprite-button", name="milestones_confirm_edit_time", sprite="utility/check_mark_white", style="milestones_confirm_button",
         tooltip={"milestones.edit_time_confirm"}, tags={action="milestones_confirm_edit_time"}}
@@ -145,88 +150,24 @@ local function parse_exact_time_to_ticks(time_string)
     end
 end
 
-local function get_ticks_from_quantity_and_unit(quantity, unit)
-    if unit == 1 then -- minutes
-        return quantity * 60*60
-    elseif unit == 2 then -- hours
-        return quantity * 60*60*60
-    elseif unit == 3 then -- days
-        return quantity * 24*60*60*60
-    end
-end
-
-local function get_quantity_from_ticks_and_unit(ticks, unit)
-    if unit == 1 then -- minutes
-        return ticks / (60*60)
-    elseif unit == 2 then -- hours
-        return ticks / (60*60*60)
-    elseif unit == 3 then -- days
-        return ticks / (24*60*60*60)
-    end
-end
-
-function get_default_unit_for_time_bucket(lower_bound_tick, upper_bound_tick)
-    local lower_bound_ticks_ago = game.tick - lower_bound_tick - 10*60*60 -- Add 10 minutes leeway to avoid bumping something to the next unit 1 tick after we calculate it
-    local upper_bound_ticks_ago = game.tick - upper_bound_tick
-
-    local default_unit_index
-    if lower_bound_ticks_ago <= 1*60*60*60 then -- 1 hour ago
-        default_unit_index = 1 -- minutes
-    elseif lower_bound_ticks_ago < 50*60*60*60 then -- 50 hours ago
-        default_unit_index = 2 -- hours
-    else -- More than 50 hours ago
-        default_unit_index = 3 -- days
-    end
-    return default_unit_index, get_quantity_from_ticks_and_unit(upper_bound_ticks_ago, default_unit_index)
-end
-
 function confirm_edit_time(player_index, element)
     local force = game.players[player_index].force
     local milestone_flow = element.parent
-    local milestone_index = milestone_flow.get_index_in_parent()
-    local milestone = global.forces[force.name].complete_milestones[milestone_index]
+    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, global.forces[force.name])
 
     local time_quantity = milestone_flow.milestones_edit_time_field.text
-    local time_unit = milestone_flow.milestones_edit_time_dropdown.selected_index
     if time_quantity ~= nil then
         local completion_tick
-        if time_unit == 4 then -- Exact time
-            completion_tick = parse_exact_time_to_ticks(time_quantity)
-        else
-            local nb_ticks_ago = get_ticks_from_quantity_and_unit(time_quantity, time_unit)
-            local absolute_ticks = math.max(0, game.tick - nb_ticks_ago)
-            completion_tick = ceil_to_nearest_minute(absolute_ticks)
-        end
+        completion_tick = parse_exact_time_to_ticks(time_quantity)
         if completion_tick then -- Could still be nil in case of parse error
             milestone.completion_tick = completion_tick
             milestone.lower_bound_tick = nil
-            sort_milestones(global.forces[force.name].completed_milestones)
+            sort_milestones(global.forces[force.name].complete_milestones)
             sort_milestones(global.forces[force.name].milestones_by_group[milestone.group])
         end
     end
 
     refresh_gui_for_force(force)
-end
-
-function edit_time_dropdown_changed(event)
-    -- Update the default value shown in the textfield
-    local dropdown = event.element
-    local milestone_flow = dropdown.parent
-    local textfield = milestone_flow.milestones_edit_time_field
-
-    local player = game.get_player(event.player_index)
-    local milestone_index = milestone_flow.get_index_in_parent()
-    local milestone = global.forces[player.force.name].complete_milestones[milestone_index]
-
-    if dropdown.selected_index == 4 then -- Exact time
-        textfield.numeric = false
-        textfield.text = misc.ticks_to_timestring(milestone.completion_tick)
-    else
-        local upper_bound_ticks_ago = game.tick - milestone.completion_tick
-        local quantity = get_quantity_from_ticks_and_unit(upper_bound_ticks_ago, dropdown.selected_index)
-        textfield.numeric = true
-        textfield.text = string.format("%.1f", quantity)
-    end
 end
 
 local function get_column_count_with_groups(milestones_by_group)

@@ -310,7 +310,5 @@ script.on_event(defines.events.on_gui_selection_state_changed, function(event)
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_change_preset" then
         preset_dropdown_changed(event)
-    elseif event.element.tags.action == "milestones_edit_time_dropdown" then
-        edit_time_dropdown_changed(event)
     end
 end)
