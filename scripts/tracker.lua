@@ -61,6 +61,7 @@ function track_item_creation(event)
                     if milestone.next then
                         local next_milestone = create_next_milestone(force_name, milestone)
                         table.insert(global_force.incomplete_milestones, next_milestone)
+                        table.insert(global_force.milestones_by_group[next_milestone.group], next_milestone)
                     end
                     mark_milestone_reached(force, milestone, game.tick, i)
                     print_milestone_reached(force, milestone)
