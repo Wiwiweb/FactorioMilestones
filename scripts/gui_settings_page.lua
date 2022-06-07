@@ -334,19 +334,24 @@ function confirm_settings_page(player_index)
 
         global.loaded_milestones = table.deep_copy(new_loaded_milestones)
 
+        local backfilled_anything = false
         for force_name, force in pairs(game.forces) do
             local global_force = global.forces[force_name]
             if global_force ~= nil then
                 merge_new_milestones(force_name, new_loaded_milestones)
-                backfill_completion_times(force)
+                backfilled_anything = backfill_completion_times(force)
             end
         end
-
+        local main_message = {"milestones.message_settings_changed"}
         if game.is_multiplayer() then
-            game.print({"milestones.message_settings_changed_multiplayer", player.name})
-        else
-            game.print({"milestones.message_settings_changed"})
+            main_message = game.print({"milestones.message_settings_changed_multiplayer", player.name})
         end
+        local full_message = {"", main_message}
+        if backfilled_anything then
+            table.insert(full_message, " ")
+            table.insert(full_message, {"milestones.message_settings_backfilled"})
+        end
+        game.print(full_message)
     end
 
     cancel_settings_page(player_index)

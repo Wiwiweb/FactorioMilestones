@@ -236,6 +236,7 @@ end
 
 function backfill_completion_times(force)
     log("Backfilling completion times for " .. force.name)
+    local backfilled_anything = false
     local item_stats = force.item_production_statistics
     local fluid_stats = force.fluid_production_statistics
     local kill_stats = force.kill_count_statistics
@@ -259,6 +260,7 @@ function backfill_completion_times(force)
                 table.insert(global_force.milestones_by_group[next_milestone.group], next_milestone)
             end
             mark_milestone_reached(force, milestone, upper_bound, i, lower_bound)
+            backfilled_anything = true
         else
             i = i + 1
         end
@@ -267,6 +269,7 @@ function backfill_completion_times(force)
     for _group_name, group_milestones in pairs(global_force.milestones_by_group) do
         sort_milestones(group_milestones)
     end
+    return backfilled_anything
 end
 
 function is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts)

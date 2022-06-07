@@ -23,8 +23,9 @@ function initialize_force_if_needed(force)
                 table.insert(global.forces[force.name].milestones_by_group[current_group], inserted_milestone)
             end
         end
-        backfill_completion_times(force)
+        return backfill_completion_times(force)
     end
+    return false
 end
 
 function reinitialize_player(player_index)

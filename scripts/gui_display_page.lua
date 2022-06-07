@@ -38,12 +38,12 @@ local function add_milestone_label(milestone_flow, milestone, compact_list, prin
         if precision_window_in_minutes < 1 then -- <1 minute, just print the normal time
             caption = {"", label_name, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
         elseif precision_window_in_minutes < 60 then --<1 hour, print the in-between time then ± X minutes
-            tooltip = {"milestones.estimation_tooltip"}
+            tooltip = milestone.type == "technology" and {"milestones.estimation_tooltip_technology"} or {"milestones.estimation_tooltip"}
             local in_between_tick = ceil_to_nearest_minute(milestone.lower_bound_tick + (milestone.completion_tick - milestone.lower_bound_tick) / 2)
             caption = {"", label_name, "[font=default-bold]", get_timestamp(in_between_tick, print_milliseconds), "[img=quantity-time][/font] ",
                         {"milestones.plus_minus_minutes", precision_window_in_minutes}}
         else -- Big window, print min-max
-            tooltip = {"milestones.estimation_tooltip"}
+            tooltip = milestone.type == "technology" and {"milestones.estimation_tooltip_technology"} or {"milestones.estimation_tooltip"}
             local lower_tick = floor_to_nearest_minute(milestone.lower_bound_tick)
             local upper_tick = ceil_to_nearest_minute(milestone.completion_tick)
             caption = "[font=default-bold]" ..get_timestamp(lower_tick, false).. "[img=quantity-time][/font] - " ..
