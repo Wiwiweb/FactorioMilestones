@@ -12,6 +12,55 @@ local function get_timestamp(ticks, print_milliseconds)
 
 end
 
+local function add_milestone_label(milestone_flow, milestone, compact_list, print_milliseconds)
+    local caption
+    local tooltip
+    local show_edit_button = false
+    if milestone.completion_tick == nil then
+        caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
+    else
+        local precision_window_in_minutes = 0
+        if milestone.lower_bound_tick ~= nil then
+            precision_window_in_minutes = math.ceil((milestone.completion_tick - milestone.lower_bound_tick) / 2 / 60 / 60)
+        end
+
+        local label_name
+        if compact_list then
+            label_name = ""
+        elseif milestone.type == "kill" then
+            label_name = {"milestones.killed_label"}
+        elseif milestone.type == "technology" then
+            label_name = {"milestones.researched_label"}
+        else
+            label_name = {"milestones.completed_label"}
+        end
+
+        if precision_window_in_minutes < 1 then -- <1 minute, just print the normal time
+            caption = {"", label_name, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
+        elseif precision_window_in_minutes < 60 then --<1 hour, print the in-between time then ± X minutes
+            tooltip = {"milestones.estimation_tooltip"}
+            local in_between_tick = ceil_to_nearest_minute(milestone.lower_bound_tick + (milestone.completion_tick - milestone.lower_bound_tick) / 2)
+            caption = {"", label_name, "[font=default-bold]", get_timestamp(in_between_tick, print_milliseconds), "[img=quantity-time][/font] ",
+                        {"milestones.plus_minus_minutes", precision_window_in_minutes}}
+        else -- Big window, print min-max
+            tooltip = {"milestones.estimation_tooltip"}
+            local lower_tick = floor_to_nearest_minute(milestone.lower_bound_tick)
+            local upper_tick = ceil_to_nearest_minute(milestone.completion_tick)
+            caption = "[font=default-bold]" ..get_timestamp(lower_tick, false).. "[img=quantity-time][/font] - " ..
+            "[font=default-bold]" ..get_timestamp(upper_tick, false).. "[img=quantity-time][/font]"
+            show_edit_button = true
+        end
+    end
+
+    milestone_flow.add{type="label", name="milestones_display_time", caption=caption, tooltip=tooltip}
+
+    -- Optional edit button
+    if show_edit_button then
+        milestone_flow.add{type="sprite-button", name="milestones_edit_time", sprite="utility/rename_icon_small_white", style="milestones_small_button", 
+            tooltip={"milestones.edit_time_tooltip"}, tags={action="milestones_edit_time"}}
+    end
+end
+
 local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list)
     local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big"}
     local prototype = nil
@@ -53,34 +102,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
 
     -- Item name
-    local caption
-    local tooltip
-    if milestone.completion_tick == nil then
-        caption = {"", "[color=100,100,100]", {"milestones.incomplete_label"}, "[/color]"}
-    elseif milestone.lower_bound_tick == nil then
-        local label_name
-        if compact_list then
-            label_name = ""
-        elseif milestone.type == "kill" then
-            label_name = {"milestones.killed_label"}
-        elseif milestone.type == "technology" then
-            label_name = {"milestones.researched_label"}
-        else
-            label_name = {"milestones.completed_label"}
-        end
-        caption = {"", label_name, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
-    else
-        tooltip = {"milestones.completed_before_tooltip"}
-        caption = "[font=default-bold]" ..get_timestamp(milestone.lower_bound_tick, false).. "[img=quantity-time][/font] - " ..
-                  "[font=default-bold]" ..get_timestamp(milestone.completion_tick, false).. "[img=quantity-time][/font]"
-    end
-    milestone_flow.add{type="label", name="milestones_display_time", caption=caption, tooltip=tooltip}
-
-    -- Optional edit button
-    if milestone.lower_bound_tick then
-        milestone_flow.add{type="sprite-button", name="milestones_edit_time", sprite="utility/rename_icon_small_white", style="milestones_small_button", 
-            tooltip={"milestones.edit_time_tooltip"}, tags={action="milestones_edit_time"}}
-    end
+    add_milestone_label(milestone_flow, milestone, compact_list, print_milliseconds)
 end
 
 function enable_edit_time(player_index, element)
