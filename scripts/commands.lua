@@ -1,4 +1,3 @@
-
 function debug_print_forces()
     game.print(serpent.block(global.forces))
     log(serpent.block(global.forces))

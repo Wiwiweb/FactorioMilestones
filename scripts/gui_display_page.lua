@@ -210,7 +210,7 @@ function build_display_page(player)
     local compact_list = settings.get_player_settings(player)["milestones_compact_list"].value
     local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
 
-    if view_by_group then
+    if view_by_group and table_size(global_force.milestones_by_group) > 0 then
         local column_count = get_column_count_with_groups(global_force.milestones_by_group)
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
             display_scroll.add{type="label", caption=group_name, style="caption_label"}
