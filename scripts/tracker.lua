@@ -84,7 +84,7 @@ script.on_event(defines.events.on_research_finished, function(event)
     local i = 1
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
-        if is_tech_milestone_reached(force, milestone, technology_researched) then
+        if is_tech_milestone_reached(milestone, technology_researched) then
             mark_milestone_reached(force, milestone, game.tick, i)
             print_milestone_reached(force, milestone)
             refresh_gui_for_force(force)

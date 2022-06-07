@@ -1,16 +1,28 @@
 local table = require("__flib__.table")
 
--- Each production graph bracket, from highest to lowest, with associated frame count
--- Used in find_higher_bound_production_tick()
+-- Each production graph bracket, from highest to lowest
+-- Used in find_precision_bracket()
 local FLOW_PRECISION_BRACKETS = {
-    {defines.flow_precision_index.one_thousand_hours,      1000*60*60*60},
-    {defines.flow_precision_index.two_hundred_fifty_hours, 250*60*60*60},
-    {defines.flow_precision_index.fifty_hours,             50*60*60*60},
-    {defines.flow_precision_index.ten_hours,               10*60*60*60},
-    {defines.flow_precision_index.one_hour,                1*60*60*60},
-    {defines.flow_precision_index.ten_minutes,             10*60*60},
-    {defines.flow_precision_index.one_minute,              1*60*60},
-    {defines.flow_precision_index.five_seconds,            5*60},
+    defines.flow_precision_index.one_thousand_hours,
+    defines.flow_precision_index.two_hundred_fifty_hours,
+    defines.flow_precision_index.fifty_hours,
+    defines.flow_precision_index.ten_hours,
+    defines.flow_precision_index.one_hour,
+    defines.flow_precision_index.ten_minutes,
+    defines.flow_precision_index.one_minute,
+    defines.flow_precision_index.five_seconds
+}
+
+-- The length of each precision bracket, in ticks
+local FLOW_PRECISION_BRACKETS_LENGTHS = {
+    [defines.flow_precision_index.one_thousand_hours] =      1000*60*60*60,
+    [defines.flow_precision_index.two_hundred_fifty_hours] = 250*60*60*60,
+    [defines.flow_precision_index.fifty_hours] =             50*60*60*60,
+    [defines.flow_precision_index.ten_hours] =               10*60*60*60,
+    [defines.flow_precision_index.one_hour] =                1*60*60*60,
+    [defines.flow_precision_index.ten_minutes] =             10*60*60,
+    [defines.flow_precision_index.one_minute] =              1*60*60,
+    [defines.flow_precision_index.five_seconds] =            5*60,
 }
 
 local function find_possible_existing_completion_time(global_force, new_milestone)
@@ -115,43 +127,101 @@ function ceil_to_nearest_minute(tick)
     return (tick - (tick % (60*60))) + 60*60
 end
 
--- Converts from "X ticks ago" to "X ticks since start of the game"
-local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago)
-    return math.max(0, floor_to_nearest_minute(game.tick - lower_bound_ticks_ago)), ceil_to_nearest_minute(game.tick - upper_bound_ticks_ago)
-end
-
-local function find_production_tick_bounds(force, milestone, stats)
+local function find_precision_bracket(milestone, stats)
     local total_count = stats.get_input_count(milestone.name)
-    local lower_bound_ticks_ago = game.tick
-    for _, flow_precision_bracket in pairs(FLOW_PRECISION_BRACKETS) do
-        local bracket, upper_bound_ticks_ago = flow_precision_bracket[1], flow_precision_bracket[2]
-        log("up: " ..upper_bound_ticks_ago.. " - low: " ..lower_bound_ticks_ago)
-        -- The first bracket that does NOT match the total count indicates the upper bound first production time
-        -- e.g: if total_count = 4, 4 were created in the last 1000 hours, 4 were created in the last 500 hours, 3 were created in the last 250 hours
-        -- then the first creation was before 250 hours ago
-        if upper_bound_ticks_ago < game.tick then -- Skip brackets if the game is not long enough
+    local previous_bracket = "ALL"
+    for _, bracket in pairs(FLOW_PRECISION_BRACKETS) do
+
+        -- The first bracket that does NOT match the total count indicates the upper bound first production time.
+        -- e.g: if total_count = 4, and 4 were created in the last 1000 hours, 4 were created in the last 250 hours, and 2 were created in the last 50 hours,
+        -- then the first creation was between 50 and 250 hours ago, and we should search the 250 hours precision bracket.
+
+        if FLOW_PRECISION_BRACKETS_LENGTHS[bracket] <= game.tick then -- Skip bracket if the game is not long enough
             local bracket_count = stats.get_flow_count{name=milestone.name, input=true, precision_index=bracket, count=true}
             if bracket_count <= total_count - milestone.quantity then
-                return get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago)
+                return previous_bracket
             end
         end
-        lower_bound_ticks_ago = upper_bound_ticks_ago
+        previous_bracket = bracket
     end
     -- If we haven't found any count drop after going through all brackets
-    -- then the item was produced within the last 5 seconds (improbable but could happen)
-    return get_realtime_tick_bounds(lower_bound_ticks_ago, game.tick)
+    -- then the item was produced during most recent bracket, which is within the last 5 seconds (improbable but could happen).
+    return previous_bracket
 end
 
+local function find_sample_in_precision_bracket(milestone, bracket, stats)
+    local total_count = stats.get_input_count(milestone.name)
+    local bracket_count = stats.get_flow_count{name=milestone.name, input=true, precision_index=bracket, count=true}
+    local count_before_bracket = total_count - bracket_count
+    local count_this_bracket = 0
+    for i = 300,1,-1 do -- Start from oldest
+        sample_count = stats.get_flow_count{name=milestone.name, input=true, precision_index=bracket, count=true, sample_index=i}
+        count_this_bracket = count_this_bracket + sample_count
+        if count_this_bracket + count_before_bracket >= milestone.quantity then
+            return i
+        end
+    end
+    -- We should never reach this point because we already determined this is the bracket where the milestone is reached
+    error("Couldn't find sample! milestone: " ..serpent.line(milestone).. ", bracket: " ..bracket..
+            ", count_before_bracket: " ..count_before_bracket.. ", count_this_bracket: " ..count_this_bracket)
+end
 
-local function find_completion_tick_bounds(force, milestone, item_stats, fluid_stats, kill_stats)
+local function get_tick_bounds_from_sample(bracket, sample_index)
+    local sample_precision_in_ticks = FLOW_PRECISION_BRACKETS_LENGTHS[bracket] / 300
+    local upper_bound_ticks_ago = sample_precision_in_ticks * sample_index
+    local lower_bound_ticks_ago = sample_precision_in_ticks * (sample_index - 1)
+    return upper_bound_ticks_ago, lower_bound_ticks_ago
+end
+
+-- Converts from "X ticks ago" to "X ticks since start of the game"
+local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago, bracket)
+    local lower_bound_ticks, upper_bound_ticks = game.tick - lower_bound_ticks_ago, game.tick - upper_bound_ticks_ago
+    log("lower_bound_ticks: " ..lower_bound_ticks.. " - upper_bound_ticks: " ..upper_bound_ticks)
+
+    -- Samples are bound to absolute game time. e.g. sample #3 for defines.flow_precision_index.one_minute corresponds to ticks 25 to 36.
+    -- Floor to the real bounds of the sample.
+    if bracket ~= "ALL" then
+        local sample_precision_in_ticks = FLOW_PRECISION_BRACKETS_LENGTHS[bracket] / 300
+        local sample_offset = lower_bound_ticks % sample_precision_in_ticks
+        lower_bound_ticks = lower_bound_ticks - sample_offset + 1
+        upper_bound_ticks = upper_bound_ticks - sample_offset
+        log("sample_offset: " ..sample_offset)
+        log("lower_bound_ticks: " ..lower_bound_ticks.. " - upper_bound_ticks: " ..upper_bound_ticks)
+    end
+
+    return lower_bound_ticks, upper_bound_ticks
+end
+
+local function find_production_tick_bounds(milestone, stats)
+    local precision_bracket = find_precision_bracket(milestone, stats)
+    log("bracket to search: " ..precision_bracket)
+
+    local lower_bound_ticks_ago, upper_bound_ticks_ago
+    if precision_bracket == "ALL" then
+        -- Completion time is over 1000 hours ago, there are no samples to go through
+        return lower_bound_real_time, upper_bound_real_time
+    end
+    local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, stats)
+    log("sample_index: " ..sample_index)
+    lower_bound_ticks_ago, upper_bound_ticks_ago = get_tick_bounds_from_sample(precision_bracket, sample_index)
+    log("lower_bound_ticks_ago: " ..lower_bound_ticks_ago.. " - upper_bound_ticks_ago: " ..upper_bound_ticks_ago)
+
+    lower_bound_real_time, upper_bound_real_time = get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago, precision_bracket)
+    log("lower_bound_real_time: " ..lower_bound_real_time.. " - upper_bound_real_time: " ..upper_bound_real_time)
+
+    -- TODO: do some rounding to the nearest second/minute/10minutes based on precision?
+    return lower_bound_real_time, upper_bound_real_time
+end
+
+local function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
     if milestone.type == "technology" then
         return 0, game.tick -- No way to know past research time
     elseif milestone.type == "item" then
-        return find_production_tick_bounds(force, milestone, item_stats)
+        return find_production_tick_bounds(milestone, item_stats)
     elseif milestone.type == "fluid" then
-        return find_production_tick_bounds(force, milestone, fluid_stats)
+        return find_production_tick_bounds(milestone, fluid_stats)
     elseif milestone.type == "kill" then
-        return find_production_tick_bounds(force, milestone, kill_stats)
+        return find_production_tick_bounds(milestone, kill_stats)
     end
 end
 
@@ -180,8 +250,8 @@ function backfill_completion_times(force)
     local i = 1
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
-        if is_milestone_reached(force, milestone, item_counts, fluid_counts, kill_counts, technologies) then
-            local lower_bound, upper_bound = find_completion_tick_bounds(force, milestone, item_stats, fluid_stats, kill_stats)
+        if is_milestone_reached(milestone, item_counts, fluid_counts, kill_counts, technologies) then
+            local lower_bound, upper_bound = find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
             log("Tick bounds for " ..milestone.name.. " : " ..lower_bound.. " - " ..upper_bound)
             if milestone.next then
                 local next_milestone = create_next_milestone(force.name, milestone)
@@ -200,12 +270,11 @@ function backfill_completion_times(force)
 end
 
 function is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts)
-
     local type_count
     if milestone.type == "item" then
         type_count = item_counts
     elseif milestone.type == "fluid" then
-        type_count = fluid_counts   
+        type_count = fluid_counts
     elseif milestone.type == "kill" then
         type_count = kill_counts
     else
@@ -219,7 +288,7 @@ function is_production_milestone_reached(milestone, item_counts, fluid_counts, k
     return false
 end
 
-function is_tech_milestone_reached(force, milestone, technology)
+function is_tech_milestone_reached(milestone, technology)
     if milestone.type == "technology" and
        technology.name == milestone.name and
        -- strict > because the level we get is the current researchable level, not the researched level
@@ -229,10 +298,10 @@ function is_tech_milestone_reached(force, milestone, technology)
     return false
 end
 
-function is_milestone_reached(force, milestone, item_counts, fluid_counts, kill_counts, technologies)
+function is_milestone_reached(milestone, item_counts, fluid_counts, kill_counts, technologies)
     if milestone.type == "technology" then
         local technology = technologies[milestone.name]
-        return is_tech_milestone_reached(force, milestone, technology)
+        return is_tech_milestone_reached(milestone, technology)
     else
         return is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts)
     end
