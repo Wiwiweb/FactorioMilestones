@@ -133,7 +133,9 @@ function floor_to_nearest_minute(tick)
 end
 
 function ceil_to_nearest_minute(tick)
-    return (tick - (tick % (60*60))) + 60*60
+    local modulo = tick % (60*60)
+    if modulo == 0 then return tick end
+    return tick - modulo + 60*60
 end
 
 local function find_precision_bracket(milestone, stats)
