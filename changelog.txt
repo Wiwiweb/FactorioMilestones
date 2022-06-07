@@ -7,9 +7,9 @@ Date: ????
     - Greatly improved estimations accuracy when added to an existing game. Milestones can now use production statistics directly to backfill completed milestones.
       - Accuracy is greater for more recent completion times. Expect ±5 minutes for 50 hours games, ±25m for 250h, ±1h40 for 1000h.
       - Editing estimation ranges is now only available for inaccurate estimations (>1hour uncertainty), and now work by just typing the time instead of typing "x minutes ago". This makes more sense now that you won't have to copy values from production statistics.
-      - In existing games: Leftover estimations will be replaced with the new more accurate estimations. Estimations that had already been edited with typed-in time won't be touched.
+      - In existing games: Leftover estimations will be replaced with the new more accurate estimations. Estimations that had already been edited with typed-in times won't be touched.
     - Add milestone groups. You can create arbitrary categories, and milestones will appear grouped under these categories.
-      - You can switch back to the the old chronological view with the new mod setting "List by group".
+      - You can switch back to the old chronological view with the new mod setting "List by group".
     - Add preset for 248k Mod (Thanks to PreLeyZero!)
 
   Changes:
