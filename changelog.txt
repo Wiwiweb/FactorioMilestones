@@ -3,13 +3,17 @@ Version: 1.3.0
 Date: ????
 
   Features:
-    - New backfill. TODO, explain more.
-    - Add milestone groups. You can categorize milestones, and either view them sorted by group, or sorted chronologically.
-      Existing games won't automatically change. To add groups to your loaded milestones, please reload your preset in the settings.
-    - Add "Exact time" option for editing estimation ranges. This can be useful if you've lost your times but have a screenshot of your previous milestones.
+    - Now requires Factorio 1.1.60 or above.
+    - Greatly improved estimations accuracy when added to an existing game. Milestones can now use production statistics directly to backfill completed milestones.
+      - Accuracy is greater for more recent completion times. Expect ±5 minutes for 50 hours games, ±25m for 250h, ±1h40 for 1000h.
+      - Editing estimation ranges is now only available for inaccurate estimations (>1hour uncertainty), and now work by just typing the time instead of typing "x minutes ago". This makes more sense now that you won't have to copy values from production statistics.
+      - In existing games: Leftover estimations will be replaced with the new more accurate estimations. Estimations that had already been edited with typed-in time won't be touched.
+    - Add milestone groups. You can create arbitrary categories, and milestones will appear grouped under these categories.
+      - You can switch back to the the old chronological view with the new mod setting "List by group".
     - Add preset for 248k Mod (Thanks to PreLeyZero!)
 
   Changes:
+    - Updated presets to use milestone groups. Existing games won't be updated unless you reload them from the preset.
     - Milestones settings can now only be changed by admins, instead of relying on "Mod Settings Changed" permissions. This seems to match with Factorio's own conditions on modifying Mod Settings.
     - Changing the settings in a multiplayer game will now indicate who did the change in the chat message.
 
