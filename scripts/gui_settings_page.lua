@@ -397,7 +397,9 @@ function preset_dropdown_changed(event)
     local selected_preset_name = event.element.get_item(event.element.selected_index)
     local settings_flow = global.players[event.player_index].settings_flow
     settings_flow.clear()
-    fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
+    if selected_preset_name ~= "Empty" then
+        fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
+    end
     get_outer_frame(event.player_index).force_auto_center()
 end
 

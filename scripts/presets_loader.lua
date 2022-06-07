@@ -39,7 +39,7 @@ end
 
 function load_presets()
     log("Loading presets")
-    global.valid_preset_names = {}
+    global.valid_preset_names = {"Empty"}
 
     local max_nb_mods_matched = -1
     for preset_name, preset in pairs(presets) do
@@ -86,7 +86,7 @@ end
 function reload_presets()
     log("Reloading presets")
     local added_presets = {}
-    local new_valid_preset_names = {}
+    local new_valid_preset_names = {"Empty"}
     for preset_name, preset in pairs(presets) do
         if is_preset_valid(preset) then
             table.insert(new_valid_preset_names, preset_name)
