@@ -213,7 +213,7 @@ local function find_production_tick_bounds(milestone, stats)
     return lower_bound_real_time, upper_bound_real_time
 end
 
-local function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
+function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
     if milestone.type == "technology" then
         return 0, game.tick -- No way to know past research time
     elseif milestone.type == "item" then

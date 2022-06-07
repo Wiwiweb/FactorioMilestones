@@ -83,8 +83,8 @@ return {
 
     ["1.3.0"] = function()
         log("Running 1.3.0 migration")
-        -- Add new milestones_by_group field, but just put all existing milestones in the Other group
-        for _, global_force in pairs(global.forces) do
+        for force_name, global_force in pairs(global.forces) do
+            -- Add new milestones_by_group field, but just put all existing milestones in the Other group
             global_force.milestones_by_group = { ["Other"] = {} }
             for i, milestone in pairs(global_force.complete_milestones) do
                 milestone.sort_index = i
@@ -95,6 +95,22 @@ return {
                 milestone.sort_index = i
                 milestone.group = "Other"
                 table.insert(global_force.milestones_by_group["Other"], milestone)
+            end
+            table.insert(global.delayed_chat_messages, {"milestones.message_migration_130_groups"})
+
+            -- Update old estimations with new more accurate estimations
+            local force = game.forces[force_name]
+            local item_stats = force.item_production_statistics
+            local fluid_stats = force.fluid_production_statistics
+            local kill_stats = force.kill_count_statistics
+            for _, milestone in pairs(global_force.complete_milestones) do
+                if milestone.lower_bound_tick ~= nil then
+                    local new_lower_bound, new_upper_bound = find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
+                    log("Old tick bounds for " ..milestone.name.. " : " ..milestone.lower_bound_tick.. " - " ..milestone.completion_tick)
+                    log("New tick bounds for " ..milestone.name.. " : " ..new_lower_bound.. " - " ..new_upper_bound)
+                    milestone.lower_bound_tick = math.max(milestone.lower_bound_tick, new_lower_bound)
+                    milestone.completion_tick = math.min(milestone.completion_tick, new_upper_bound)
+                end
             end
         end
     end,
