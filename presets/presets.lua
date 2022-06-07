@@ -490,7 +490,6 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=1},
             {type="item",       name="utility-science-pack",           quantity=1},
             {type="item",       name="space-science-pack",             quantity=1},
-            {type="item",       name="token-bio",                      quantity=1},
             {type="item",       name="automation-science-pack",        quantity=1000, next="x10"},
             {type="item",       name="logistic-science-pack",          quantity=1000, next="x10"},
             {type="item",       name="military-science-pack",          quantity=1000, next="x10"},
@@ -500,6 +499,8 @@ presets = {
             {type="item",       name="space-science-pack",             quantity=10000, next="x10"},
 
             {type="group",      name="Resources"},
+            {type="item",       name="wood-charcoal",                  quantity=1},
+            {type="item",       name="token-bio",                      quantity=1},
             {type="item",       name="electronic-circuit",             quantity=1},
             {type="item",       name="advanced-circuit",               quantity=1},
             {type="item",       name="processing-unit",                quantity=1},
@@ -560,7 +561,6 @@ presets = {
             {type="item",       name="production-science-pack",        quantity=1},
             {type="item",       name="utility-science-pack",           quantity=1},
             {type="item",       name="space-science-pack",             quantity=1},
-            {type="item",       name="token-bio",                      quantity=1},
             {type="item",       name="automation-science-pack",        quantity=1000, next="x10"},
             {type="item",       name="logistic-science-pack",          quantity=1000, next="x10"},
             {type="item",       name="military-science-pack",          quantity=1000, next="x10"},
@@ -572,6 +572,7 @@ presets = {
             {type="item",       name="space-science-pack",             quantity=10000, next="x10"},
 
             {type="group",      name="Resources"},
+            {type="item",       name="wood-charcoal",                  quantity=1},
             {type="item",       name="electronic-circuit",             quantity=1},
             {type="item",       name="advanced-circuit",               quantity=1},
             {type="item",       name="processing-unit",                quantity=1},
