@@ -37,7 +37,7 @@ script.on_init(function()
     -- Initialize for existing forces in existing save file
     local backfilled_anything = false
     for _, force in pairs(game.forces) do
-        local backfilled_anything_from_this_force =  initialize_force_if_needed(force)
+        local backfilled_anything_from_this_force = initialize_force_if_needed(force)
         backfilled_anything = backfilled_anything or backfilled_anything_from_this_force
     end
     if backfilled_anything then
