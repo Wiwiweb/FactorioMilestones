@@ -172,9 +172,11 @@ local function find_sample_in_precision_bracket(milestone, bracket, stats)
             return i
         end
     end
-    -- We should never reach this point because we already determined this is the bracket where the milestone is reached
-    error("Couldn't find sample! milestone: " ..serpent.line(milestone).. ", bracket: " ..bracket..
-            ", count_before_bracket: " ..count_before_bracket.. ", count_this_bracket: " ..count_this_bracket)
+    -- We should almost never reach this point because we already determined this is the bracket where the milestone was reached.
+    -- It can happen when a mod creates items on tick 0 (i.e. before the game starts).
+    log("Couldn't find sample! milestone: " ..serpent.line(milestone).. ", bracket: " ..bracket..
+    ", count_before_bracket: " ..count_before_bracket.. ", count_this_bracket: " ..count_this_bracket)
+    return 0
 end
 
 local function get_tick_bounds_from_sample(bracket, sample_index)
@@ -214,6 +216,9 @@ local function find_production_tick_bounds(milestone, stats)
     end
     local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, stats)
     log("sample_index: " ..sample_index)
+    if sample_index == 0 then
+        return game.tick, game.tick -- Created this exact tick, usually on tick 0 before the start of the game
+    end
     lower_bound_ticks_ago, upper_bound_ticks_ago = get_tick_bounds_from_sample(precision_bracket, sample_index)
     log("lower_bound_ticks_ago: " ..lower_bound_ticks_ago.. " - upper_bound_ticks_ago: " ..upper_bound_ticks_ago)
 
