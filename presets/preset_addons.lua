@@ -93,45 +93,161 @@ preset_addons = {
             {type="item", name="spidertron_mk3", quantity=1},
         }
     },
-
     ["Armoured Biters"] = {
         required_mods = {"ArmouredBiters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Kills"},
-            {type="kill", name="behemoth-armoured-biter",  quantity=1},
+            {type="kill", name="behemoth-armoured-biter", quantity=1},
             {type="kill", name="leviathan-armoured-biter", quantity=1},
         }
     },
-
     ["Cold Biters"] = {
         required_mods = {"Cold_biters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Kills"},
-            {type="kill", name="behemoth-cold-biter",  quantity=1},
+            {type="kill", name="behemoth-cold-biter", quantity=1},
             {type="kill", name="leviathan-cold-biter", quantity=1},
         }
     },
-
     ["Explosive Biters"] = {
         required_mods = {"Explosive_biters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Kills"},
-            {type="kill", name="behemoth-explosive-biter",  quantity=1},
+            {type="kill", name="behemoth-explosive-biter", quantity=1},
             {type="kill", name="explosive-leviathan-biter", quantity=1},
         }
     },
-
     ["Bob's Enemies"] = {
         required_mods = {"bobenemies"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Kills"},
-            {type="kill", name="bob-titan-biter",     quantity=1},
-            {type="kill", name="bob-behemoth-biter",  quantity=1},
+            {type="kill", name="bob-titan-biter", quantity=1},
+            {type="kill", name="bob-behemoth-biter", quantity=1},
             {type="kill", name="bob-leviathan-biter", quantity=1},
+        }
+    },
+    ["SciencePackGalore"] = {
+        required_mods = {"SciencePackGalore"},
+        milestones = {
+            {type="group", name="Science"},
+            {type="item", name="sem:spg_science-pack-1", quantity=1},
+            {type="item", name="sem:spg_science-pack-2", quantity=1},
+            {type="item", name="sem:spg_science-pack-3", quantity=1},
+            {type="item", name="sem:spg_science-pack-4", quantity=1},
+            {type="item", name="sem:spg_science-pack-5", quantity=1},
+            {type="item", name="sem:spg_science-pack-6", quantity=1},
+            {type="item", name="sem:spg_science-pack-7", quantity=1},
+            {type="item", name="sem:spg_science-pack-8", quantity=1},
+            {type="item", name="sem:spg_science-pack-9", quantity=1},
+            {type="item", name="sem:spg_science-pack-10", quantity=1},
+            {type="item", name="sem:spg_science-pack-11", quantity=1},
+            {type="item", name="sem:spg_science-pack-12", quantity=1},
+            {type="item", name="sem:spg_science-pack-13", quantity=1},
+            {type="item", name="sem:spg_science-pack-14", quantity=1},
+            {type="item", name="sem:spg_science-pack-15", quantity=1},
+            {type="item", name="sem:spg_science-pack-16", quantity=1},
+            {type="item", name="sem:spg_science-pack-17", quantity=1},
+            {type="item", name="sem:spg_science-pack-18", quantity=1},
+            {type="item", name="sem:spg_science-pack-19", quantity=1},
+            {type="item", name="sem:spg_science-pack-20", quantity=1},
+            {type="item", name="sem:spg_science-pack-21", quantity=1},
+            {type="item", name="sem:spg_science-pack-22", quantity=1},
+            {type="item", name="sem:spg_science-pack-23", quantity=1},
+            {type="item", name="sem:spg_science-pack-24", quantity=1},
+            {type="item", name="sem:spg_science-pack-25", quantity=1},
+            {type="item", name="sem:spg_science-pack-26", quantity=1},
+            {type="item", name="sem:spg_science-pack-27", quantity=1},
+            {type="item", name="sem:spg_science-pack-28", quantity=1},
+            {type="item", name="sem:spg_science-pack-29", quantity=1},
+            {type="item", name="sem:spg_science-pack-30", quantity=1},
+            {type="item", name="sem:spg_science-pack-31", quantity=1},
+            {type="item", name="sem:spg_science-pack-32", quantity=1},
+            {type="item", name="sem:spg_science-pack-33", quantity=1},
+            {type="item", name="sem:spg_science-pack-34", quantity=1},
+            {type="item", name="sem:spg_science-pack-35", quantity=1},
+            {type="item", name="sem:spg_science-pack-36", quantity=1},
+            {type="item", name="sem:spg_science-pack-1", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-2", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-3", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-4", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-5", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-6", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-7", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-8", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-9", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-10", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-11", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-12", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-13", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-14", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-15", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-16", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-17", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-18", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-19", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-20", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-21", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-22", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-23", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-24", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-25", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-26", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-27", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-28", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-29", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-30", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-31", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-32", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-33", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-34", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-35", quantity=1000, next="x10"},
+            {type="item", name="sem:spg_science-pack-36", quantity=1000, next="x10"},
+        }
+    },
+    ["BZ Aluminum"] = {
+        required_mods = {"bzaluminum"},
+        milestones = {
+            {type="group", name="Resources", quantity=1},
+            {type="item", name="aluminum-plate", quantity=1},
+        }
+    },
+    ["BZ Lead"] = {
+        required_mods = {"bzlead"},
+        milestones = {
+            {type="group", name="Resources", quantity=1},
+            {type="item", name="lead-plate", quantity=1},
+        }
+    },
+    ["BZ Silicon"] = {
+        required_mods = {"bzsilicon"},
+        milestones = {
+            {type="group", name="Resources", quantity=1},
+            {type="item", name="silica", quantity=1},
+        }
+    },
+    ["BZ Titanium"] = {
+        required_mods = {"bztitanium"},
+        milestones = {
+            {type="group", name="Resources", quantity=1},
+            {type="item", name="titanium-plate", quantity=1},
+        }
+    },
+    ["BZ Tungsten"] = {
+        required_mods = {"bztungsten"},
+        milestones = {
+            {type="group", name="Resources", quantity=1},
+            {type="item", name="tungsten-plate", quantity=1},
+        }
+    },
+    ["BZ Zirconium"] = {
+        required_mods = {"bzzirconium"},
+        milestones = {
+            {type="group", name="Resources", quantity=1},
+            {type="item", name="zirconium-plate", quantity=1},
         }
     },
 }
