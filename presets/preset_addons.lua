@@ -135,7 +135,7 @@ preset_addons = {
         }
     },
 
-    ["SciencePackGalore"] = {
+    ["Science Pack Galore"] = {
         required_mods = {"SciencePackGalore"},
         milestones = {
             {type="group", name="Science"},

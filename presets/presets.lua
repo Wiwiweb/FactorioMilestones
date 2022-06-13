@@ -245,8 +245,8 @@ presets = {
         }
     },
 
-    ["Krastorio2 + Space Exploration (No Spoilers) + 248k"] = {
-        required_mods = {"Krastorio2","space-exploration","248k"},
+    ["Space Exploration + Krastorio2 + 248k (No Spoilers)"] = {
+        required_mods = {"space-exploration", "Krastorio2", "248k"},
         milestones = {
             {type="group",      name="Science"},
             {type="item",       name="basic-tech-card",              quantity=1},
