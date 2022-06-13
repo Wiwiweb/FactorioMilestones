@@ -6,11 +6,15 @@ Date: ????
     - Add preset for SE+K2+248k.
     - Add preset addons for "Science Pack Galore" and various BZ mods. (Thanks to nihilistzsche for both!)
 
+  Changes:
+    - Tweaks to Nullius preset to account for some boxed science packs. (This isn't perfect, fully accounting for all boxed versions of science packs will require supporting alternate items for milestones).
+
   Bugfixes:
     - Fix crash with mods that create items before the start of the game. 
 
   Locale:
     - Locale updates from Crowdin.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.0
 Date: 2022-06-07
