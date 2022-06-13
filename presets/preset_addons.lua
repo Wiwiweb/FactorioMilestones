@@ -93,43 +93,48 @@ preset_addons = {
             {type="item", name="spidertron_mk3", quantity=1},
         }
     },
+
     ["Armoured Biters"] = {
         required_mods = {"ArmouredBiters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Kills"},
-            {type="kill", name="behemoth-armoured-biter", quantity=1},
+            {type="kill", name="behemoth-armoured-biter",  quantity=1},
             {type="kill", name="leviathan-armoured-biter", quantity=1},
         }
     },
+
     ["Cold Biters"] = {
         required_mods = {"Cold_biters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Kills"},
-            {type="kill", name="behemoth-cold-biter", quantity=1},
+            {type="kill", name="behemoth-cold-biter",  quantity=1},
             {type="kill", name="leviathan-cold-biter", quantity=1},
         }
     },
+
     ["Explosive Biters"] = {
         required_mods = {"Explosive_biters"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Kills"},
-            {type="kill", name="behemoth-explosive-biter", quantity=1},
+            {type="kill", name="behemoth-explosive-biter",  quantity=1},
             {type="kill", name="explosive-leviathan-biter", quantity=1},
         }
     },
+
     ["Bob's Enemies"] = {
         required_mods = {"bobenemies"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Kills"},
-            {type="kill", name="bob-titan-biter", quantity=1},
-            {type="kill", name="bob-behemoth-biter", quantity=1},
+            {type="kill", name="bob-titan-biter",     quantity=1},
+            {type="kill", name="bob-behemoth-biter",  quantity=1},
             {type="kill", name="bob-leviathan-biter", quantity=1},
         }
     },
+
     ["SciencePackGalore"] = {
         required_mods = {"SciencePackGalore"},
         milestones = {
@@ -208,6 +213,7 @@ preset_addons = {
             {type="item", name="sem:spg_science-pack-36", quantity=1000, next="x10"},
         }
     },
+
     ["BZ Aluminum"] = {
         required_mods = {"bzaluminum"},
         milestones = {
@@ -215,6 +221,7 @@ preset_addons = {
             {type="item", name="aluminum-plate", quantity=1},
         }
     },
+
     ["BZ Lead"] = {
         required_mods = {"bzlead"},
         milestones = {
@@ -222,6 +229,7 @@ preset_addons = {
             {type="item", name="lead-plate", quantity=1},
         }
     },
+
     ["BZ Silicon"] = {
         required_mods = {"bzsilicon"},
         milestones = {
@@ -236,6 +244,7 @@ preset_addons = {
             {type="item", name="titanium-plate", quantity=1},
         }
     },
+
     ["BZ Tungsten"] = {
         required_mods = {"bztungsten"},
         milestones = {
@@ -243,6 +252,7 @@ preset_addons = {
             {type="item", name="tungsten-plate", quantity=1},
         }
     },
+
     ["BZ Zirconium"] = {
         required_mods = {"bzzirconium"},
         milestones = {
