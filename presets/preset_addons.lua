@@ -260,4 +260,20 @@ preset_addons = {
             {type="item", name="zirconium-plate", quantity=1},
         }
     },
+    ["Infused Science (Fixed)"] = {
+        required_mods = {"infused-science-fixed"},
+        milestones = {
+          {type = "group", name = "Science"}
+        },
+        build_func = function(preset)
+          local infusedScienceMilestones = preset.milestones
+          for _, science in pairs(game.item_prototypes) do
+            if science and science.type == "tool" and science.name:sub(1, 8) == "infused-" then
+              log("Adding milestone for: " .. science.name)
+              table.insert(infusedScienceMilestones, {type = "item", name = science.name, quantity = 1})
+              table.insert(infusedScienceMilestones, {type = "item", name = science.name, quantity = 1000, next = "x10"})
+            end
+          end
+        end
+    },
 }
