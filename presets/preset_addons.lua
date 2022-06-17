@@ -221,7 +221,14 @@ preset_addons = {
             {type="item", name="aluminum-plate", quantity=1},
         }
     },
-
+    ["BZ Graphite & Diamonds"] = {
+        required_mods = {"bzcarbon"},
+        milestones = {
+          {type = "group", name = "Resources", quantity = 1},
+          {type = "item", name = "graphite", quantity = 1},
+          {type = "item", name = "diamond", quantity = 1},
+      }
+    },
     ["BZ Lead"] = {
         required_mods = {"bzlead"},
         milestones = {
