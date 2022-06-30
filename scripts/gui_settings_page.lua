@@ -49,31 +49,36 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
 
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]
+        local default_selection = nil
+        if prototype ~= nil then default_selection = milestone.name end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item",
-            item=milestone.name, tags={action="milestones_change_setting", milestone_type="item"}}
+            item=default_selection, tags={action="milestones_change_setting", milestone_type="item"}}
     elseif milestone.type == "fluid" then
         prototype = game.fluid_prototypes[milestone.name]
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="fluid",
-            fluid=milestone.name, tags={action="milestones_change_setting", milestone_type="fluid"}}
+        local default_selection = nil
+        if prototype ~= nil then default_selection = milestone.name end        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="fluid",
+            fluid=default_selection, tags={action="milestones_change_setting", milestone_type="fluid"}}
     elseif milestone.type == "technology" then
         prototype = game.technology_prototypes[milestone.name]
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="technology",
-            technology=milestone.name, tags={action="milestones_change_setting", milestone_type="technology"}}
+        local default_selection = nil
+        if prototype ~= nil then default_selection = milestone.name end        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="technology",
+            technology=default_selection, tags={action="milestones_change_setting", milestone_type="technology"}}
     elseif milestone.type == "kill" then
         prototype = game.entity_prototypes[milestone.name]
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="entity",
-            entity=milestone.name, tags={action="milestones_change_setting", milestone_type="kill"},
+        local default_selection = nil
+        if prototype ~= nil then default_selection = milestone.name end        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="entity",
+            entity=default_selection, tags={action="milestones_change_setting", milestone_type="kill"},
             elem_filters={{filter="entity-with-health"}}}
     end
 
+    milestone_flow.add(elem_button)
+    local caption
     if milestone.name ~= nil and prototype == nil then
-        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}}
+        caption = {"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}
     else
-        milestone_flow.add(elem_button)
-
-        local caption = (prototype ~= nil) and prototype.localised_name or ""
-        milestone_flow.add{type="label", name="milestones_settings_label", caption=caption}
+        caption = (prototype ~= nil) and prototype.localised_name or ""
     end
+    milestone_flow.add{type="label", name="milestones_settings_label", caption=caption}
 
     milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
 
