@@ -267,7 +267,7 @@ function backfill_completion_times(force)
     local i = 1
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
-        if is_milestone_reached(milestone, item_counts, fluid_counts, kill_counts, technologies) then
+        if is_valid_milestone(milestone) and is_milestone_reached(milestone, item_counts, fluid_counts, kill_counts, technologies) then
             local lower_bound, upper_bound = find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
             log("Tick bounds for " ..milestone.name.. " : " ..lower_bound.. " - " ..upper_bound)
             if milestone.next then
@@ -324,4 +324,20 @@ function is_milestone_reached(milestone, item_counts, fluid_counts, kill_counts,
     else
         return is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts)
     end
+end
+
+function is_valid_milestone(milestone)
+    local prototype
+    if milestone.type == "item" then
+        prototype = game.item_prototypes[milestone.name]
+    elseif milestone.type == "fluid" then
+        prototype = game.fluid_prototypes[milestone.name]
+    elseif milestone.type == "technology" then
+        prototype = game.technology_prototypes[milestone.name]
+    elseif milestone.type == "kill" then
+        prototype = game.entity_prototypes[milestone.name]
+    else
+        return false
+    end
+    return prototype ~= nil
 end
