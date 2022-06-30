@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.4
-Date: ????
+Date: 2022-06-30
 
   Changes:
     - More changes to SE and SE+K2 presets (I forgot the new science packs)
