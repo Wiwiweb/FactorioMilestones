@@ -267,4 +267,12 @@ preset_addons = {
             {type="item", name="zirconium-plate", quantity=1},
         }
     },
+    ["Leighzer's Uranium Innovations"] = {
+        required_mods = {"leighzeruraniuminnovations"},
+        milestones = {
+            {type="group", name="Science"},
+            {type="item", name="nuclear-science-pack", quantity=1},
+            {type="item", name="nuclear-science-pack", quantity=1000, next="x10"},
+        }
+    },
 }
