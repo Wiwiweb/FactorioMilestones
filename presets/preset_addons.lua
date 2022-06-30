@@ -221,6 +221,7 @@ preset_addons = {
             {type="item", name="aluminum-plate", quantity=1},
         }
     },
+
     ["BZ Graphite & Diamonds"] = {
         required_mods = {"bzcarbon"},
         milestones = {
@@ -229,6 +230,7 @@ preset_addons = {
           {type = "item", name = "diamond", quantity = 1},
       }
     },
+
     ["BZ Lead"] = {
         required_mods = {"bzlead"},
         milestones = {
@@ -244,6 +246,7 @@ preset_addons = {
             {type="item", name="silica", quantity=1},
         }
     },
+
     ["BZ Titanium"] = {
         required_mods = {"bztitanium"},
         milestones = {
@@ -267,6 +270,7 @@ preset_addons = {
             {type="item", name="zirconium-plate", quantity=1},
         }
     },
+
     ["Leighzer's Uranium Innovations"] = {
         required_mods = {"leighzeruraniuminnovations"},
         milestones = {
