@@ -6,6 +6,9 @@ Date: ????
     - Remove ⓘ symbols from setting names now that Factorio does it automatically.
     - Add core fragments to SE presets.
 
+  Bugfixes:
+    - Fix crash when estimating milestones that were completed 1000+ hours ago.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.4
 Date: 2022-06-30

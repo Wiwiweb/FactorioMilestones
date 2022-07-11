@@ -212,20 +212,18 @@ local function find_production_tick_bounds(milestone, stats)
     local lower_bound_ticks_ago, upper_bound_ticks_ago
     if precision_bracket == "ALL" then
         -- Completion time is over 1000 hours ago, there are no samples to go through
-        return lower_bound_real_time, upper_bound_real_time
+        -- All we know is it's between tick 0 and 1000 hours ago
+        lower_bound_ticks_ago, upper_bound_ticks_ago = game.tick, FLOW_PRECISION_BRACKETS_LENGTHS[defines.flow_precision_index.one_thousand_hours]
+    else
+        local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, stats)
+        if sample_index == 0 then
+            return game.tick, game.tick -- Created this exact tick, usually on tick 0 before the start of the game
+        end
+        lower_bound_ticks_ago, upper_bound_ticks_ago = get_tick_bounds_from_sample(precision_bracket, sample_index)
     end
-    local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, stats)
-    log("sample_index: " ..sample_index)
-    if sample_index == 0 then
-        return game.tick, game.tick -- Created this exact tick, usually on tick 0 before the start of the game
-    end
-    lower_bound_ticks_ago, upper_bound_ticks_ago = get_tick_bounds_from_sample(precision_bracket, sample_index)
-    log("lower_bound_ticks_ago: " ..lower_bound_ticks_ago.. " - upper_bound_ticks_ago: " ..upper_bound_ticks_ago)
 
     lower_bound_real_time, upper_bound_real_time = get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago, precision_bracket)
-    log("lower_bound_real_time: " ..lower_bound_real_time.. " - upper_bound_real_time: " ..upper_bound_real_time)
 
-    -- TODO: do some rounding to the nearest second/minute/10minutes based on precision?
     return lower_bound_real_time, upper_bound_real_time
 end
 
