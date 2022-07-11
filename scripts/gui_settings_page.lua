@@ -407,8 +407,8 @@ function preset_dropdown_changed(event)
     settings_flow.clear()
     if selected_preset_name ~= "Empty" then
         fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
+        get_outer_frame(event.player_index).force_auto_center()
     end
-    get_outer_frame(event.player_index).force_auto_center()
 end
 
 function is_settings_page_visible(player_index)
