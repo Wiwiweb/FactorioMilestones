@@ -85,6 +85,7 @@ presets = {
 
             {type="group",      name="Resources"},
             {type="fluid",      name="petroleum-gas",                quantity=1},
+            {type="item",       name="se-core-fragment-omni",        quantity=1},
             {type="item",       name="se-vulcanite-block",           quantity=1},
             {type="item",       name="se-cryonite-rod",              quantity=1},
             {type="item",       name="se-vitamelange-spice",         quantity=1},
@@ -208,6 +209,7 @@ presets = {
             {type="group",      name="Resources"},
             {type="fluid",      name="petroleum-gas",                quantity=1},
             {type="item",       name="silicon",                      quantity=1},
+            {type="item",       name="se-core-fragment-omni",        quantity=1},
             {type="item",       name="se-vulcanite-block",           quantity=1},
             {type="item",       name="se-cryonite-rod",              quantity=1},
             {type="item",       name="se-vitamelange-spice",         quantity=1},
@@ -285,6 +287,7 @@ presets = {
             {type="group",      name="Resources"},
             {type="fluid",      name="petroleum-gas",                quantity=1},
             {type="item",       name="silicon",                      quantity=1},
+            {type="item",       name="se-core-fragment-omni",        quantity=1},
             {type="item",       name="se-vulcanite-block",           quantity=1},
             {type="item",       name="se-cryonite-rod",              quantity=1},
             {type="item",       name="se-vitamelange-spice",         quantity=1},

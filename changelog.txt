@@ -4,6 +4,7 @@ Date: ????
 
   Changes:
     - Remove ⓘ symbols from setting names now that Factorio does it automatically.
+    - Add core fragments to SE presets.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.4
