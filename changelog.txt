@@ -3,6 +3,7 @@ Version: 1.3.5
 Date: ????
 
   Changes:
+    - The main GUI will now adjust its number of columns to avoid going beyond screen borders.
     - Remove ⓘ symbols from setting names now that Factorio does it automatically.
     - Add core fragments to SE presets.
 

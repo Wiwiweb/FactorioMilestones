@@ -216,6 +216,16 @@ script.on_event(defines.events.on_gui_closed, function(event)
     end
 end)
 
+script.on_event(defines.events.on_player_display_resolution_changed, function(event)
+    local player = game.players[event.player_index]
+    refresh_gui_for_player(player)
+end)
+
+script.on_event(defines.events.on_player_display_scale_changed, function(event)
+    local player = game.players[event.player_index]
+    refresh_gui_for_player(player)
+end)
+
 -- Quickbar shortcut
 script.on_event(defines.events.on_lua_shortcut, function(event)
     if event.prototype_name == "milestones_toggle_gui" then

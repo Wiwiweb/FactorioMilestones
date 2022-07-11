@@ -170,21 +170,33 @@ function confirm_edit_time(player_index, element)
     refresh_gui_for_force(force)
 end
 
-local function get_column_count_with_groups(milestones_by_group)
+local function get_column_count_with_groups(player, milestones_by_group)
+
     local nb_groups = table_size(milestones_by_group)
 
+    local real_width = player.display_resolution.width * (1 / player.display_scale)
+    local max_nb_columns = math.ceil(real_width / 250) - 1 -- 250 is about the width of one column
     local row_count = nb_groups * 2
     local column_count = 1
     local milestone_counts_by_group = {}
     for _group_name, group_milestones in pairs(milestones_by_group) do
         table.insert(milestone_counts_by_group, #group_milestones)
         column_count = math.max(column_count, #group_milestones)
+
+        if column_count >= max_nb_columns then
+            column_count = max_nb_columns
+            break
+        end
     end
 
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
+    row_count = nb_groups
+    for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
+        row_count = row_count + math.ceil(milestone_count_in_group / column_count)
+    end
     while row_count < column_count * 3 do
-        row_count = nb_groups
         column_count = column_count - 1
+        row_count = nb_groups
         for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
             row_count = row_count + math.ceil(milestone_count_in_group / column_count)
         end
@@ -211,7 +223,7 @@ function build_display_page(player)
     local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
 
     if view_by_group and table_size(global_force.milestones_by_group) > 0 then
-        local column_count = get_column_count_with_groups(global_force.milestones_by_group)
+        local column_count = get_column_count_with_groups(player, global_force.milestones_by_group)
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
             display_scroll.add{type="label", caption=group_name, style="caption_label"}
             local group_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
