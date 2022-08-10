@@ -1,3 +1,4 @@
+local core_util = require("__core__/lualib/util.lua")
 local misc = require("__flib__.misc")
 require("scripts.gui")
 require("scripts.milestones_util")
@@ -34,7 +35,11 @@ local function print_milestone_reached(force, milestone)
         if milestone.quantity == 1 then
             force.print{"", {"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, localised_name, human_timestamp}, postscript}
         else
-            force.print{"", {"milestones.message_milestone_reached_" ..message_type.. "_more", milestone.quantity, sprite_name, localised_name, human_timestamp}, postscript}
+            local print_quantity = milestone.quantity
+            if milestone.quantity >= 10000 then
+                print_quantity = core_util.format_number(milestone.quantity, true)
+            end
+            force.print{"", {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, sprite_name, localised_name, human_timestamp}, postscript}
         end
     end
     force.play_sound{path="utility/achievement_unlocked"}
