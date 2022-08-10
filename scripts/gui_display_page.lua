@@ -170,6 +170,14 @@ function confirm_edit_time(player_index, element)
     refresh_gui_for_force(force)
 end
 
+local function get_row_count(milestone_counts_by_group, column_count)
+    row_count = 0
+    for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
+        row_count = row_count + math.ceil(milestone_count_in_group / column_count) + 1
+    end
+    return row_count
+end
+
 local function get_column_count_with_groups(player, milestones_by_group)
 
     local nb_groups = table_size(milestones_by_group)
@@ -185,21 +193,14 @@ local function get_column_count_with_groups(player, milestones_by_group)
 
         if column_count >= max_nb_columns then
             column_count = max_nb_columns
-            break
         end
     end
 
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-    row_count = nb_groups
-    for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
-        row_count = row_count + math.ceil(milestone_count_in_group / column_count)
-    end
+    row_count = get_row_count(milestone_counts_by_group, column_count)
     while row_count < column_count * 3 do
         column_count = column_count - 1
-        row_count = nb_groups
-        for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
-            row_count = row_count + math.ceil(milestone_count_in_group / column_count)
-        end
+        row_count = get_row_count(milestone_counts_by_group, column_count)
     end
 
     return column_count

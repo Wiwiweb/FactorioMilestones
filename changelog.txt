@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.6
 Date: ????
-  Changes:
+  Bugfixes:
+    - Fix main GUI that could be too tall and not wide enough in some cases.
 
   Locale:
     - Japanese translation thanks to nojio.
