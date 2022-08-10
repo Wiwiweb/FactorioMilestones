@@ -3,6 +3,7 @@ Version: 1.3.6
 Date: ????
   Bugfixes:
     - Fix main GUI that could be too tall and not wide enough in some cases.
+    - Fix GUI losing its position on every save file load.
 
   Locale:
     - Japanese translation thanks to nojio.

@@ -7,7 +7,7 @@ local function get_frame(player_index, frame_name)
     if not global_player[frame_name] or not global_player[frame_name].valid then
         reinitialize_player(player_index)
     end
-    return global.players[player_index][frame_name]
+    return global_player[frame_name]
 end
 
 function get_outer_frame(player_index)
@@ -22,9 +22,9 @@ function get_inner_frame(player_index)
     return get_frame(player_index, "inner_frame")
 end
 
-function build_main_frame(player)
+function build_gui_frames(player)
     local screen_element = player.gui.screen
-    local outer_frame = screen_element.add{type="frame", style="outer_frame", visible=false}
+    local outer_frame = screen_element.add{type="frame", name="milestones_outer_frame", style="outer_frame", visible=false}
     local main_frame = outer_frame.add{type="frame", name="milestones_main_frame", direction="vertical"}
 
     local titlebar = main_frame.add{type="flow", name="milestones_titlebar", style="flib_titlebar_flow", direction="horizontal"}
@@ -135,6 +135,7 @@ local function open_gui(player)
     build_display_page(player)
     update_settings_button(player)
     outer_frame.visible = true
+    outer_frame.bring_to_front()
     player.opened = get_main_frame(player.index)
     player.set_shortcut_toggled("milestones_toggle_gui", true)
 
@@ -145,9 +146,9 @@ local function open_gui(player)
 end
 
 local function close_gui(player)
-    local global_player = global.players[player.index]
     local outer_frame = get_outer_frame(player.index)
     outer_frame.visible = false
+    outer_frame.auto_center = false -- Remove auto_center from the force_auto_center() that we did for the first open
     get_inner_frame(player.index).clear()
 
     local import_export_frame = outer_frame.milestones_settings_import_export

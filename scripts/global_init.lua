@@ -38,7 +38,7 @@ function reinitialize_player(player_index)
 end
 
 function initialize_player(player)
-    local outer_frame, main_frame, inner_frame = build_main_frame(player)
+    local outer_frame, main_frame, inner_frame = build_gui_frames(player)
     global.players[player.index] = {
         outer_frame = outer_frame,
         main_frame = main_frame,
