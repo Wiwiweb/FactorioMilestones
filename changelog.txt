@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.6
-Date: ????
+Date: 2022-08-15
 
   Changes:
     - The "created X items at" chat message will now format quantities of items starting at 10000 (as in, "10k" instead of 10000).
