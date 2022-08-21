@@ -28,11 +28,11 @@ local function add_milestone_label(milestone_flow, milestone, compact_list, prin
         if compact_list then
             label_name = ""
         elseif milestone.type == "kill" then
-            label_name = {"milestones.killed_label"}
+            label_name = {"", {"milestones.killed_label"}, " "}
         elseif milestone.type == "technology" then
-            label_name = {"milestones.researched_label"}
+            label_name = {"", {"milestones.researched_label"}, " "}
         else
-            label_name = {"milestones.completed_label"}
+            label_name = {"", {"milestones.completed_label"}, " "}
         end
 
         if precision_window_in_minutes < 1 then -- <1 minute, just print the normal time
@@ -76,7 +76,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
 
     if prototype == nil then
         log("Milestones error! Invalid milestone: " .. serpent.line(milestone))
-        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}}
+        milestone_flow.add{type="label", caption={"", "[color=red]", {"", {"milestones.invalid_entry"}, " "}, milestone.name, "[/color]"}}
         return
     end
 
