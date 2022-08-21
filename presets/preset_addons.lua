@@ -136,6 +136,17 @@ preset_addons = {
         }
     },
 
+    ["Bob's Modules"] = {
+        required_mods = {"bobenemies"},
+        forbidden_mods = {"SeaBlock"},
+        milestones = {
+            {type="group", name="Progress"},
+            {type="kill", name="speed-module-8", quantity=1},
+            {type="kill", name="effectivity-module-8", quantity=1},
+            {type="kill", name="productivity-module-8", quantity=1},
+        }
+    },
+
     ["Science Pack Galore"] = {
         required_mods = {"SciencePackGalore"},
         milestones = {
