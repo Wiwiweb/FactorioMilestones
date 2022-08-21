@@ -7,7 +7,7 @@ local function get_frame(player_index, frame_name)
     if not global_player[frame_name] or not global_player[frame_name].valid then
         reinitialize_player(player_index)
     end
-    return global_player[frame_name]
+    return global.players[player_index][frame_name]
 end
 
 function get_outer_frame(player_index)

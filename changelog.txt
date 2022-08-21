@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.7
 Date: ????
+
+  Bugfixes:
+    - Fix crash when the GUI was cleared by another mod or command (again!).
+
   Locale:
     - German translation thanks to knniDE.
     - Adjustment of some whitespace after strings (e.g. after "Completed at").
