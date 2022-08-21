@@ -254,6 +254,7 @@ preset_addons = {
 
     ["BZ Silicon"] = {
         required_mods = {"bzsilicon"},
+        forbidden_mods = {"Krastorio2"},
         milestones = {
             {type="group", name="Resources", quantity=1},
             {type="item", name="silica", quantity=1},
