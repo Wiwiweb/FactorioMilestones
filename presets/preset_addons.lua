@@ -132,6 +132,7 @@ preset_addons = {
             {type="kill", name="bob-titan-biter",     quantity=1},
             {type="kill", name="bob-behemoth-biter",  quantity=1},
             {type="kill", name="bob-leviathan-biter", quantity=1},
+            {type="kill", name="bob-leviathan-biter", quantity=100, next="x10"},
         }
     },
 
@@ -219,6 +220,7 @@ preset_addons = {
         milestones = {
             {type="group", name="Resources", quantity=1},
             {type="item", name="aluminum-plate", quantity=1},
+            {type="item", name="copper-plate", quantity=1}, -- pushed further into the tech tree
         }
     },
 
@@ -241,6 +243,15 @@ preset_addons = {
 
     ["BZ Silicon"] = {
         required_mods = {"bzsilicon"},
+        milestones = {
+            {type="group", name="Resources", quantity=1},
+            {type="item", name="silicon", quantity=1},
+            {type="item", name="silica", quantity=1},
+        }
+    },
+
+    ["BZ Silicon (with K2)"] = { -- K2 removes BZ's silicon
+        required_mods = {"bzsilicon", "Krastorio2"},
         milestones = {
             {type="group", name="Resources", quantity=1},
             {type="item", name="silica", quantity=1},
