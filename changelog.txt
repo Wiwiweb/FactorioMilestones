@@ -2,6 +2,7 @@
 Version: 1.3.7
 Date: ????
   Changes:
+    - Added preset addons for "Brass Tacks" and "If I Had A Nickel" (Thanks to Xynariz)
     - Tweaks to some preset addons.
 
   Bugfixes:

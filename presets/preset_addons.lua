@@ -245,8 +245,8 @@ preset_addons = {
         required_mods = {"bzsilicon"},
         milestones = {
             {type="group", name="Resources", quantity=1},
-            {type="item", name="silicon", quantity=1},
             {type="item", name="silica", quantity=1},
+            {type="item", name="silicon", quantity=1},
         }
     },
 
@@ -290,4 +290,22 @@ preset_addons = {
             {type="item", name="nuclear-science-pack", quantity=1000, next="x10"},
         }
     },
+
+    ["Brass Tacks"] = {
+        required_mods = {"BrassTacks"},
+        milestones = {
+            {type="group", name="Resources"},
+            {type="item", name="zinc-plate", quantity=1},
+            {type="item", name="brass-plate", quantity=1},
+        }
+    },
+
+    ["If I Had A Nickel "] = {
+        required_mods = {"IfNickel"},
+        milestones = {
+            {type="group", name="Resources"},
+            {type="item", name="nickel-plate", quantity=1},
+            {type="item", name="invar-plate", quantity=1},
+        }
+    }
 }
