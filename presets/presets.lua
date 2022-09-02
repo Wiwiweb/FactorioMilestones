@@ -1110,7 +1110,7 @@ presets = {
             {type="item",       name="el_energy_crystal_item", quantity=1},
             {type="item",       name="el_diesel_train_item", quantity=1},
 
-            {type="group",      name="Fisson"},
+            {type="group",      name="Fission"},
             {type="item",       name="fi_materials_glass", quantity=1},
             {type="item",       name="fi_materials_gold", quantity=1},
             {type="item",       name="fi_materials_neodym", quantity=1},
@@ -1218,7 +1218,7 @@ presets = {
             {type="item",       name="el_energy_crystal_item", quantity=1},
             {type="item",       name="el_diesel_train_item", quantity=1},
 
-            {type="group",      name="Fisson"},
+            {type="group",      name="Fission"},
             {type="item",       name="fi_materials_glass", quantity=1},
             {type="item",       name="fi_materials_gold", quantity=1},
             {type="item",       name="fi_materials_neodym", quantity=1},
