@@ -1100,7 +1100,7 @@ presets = {
             {type="technology", name="fu_energy_tech", quantity=1},
             {type="technology", name="gr_stage_tech", quantity=1},
 
-            {type="group",      name="vanilla"},
+            {type="group",      name="Vanilla"},
             {type="fluid",      name="petroleum-gas", quantity=1},
             {type="item",       name="locomotive", quantity=1},
             {type="item",       name="construction-robot", quantity=1},
@@ -1196,6 +1196,11 @@ presets = {
             {type="technology", name="fu_energy_tech", quantity=1},
             {type="technology", name="gr_stage_tech", quantity=1},
             
+            {type="group",      name="Vanilla"},
+            {type="fluid",      name="petroleum-gas",                quantity=1},
+            {type="item",       name="locomotive", quantity=1},
+            {type="item",       name="construction-robot", quantity=1},
+            {type="item",       name="logistic-robot", quantity=1},
             {type="group",      name="K2 Progress"},
             {type="item",       name="ai-core",                      quantity=1},
             {type="fluid",      name="matter",                       quantity=1},
@@ -1207,12 +1212,6 @@ presets = {
             {type="item",       name="silicon",                      quantity=1},
             {type="item",       name="rare-metals",                  quantity=1},
             {type="item",       name="imersite-powder",              quantity=1},
-
-            {type="group",      name="vanilla"},
-            {type="fluid",      name="petroleum-gas",                quantity=1},
-            {type="item",       name="locomotive", quantity=1},
-            {type="item",       name="construction-robot", quantity=1},
-            {type="item",       name="logistic-robot", quantity=1},
             
             {type="group",      name="Electronics"},
             {type="item",       name="el_materials_ALK", quantity=1},
