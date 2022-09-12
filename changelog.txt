@@ -4,6 +4,7 @@ Date: ????
   Changes:
     - Add preset for K2+248k and tweak 248k preset (Thanks to quindao)
     - GUI will now center when opening import/export window.
+    - Add requester chest to Space Exploration presets.
 
   Bugfixes:
     - Fix crash when trying to import an empty string.
