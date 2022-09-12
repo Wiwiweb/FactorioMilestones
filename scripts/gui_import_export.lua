@@ -96,6 +96,9 @@ function import_settings(player_index)
                               .milestones_import_export_scroll
                               .milestones_settings_import_export_textbox.text
 
+    if string.len(import_string) == 0 then
+        return
+    end
     local decoded_string = game.decode_string(import_string)
     if decoded_string then import_string = decoded_string end
 
