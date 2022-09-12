@@ -178,12 +178,17 @@ local function get_row_count(milestone_counts_by_group, column_count)
     return row_count
 end
 
-local function get_column_count_with_groups(player, milestones_by_group)
+local function get_column_count_with_groups(player, milestones_by_group, compact_list)
 
     local nb_groups = table_size(milestones_by_group)
 
     local real_width = player.display_resolution.width * (1 / player.display_scale)
-    local max_nb_columns = math.ceil(real_width / 250) - 1 -- 250 is about the width of one column
+    -- 260px is about the max width of one column (3-digit hours time and 2-digit estimation)
+    local max_column_width = 260
+    if compact_list then
+        max_column_width = max_column_width - 86
+    end
+    local max_nb_columns = math.ceil(real_width / max_column_width) - 1
     local row_count = nb_groups * 2
     local column_count = 1
     local milestone_counts_by_group = {}
@@ -224,7 +229,7 @@ function build_display_page(player)
     local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
 
     if view_by_group and table_size(global_force.milestones_by_group) > 0 then
-        local column_count = get_column_count_with_groups(player, global_force.milestones_by_group)
+        local column_count = get_column_count_with_groups(player, global_force.milestones_by_group, compact_list)
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
             display_scroll.add{type="label", caption=group_name, style="caption_label"}
             local group_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}

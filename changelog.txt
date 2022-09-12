@@ -7,10 +7,12 @@ Date: ????
 
   Bugfixes:
     - Fix crash when trying to import an empty string.
+    - Attempt to fix some cases where the display GUI is still growing beyond screen borders (because of the "±Xm" estimations).
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.7
 Date: 2022-08-21
+
   Changes:
     - Add preset addons for Bob's Modules, Brass Tacks, and If I Had A Nickel (Thanks to Xynariz)
     - Tweak some preset addons.
