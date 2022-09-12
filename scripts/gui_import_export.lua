@@ -58,6 +58,7 @@ function build_import_export_page(player_index, button_element, import)
     textbox.select_all()
     textbox.focus()
     import_export_frame.visible = true
+    outer_frame.force_auto_center()
 
     button_element.style = "flib_selected_tool_button"
 end
