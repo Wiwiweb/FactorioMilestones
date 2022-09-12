@@ -25,5 +25,11 @@ data:extend{
         name = "milestones_list_by_group",
         setting_type = "runtime-per-user",
         default_value = true,
+    },
+    {
+        type = "bool-setting",
+        name = "milestones_show_estimations",
+        setting_type = "runtime-per-user",
+        default_value = true,
     }
 }

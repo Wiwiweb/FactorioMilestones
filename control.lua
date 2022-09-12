@@ -89,10 +89,13 @@ end)
 script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
-    if event.setting == "milestones_check_frequency" then
+    local setting_name = event.setting
+    if setting_name == "milestones_check_frequency" then
         log("Milestones check frequency changed")
         script.on_nth_tick(nil) -- Unregister event
         script.on_nth_tick(settings.global["milestones_check_frequency"].value, track_item_creation)
+    elseif setting_name == "milestones_compact_list" or setting_name == "milestones_list_by_group" or setting_name == "milestones_show_estimations" then
+        refresh_gui_for_player(game.get_player(event.player_index))
     end
 end)
 

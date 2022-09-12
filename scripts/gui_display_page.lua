@@ -12,7 +12,7 @@ local function get_timestamp(ticks, print_milliseconds)
 
 end
 
-local function add_milestone_label(milestone_flow, milestone, compact_list, print_milliseconds)
+local function add_milestone_label(milestone_flow, milestone, compact_list, show_estimations, print_milliseconds)
     local caption
     local tooltip
     local show_edit_button = false
@@ -35,7 +35,7 @@ local function add_milestone_label(milestone_flow, milestone, compact_list, prin
             label_name = {"", {"milestones.completed_label"}, " "}
         end
 
-        if precision_window_in_minutes < 1 then -- <1 minute, just print the normal time
+        if precision_window_in_minutes < 1 or (not show_estimations and precision_window_in_minutes < 60) then -- <1 minute, or doesn't want estimations shown. Just print the normal time
             caption = {"", label_name, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
         elseif precision_window_in_minutes < 60 then --<1 hour, print the in-between time then ± X minutes
             tooltip = milestone.type == "technology" and {"milestones.estimation_tooltip_technology"} or {"milestones.estimation_tooltip"}
@@ -61,7 +61,7 @@ local function add_milestone_label(milestone_flow, milestone, compact_list, prin
     end
 end
 
-local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list)
+local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list, show_estimations)
     local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big", tags={index=milestone.sort_index}}
     local prototype = nil
     if milestone.type == "item" then
@@ -102,7 +102,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
 
     -- Item name
-    add_milestone_label(milestone_flow, milestone, compact_list, print_milliseconds)
+    add_milestone_label(milestone_flow, milestone, compact_list, show_estimations, print_milliseconds)
 end
 
 local function find_complete_milestone_from_UI_flow(milestone_flow, global_force)
@@ -178,8 +178,7 @@ local function get_row_count(milestone_counts_by_group, column_count)
     return row_count
 end
 
-local function get_column_count_with_groups(player, milestones_by_group, compact_list)
-
+local function get_column_count_with_groups(player, milestones_by_group, compact_list, show_estimations)
     local nb_groups = table_size(milestones_by_group)
 
     local real_width = player.display_resolution.width * (1 / player.display_scale)
@@ -187,6 +186,9 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     local max_column_width = 260
     if compact_list then
         max_column_width = max_column_width - 86
+    end
+    if not show_estimations then
+        max_column_width = max_column_width - 46
     end
     local max_nb_columns = math.ceil(real_width / max_column_width) - 1
     local row_count = nb_groups * 2
@@ -227,14 +229,15 @@ function build_display_page(player)
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local compact_list = settings.get_player_settings(player)["milestones_compact_list"].value
     local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
+    local show_estimations = settings.get_player_settings(player)["milestones_show_estimations"].value
 
     if view_by_group and table_size(global_force.milestones_by_group) > 0 then
-        local column_count = get_column_count_with_groups(player, global_force.milestones_by_group, compact_list)
+        local column_count = get_column_count_with_groups(player, global_force.milestones_by_group, compact_list, show_estimations)
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
             display_scroll.add{type="label", caption=group_name, style="caption_label"}
             local group_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
             for _, milestone in pairs(group_milestones) do
-                add_milestone_item(group_table, milestone, print_milliseconds, compact_list)
+                add_milestone_item(group_table, milestone, print_milliseconds, compact_list, show_estimations)
             end
             display_scroll.add{type="line"}
         end

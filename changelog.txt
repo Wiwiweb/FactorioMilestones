@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.8
 Date: ????
+
+  Features:
+    - Add mod setting to hide the "±Xm" estimations.
+
   Changes:
     - Add preset for K2+248k and tweak 248k preset (Thanks to quindao)
     - GUI will now center when opening import/export window.
