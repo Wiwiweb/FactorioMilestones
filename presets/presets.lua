@@ -964,8 +964,8 @@ presets = {
             {type="item",       name="nullius-mechanical-pack",          quantity=1},
             {type="item",       name="nullius-electrical-pack",          quantity=1},
             {type="item",       name="nullius-chemical-pack",            quantity=1},
-            {type="item",       name="nullius-box-physics-pack",         quantity=1}, -- box form for now
-            {type="item",       name="nullius-box-astronomy-pack",       quantity=1}, -- box form for now
+            {type="item",       name="nullius-physics-pack",             quantity=1},
+            {type="item",       name="nullius-astronomy-pack",           quantity=1},
             {type="item",       name="nullius-biochemistry-pack",        quantity=1},
             {type="item",       name="nullius-microbiology-pack",        quantity=1},
             {type="item",       name="nullius-botany-pack",              quantity=1},
@@ -978,8 +978,8 @@ presets = {
             {type="item",       name="nullius-mechanical-pack",          quantity=1000, next="x10"},
             {type="item",       name="nullius-electrical-pack",          quantity=1000, next="x10"},
             {type="item",       name="nullius-chemical-pack",            quantity=1000, next="x10"},
-            {type="item",       name="nullius-box-physics-pack",         quantity=200, next="x10"}, -- a box is 5 packs
-            {type="item",       name="nullius-box-astronomy-pack",       quantity=200, next="x10"},
+            {type="item",       name="nullius-physics-pack",             quantity=1000, next="x10"},
+            {type="item",       name="nullius-astronomy-pack",           quantity=1000, next="x10"},
             {type="item",       name="nullius-biochemistry-pack",        quantity=1000, next="x10"},
             {type="item",       name="nullius-microbiology-pack",        quantity=1000, next="x10"},
             {type="item",       name="nullius-botany-pack",              quantity=1000, next="x10"},
@@ -987,6 +987,15 @@ presets = {
             {type="item",       name="nullius-dendrology-pack",          quantity=1000, next="x10"},
             {type="item",       name="nullius-ichthyology-pack",         quantity=1000, next="x10"},
             {type="item",       name="nullius-zoology-pack",             quantity=1000, next="x10"},
+
+            -- Science boxes, a box is 5 packs
+            {type="alias",      name="nullius-box-geology-pack",     equals="nullius-geology-pack",     quantity=5},
+            {type="alias",      name="nullius-box-climatology-pack", equals="nullius-climatology-pack", quantity=5},
+            {type="alias",      name="nullius-box-mechanical-pack",  equals="nullius-mechanical-pack",  quantity=5},
+            {type="alias",      name="nullius-box-electrical-pack",  equals="nullius-electrical-pack",  quantity=5},
+            {type="alias",      name="nullius-box-chemical-pack",    equals="nullius-chemical-pack",    quantity=5},
+            {type="alias",      name="nullius-box-physics-pack",     equals="nullius-physics-pack",     quantity=5},
+            {type="alias",      name="nullius-box-astronomy-pack",   equals="nullius-astronomy-pack",   quantity=5},
 
             {type="group",      name="Resources"},
             {type="item",       name="nullius-iron-ingot",               quantity=1},

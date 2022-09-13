@@ -33,6 +33,7 @@ script.on_init(function()
     if initial_preset == nil then
         load_preset_addons()
     end
+    initialize_alias_table()
 
     -- Initialize for existing forces in existing save file
     local backfilled_anything = false

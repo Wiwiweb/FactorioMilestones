@@ -46,7 +46,7 @@ function merge_new_milestones(force_name, new_loaded_milestones)
     for i, new_loaded_milestone in pairs(new_loaded_milestones) do
         if new_loaded_milestone.type == "group" then
             current_group = new_loaded_milestone.name
-        else
+        elseif new_loaded_milestone.type ~= "alias" then
             local new_milestone = table.deep_copy(new_loaded_milestone)
             new_milestone.sort_index = i
             new_milestone.group = current_group
@@ -78,6 +78,16 @@ function merge_new_milestones(force_name, new_loaded_milestones)
     global_force.complete_milestones = new_complete
     global_force.incomplete_milestones = new_incomplete
     global_force.milestones_by_group = new_milestones_by_group
+end
+
+function initialize_alias_table()
+    global.production_aliases = {}
+    for _, loaded_milestone in pairs(global.loaded_milestones) do
+        if loaded_milestone.type == "alias" then
+            global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
+            table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+        end
+    end
 end
 
 function mark_milestone_reached(force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional
@@ -299,6 +309,18 @@ function is_production_milestone_reached(milestone, item_counts, fluid_counts, k
     end
 
     local milestone_count = type_count[milestone.name]
+
+    -- Aliases
+    if global.production_aliases[milestone.name] then
+        for _, alias in pairs(global.production_aliases[milestone.name]) do
+            local alias_count = type_count[alias.name]
+            if alias_count then
+                milestone_count = milestone_count or 0 -- Could be nil
+                milestone_count = milestone_count + alias_count * alias.quantity
+            end
+        end
+    end
+
     if milestone_count ~= nil and milestone_count >= milestone.quantity then
         return true
     end

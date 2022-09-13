@@ -105,9 +105,22 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     return milestone_flow
 end
 
+local function add_alias_setting(milestone, settings_flow, gui_index)
+    local milestone_flow = settings_flow.add({type="flow", direction="horizontal", style="milestones_horizontal_flow_big", index=gui_index})
+    local caption = {"", {"milestones.settings_alias"}, ": ", milestone.name, " = ", milestone.quantity, "x ", milestone.equals}
+    milestone_flow.add({type="label", name="milestones_settings_alias_label", caption=caption, tags={name=milestone.name, equals=milestone.equals, quantity=milestone.quantity}})
+
+    milestone_flow.add({type="empty-widget", style="flib_horizontal_pusher"})
+
+    milestone_flow.add({type="sprite-button", sprite="utility/trash", style="milestones_trash_button", tags={action="milestones_delete_setting"}})
+    milestone_flow.add({type="flow", name="milestones_arrows_flow", direction="vertical"})
+end
+
 local function add_settings_element_from_json_item(settings_element, settings_flow, gui_index)
     if settings_element.type == "group" then
         return add_group(settings_flow, settings_element.name, gui_index)
+    elseif settings_element.type == "alias" then
+        return add_alias_setting(settings_element, settings_flow, gui_index)
     else
         return add_milestone_setting(settings_element, settings_flow, gui_index)
     end
@@ -133,11 +146,14 @@ end
 local function get_milestones_array_element(flow, allow_empty, player_index)
     if not allow_empty
        and (flow.milestones_settings_item == nil or flow.milestones_settings_item.elem_value == nil)
-       and (flow.milestones_settings_group_name == nil or flow.milestones_settings_group_name.text == nil) then
+       and (flow.milestones_settings_group_name == nil or flow.milestones_settings_group_name.text == nil)
+       and flow.milestones_settings_alias_label == nil then
         return nil
     end
     if flow.milestones_settings_group_name then
         return {type="group", name=flow.milestones_settings_group_name.text}
+    elseif flow.milestones_settings_alias_label then
+        return {type="alias", name=flow.milestones_settings_alias_label.tags.name, equals=flow.milestones_settings_alias_label.tags.equals, quantity=flow.milestones_settings_alias_label.tags.quantity}
     end
 
     local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
@@ -341,6 +357,7 @@ function confirm_settings_page(player_index)
         end
 
         global.loaded_milestones = table.deep_copy(new_loaded_milestones)
+        initialize_alias_table()
 
         local backfilled_anything = false
         for force_name, force in pairs(game.forces) do

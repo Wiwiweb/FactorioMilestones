@@ -13,7 +13,7 @@ function initialize_force_if_needed(force)
         for i, loaded_milestone in pairs(global.loaded_milestones) do
             if loaded_milestone.type == "group" then
                 current_group = loaded_milestone.name
-            else
+            elseif loaded_milestone.type ~= "alias" then
                 local inserted_milestone = table.deep_copy(loaded_milestone)
                 inserted_milestone.sort_index = i
                 inserted_milestone.group = current_group

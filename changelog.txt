@@ -3,9 +3,13 @@ Version: 1.3.8
 Date: ????
 
   Features:
+    - Add beta support for item aliases. You can indicate to Milestones that an item is worth a certain amount of another item.
+      - This is designed for Nullius's science, which can be created individually or as a "box" item worth several science packs. Up until now the Nullius milestones were not accurate because of these 2 ways to create science.
+      - For now there is no way to create aliases via the settings GUI. You can modify aliases using the export/import feature.
     - Add mod setting to hide the "±Xm" estimations.
 
   Changes:
+    - Update Nullius preset to use aliases for science boxes. If you are already using the Nullius preset, you can update it in the settings (Switch to "Empty" preset, switch back to "Nullius", confirm).
     - Add preset for K2+248k and tweak 248k preset (Thanks to quindao)
     - GUI will now center when opening import/export window.
     - Add requester chest to Space Exploration presets.
