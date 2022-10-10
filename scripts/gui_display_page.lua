@@ -84,20 +84,20 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
     local sprite_path = sprite_path_prefix .. "/" .. milestone.name
     local sprite_number
-    local tooltip
+    local tooltip = milestone.tooltip   -- Milestone tooltip has precidence
     if milestone.quantity > 1 then
         sprite_number = milestone.quantity
-        tooltip = {"", milestone.quantity, "x ", prototype.localised_name}
+        tooltip = tooltip or {"", milestone.quantity, "x ", prototype.localised_name}
     end
     if milestone.type == "technology" then
         local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "Level "..milestone.quantity
-        tooltip = {"", prototype.localised_name, " (", postfix, ")"}
+        tooltip = tooltip or {"", prototype.localised_name, " (", postfix, ")"}
     elseif milestone.type == "kill" then
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
-        tooltip = {"", prefix, prototype.localised_name, " (", {"milestones.type_kill"}, ")"}
+        tooltip = tooltip or {"", prefix, prototype.localised_name, " (", {"milestones.type_kill"}, ")"}
     else
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
-        tooltip = {"", prefix, prototype.localised_name}
+        tooltip = tooltip or {"", prefix, prototype.localised_name}
     end
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
 
