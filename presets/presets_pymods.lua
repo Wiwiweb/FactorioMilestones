@@ -126,6 +126,7 @@ presets["Full PyMods"] = {
         {type="item",       name="space-science-pack",            quantity=1000, next="x10"},
 
         {type="group",      name="Power"},
+        {type="item",       name="steam-engine",               quantity=1},
         {type="item",       name="geothermal-plant-mk01",      quantity=1},
         {type="item",       name="py-biomass-powerplant-mk01", quantity=1},
         {type="item",       name="py-coal-powerplant-mk01",    quantity=1},
@@ -347,10 +348,8 @@ presets["Full PyMods (minus Alternative Energy)"] = {
         {type="item",       name="kmauts",         quantity=1},
         {type="item",       name="phadai",         quantity=1},
         {type="item",       name="simik",          quantity=1},
-        {type="item",       name="numal",          quantity=1},
         {type="item",       name="xeno",           quantity=1},
         {type="item",       name="vonix",          quantity=1},
-        {type="item",       name="zungror",        quantity=1},
         {type="item",       name="antelope",       quantity=1},
 
         {type="group",      name="Progress"},
