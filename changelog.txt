@@ -1,7 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.9
 Date: ????
+
   Changes:
+    - Update PyMods presets to account for changes in the latest PyMods versions. Now comes with 4 presets depending on how many PyMods you are using: Full, Full except AE, Medium, and Short PyMods.
+      As usual you will need to refresh your milestone set yourself if you are already in the middle of a PyMods playthrough. (Settings -> Switch to Empty -> Switch to the preset you want -> Confirm)
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.8
 Date: 2022-09-13
