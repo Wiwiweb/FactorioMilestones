@@ -1,5 +1,6 @@
 require("scripts.util")
 require("presets.presets")
+require("presets.presets_pymods")
 require("presets.preset_addons")
 
 local function get_delayed_chat_delay()
