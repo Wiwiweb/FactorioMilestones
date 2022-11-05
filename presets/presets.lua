@@ -1011,6 +1011,20 @@ presets = {
             {type="item",       name="nullius-processor-2",              quantity=1},
             {type="item",       name="nullius-processor-3",              quantity=1},
 
+            -- Item boxes, a box is 5 items
+            {type="alias",      name="nullius-box-iron-ingot",     equals="nullius-iron-ingot",     quantity=5},
+            {type="alias",      name="nullius-box-plastic",        equals="nullius-plastic",        quantity=5},
+            {type="alias",      name="nullius-box-glass",          equals="nullius-glass",          quantity=5},
+            {type="alias",      name="nullius-box-aluminum-ingot", equals="nullius-aluminum-ingot", quantity=5},
+            {type="alias",      name="nullius-box-silicon-ingot",  equals="nullius-silicon-ingot",  quantity=5},
+            {type="alias",      name="nullius-box-steel-ingot",    equals="nullius-steel-ingot",    quantity=5},
+            {type="alias",      name="nullius-box-fiberglass",     equals="nullius-fiberglass",     quantity=5},
+            {type="alias",      name="nullius-box-titanium-ingot", equals="nullius-titanium-ingot", quantity=5},
+            {type="alias",      name="nullius-box-copper-ingot",   equals="nullius-copper-ingot",   quantity=5},
+            {type="alias",      name="nullius-box-processor-1",    equals="nullius-processor-1",    quantity=5},
+            {type="alias",      name="nullius-box-processor-2",    equals="nullius-processor-2",    quantity=5},
+            {type="alias",      name="nullius-box-processor-3",    equals="nullius-processor-3",    quantity=5},
+
             {type="group",      name="Terraforming"},
             {type="item",       name="nullius-terraforming-drone-brown", quantity=1},
             {type="item",       name="nullius-rocket",                   quantity=1},
