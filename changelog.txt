@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.10
-Date: ????
+Date: 2022-11-06
   Changes:
     - Update Nullius preset to account for boxed versions of milestones in the "Resources" group (ingots, processors, glass).
     - GUI improvements:
