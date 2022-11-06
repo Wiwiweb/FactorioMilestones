@@ -5,10 +5,13 @@ Date: ????
     - Update Nullius preset to account for boxed versions of milestones in the "Resources" group (ingots, processors, glass).
     - GUI improvements:
       - Milestones from different groups are now aligned properly.
-      - Improve the look of the scroll bars that appear when using large milestones set.
+      - Improved the look of the scroll bars that appear when using large milestones set.
       - In the settings page, you can now add milestones directly at a specific position.
       - In the settings page, you can now delete multiple milestones at the same time.
       - In the settings page, you can now shift-click arrows to move 5 places at a time.
+
+  Bugfixes:
+    - Fix estimations not being shown when the "List by group" setting was disabled.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.9

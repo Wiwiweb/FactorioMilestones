@@ -277,11 +277,11 @@ function build_display_page(player)
 
         local content_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
         for _, milestone in pairs(global_force.complete_milestones) do
-            add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
+            add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
         end
 
         for _, milestone in pairs(global_force.incomplete_milestones) do
-            add_milestone_item(content_table, milestone, print_milliseconds, compact_list)
+            add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
         end
     end
 end
