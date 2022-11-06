@@ -35,7 +35,7 @@ local function add_milestone_label(milestone_flow, milestone, compact_list, show
             label_name = {"", {"milestones.completed_label"}, " "}
         end
 
-        if precision_window_in_minutes < 1 or (not show_estimations and precision_window_in_minutes < 60) then -- <1 minute, or doesn't want estimations shown. Just print the normal time
+        if precision_window_in_minutes < 1 or (not show_estimations and precision_window_in_minutes < 60) then -- <1 minute, or doesn't want estimations shown. Just print the normal time.
             caption = {"", label_name, "[font=default-bold]", get_timestamp(milestone.completion_tick, print_milliseconds), "[img=quantity-time][/font]"}
         elseif precision_window_in_minutes < 60 then --<1 hour, print the in-between time then ± X minutes
             tooltip = milestone.type == "technology" and {"milestones.estimation_tooltip_technology"} or {"milestones.estimation_tooltip"}

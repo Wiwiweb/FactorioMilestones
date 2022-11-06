@@ -1,7 +1,7 @@
 local data_util = require("__flib__.data-util")
 local styles = data.raw["gui-style"].default
 
-styles.milestones_settings_flow = {
+styles.milestones_settings_outer_flow = {
     type = "vertical_flow_style",
     horizontal_align = "center",
     vertical_spacing = 8,
@@ -67,14 +67,6 @@ styles.milestones_grey_button = {
 styles.milestones_selected_grey_button = {
   type = "button_style",
   parent = "flib_selected_tool_button",
-  width = 24,
-  height = 24,
-  padding = 0
-}
-
-styles.milestones_trash_button = {
-  type = "button_style",
-  parent = "tool_button_red",
   width = 24,
   height = 24,
   padding = 0

@@ -276,8 +276,8 @@ script.on_event(defines.events.on_gui_click, function(event)
         confirm_settings_page(event.player_index)
     elseif event.element.tags.action == "milestones_swap_setting" then
         swap_settings(event.player_index, event)
-    elseif event.element.tags.action == "milestones_delete_setting" then
-        delete_setting(event.player_index, event.element)
+    elseif event.element.tags.action == "milestones_delete_settings" then
+        delete_selected_settings(event.player_index)
     elseif event.element.tags.action == "milestones_add_setting" then
         add_setting(event.player_index, event.element)
     elseif event.element.tags.action == "milestones_edit_time" then
@@ -294,6 +294,8 @@ script.on_event(defines.events.on_gui_click, function(event)
         import_settings(event.player_index)
     elseif event.element.tags.action == "milestones_settings_infinity_button" then
         toggle_infinity_button(event.element)
+    elseif event.element.tags.action == "milestones_select_setting" then -- have to use on_gui_click instead of on_gui_checked_state_changed so we can check for shift
+        select_setting(event)
     end
 end)
 

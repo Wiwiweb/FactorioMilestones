@@ -84,7 +84,7 @@ function close_import_export_page(player_index)
     inside_frame.clear()
     import_export_frame.visible = false
 
-    local button_flow = get_inner_frame(player_index).milestones_preset_flow
+    local button_flow = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow
     button_flow.milestones_import_button.style = "tool_button"
     button_flow.milestones_export_button.style = "tool_button"
 end
@@ -109,7 +109,7 @@ function import_settings(player_index)
         local settings_flow = global.players[player_index].settings_flow
         settings_flow.clear()
         fill_settings_flow(settings_flow, imported_milestones)
-        local preset_dropdown = get_inner_frame(player_index).milestones_preset_flow.milestones_preset_dropdown
+        local preset_dropdown = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown
         preset_dropdown.caption = {"milestones.settings_imported"}
         preset_dropdown.tags = {action="milestones_change_preset", imported=true} -- For some reason, can't just change a single tag
         close_import_export_page(player_index)
