@@ -7,14 +7,16 @@ local function refresh_arrow_buttons(gui_index, settings_flow)
     arrows_flow.clear()
 
     if gui_index == 1 then
-        arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
+        arrows_flow.add{type="empty-widget", style="milestones_empty_button"}
     else
-        arrows_flow.add{type="sprite-button", name="milestones_arrow_up", sprite="milestones_arrow_up", style="milestones_small_button", tags={action="milestones_swap_setting", direction=-1}}
+        arrows_flow.add{type="sprite-button", name="milestones_arrow_up", sprite="milestones_arrow_up", style="milestones_small_button",
+        tooltip={"milestones.settings_arrow_tooltip"}, tags={action="milestones_swap_setting", direction=-1}}
     end
     if gui_index == #settings_flow.children then
-        arrows_flow.add{type="empty-widget", style="milestones_empty_button"} 
+        arrows_flow.add{type="empty-widget", style="milestones_empty_button"}
     else
-        arrows_flow.add{type="sprite-button", name="milestones_arrow_down", sprite="milestones_arrow_down", style="milestones_small_button", tags={action="milestones_swap_setting", direction=1}}
+        arrows_flow.add{type="sprite-button", name="milestones_arrow_down", sprite="milestones_arrow_down", style="milestones_small_button",
+        tooltip={"milestones.settings_arrow_tooltip"}, tags={action="milestones_swap_setting", direction=1}}
     end
 end
 
@@ -246,20 +248,21 @@ function build_settings_page(player)
     get_outer_frame(player.index).force_auto_center()
 end
 
-function swap_settings(player_index, button_element)
-    local index_delta = button_element.tags.direction *2
-    gui_index1 = button_element.parent.parent.get_index_in_parent()
-    gui_index2 = gui_index1 + index_delta
-    gui_index1, gui_index2 = math.min(gui_index1, gui_index2), math.max(gui_index1, gui_index2)
+function swap_settings(player_index, event)
+    local index_delta = event.element.tags.direction *2 -- *2 because of separation lines
+    if event.shift then
+        index_delta = index_delta * 5
+    end
     local settings_flow = global.players[player_index].settings_flow
-    local milestone1 = get_milestones_array_element(settings_flow.children[gui_index1], true)
-    local milestone2 = get_milestones_array_element(settings_flow.children[gui_index2], true)
 
-    -- index1 is always smaller, destroying and rebuilding in this order works
-    settings_flow.children[gui_index2].destroy()
-    settings_flow.children[gui_index1].destroy()
-    add_settings_element_from_json_item(milestone2, settings_flow, gui_index1)
-    add_settings_element_from_json_item(milestone1, settings_flow, gui_index2)
+    gui_index1 = event.element.parent.parent.get_index_in_parent()
+    gui_index2 = gui_index1 + index_delta
+    gui_index1, gui_index2 = math.min(gui_index1, gui_index2), math.max(gui_index1, gui_index2) -- Now index1 is always the first element
+    gui_index1 = math.max(gui_index1, 1) -- Don't go beyond first element
+    gui_index2 = math.min(gui_index2, #settings_flow.children) -- Don't go beyond the last element
+
+    settings_flow.swap_children(gui_index1, gui_index2)
+
     refresh_arrow_buttons(gui_index1, settings_flow)
     refresh_arrow_buttons(gui_index2, settings_flow)
 end
