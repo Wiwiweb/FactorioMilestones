@@ -222,7 +222,7 @@ function build_display_page(player)
 
     local inner_frame = get_inner_frame(player.index)
     inner_frame.clear() -- Just in case the GUI didn't close through close_gui
-    local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll"}
+    local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll", style="flib_naked_scroll_pane"}
 
     local global_force = global.forces[player.force.name]
 

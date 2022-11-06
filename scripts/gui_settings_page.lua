@@ -204,8 +204,9 @@ function build_settings_page(player)
     main_frame.milestones_dialog_buttons.visible = true
 
     local inner_frame = get_inner_frame(player.index)
+    local settings_outer_flow = inner_frame.add{type="flow", name="milestones_settings_flow", direction="vertical", style="milestones_settings_flow"}
 
-    local preset_flow = inner_frame.add{type="flow", name="milestones_preset_flow", direction="horizontal"}
+    local preset_flow = settings_outer_flow.add{type="flow", name="milestones_preset_flow", direction="horizontal"}
     preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
 
     -- Preset dropdown
@@ -231,12 +232,12 @@ function build_settings_page(player)
     preset_flow.add{type="sprite-button", name="milestones_export_button", tooltip={"milestones.settings_export"}, sprite="utility/export_slot", style="tool_button",
         tags={action="milestones_open_export"}}
 
-    local settings_scroll = inner_frame.add{type="scroll-pane", name="milestones_settings_scroll"}
+    local settings_scroll = settings_outer_flow.add{type="scroll-pane", name="milestones_settings_scroll", style="milestones_settings_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
     global.players[player.index].settings_flow = settings_flow
     fill_settings_flow(settings_flow, global.loaded_milestones)
 
-    local buttons_flow = inner_frame.add{type="flow", direction="horizontal"}
+    local buttons_flow = settings_outer_flow.add{type="flow", direction="horizontal"}
     for _, type in pairs({"group", "item", "fluid", "technology", "kill"}) do
         buttons_flow.add{type="button",
             caption={"", "[img=milestones_icon_"..type.."_black] ", {"milestones.settings_add_"..type}},

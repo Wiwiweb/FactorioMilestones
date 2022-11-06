@@ -1,15 +1,17 @@
 local data_util = require("__flib__.data-util")
 local styles = data.raw["gui-style"].default
 
-styles.milestones_inner_frame = {
-    type = "frame_style",
-    parent = "inside_shallow_frame_with_padding",
-    vertically_stretchable = "on",
-    vertical_flow_style = {
-      type = "vertical_flow_style",
-      horizontal_align = "center",
-      vertical_spacing = 8,
-    }
+styles.milestones_settings_flow = {
+    type = "vertical_flow_style",
+    horizontal_align = "center",
+    vertical_spacing = 8,
+    padding = 15
+}
+
+styles.milestones_settings_scroll = {
+  type = "scroll_pane_style",
+  parent = "flib_naked_scroll_pane",
+  padding = 0
 }
 
 styles.milestones_deep_frame_in_shallow_frame = {

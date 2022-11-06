@@ -119,4 +119,12 @@ return {
         log("Running 1.3.8 migration")
         initialize_alias_table()
     end,
+
+    ["1.3.10"] = function()
+        log("Running 1.3.10 migration")
+        -- inner frame GUI changes, we must recreate GUIs
+        for _, player in pairs(game.players) do
+            reinitialize_player(player)
+        end
+    end,
 }

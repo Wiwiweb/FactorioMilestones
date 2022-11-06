@@ -84,7 +84,7 @@ function build_gui_frames(player)
     }
     titlebar.drag_target = outer_frame
 
-    local inner_frame = main_frame.add{type="frame", name="milestones_inner_frame", direction="vertical", style="milestones_inner_frame"}
+    local inner_frame = main_frame.add{type="frame", name="milestones_inner_frame", direction="vertical", style="inside_shallow_frame"}
 
     local dialog_buttons_bar = main_frame.add{type="flow", style="dialog_buttons_horizontal_flow", name="milestones_dialog_buttons", direction="horizontal"}
     dialog_buttons_bar.add{type="button", style="back_button", caption={"milestones.settings_back"}, tags={action="milestones_cancel_settings"}}
