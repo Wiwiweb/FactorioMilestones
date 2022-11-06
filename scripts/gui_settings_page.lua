@@ -27,7 +27,7 @@ local function refresh_all_arrow_buttons(settings_flow)
 end
 
 local function add_group(settings_flow, default_name, gui_index)
-    local group_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big", index=gui_index}
+    local group_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_settings", index=gui_index}
     group_flow.add{type="sprite", sprite="milestones_icon_group", tooltip={"milestones.type_group"}}
     group_flow.add{type="label", name="milestones_settings_label", caption={"", {"milestones.type_group"}, ":"}}
     local textfield = group_flow.add{type="textfield", name="milestones_settings_group_name", text=default_name, clear_and_focus_on_right_click=true}
@@ -44,7 +44,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     local prototype
     local elem_button
 
-    local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big", index=gui_index}
+    local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_settings", index=gui_index}
     milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
 
     if milestone.type == "item" then
@@ -106,7 +106,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
 end
 
 local function add_alias_setting(milestone, settings_flow, gui_index)
-    local milestone_flow = settings_flow.add({type="flow", direction="horizontal", style="milestones_horizontal_flow_big", index=gui_index})
+    local milestone_flow = settings_flow.add({type="flow", direction="horizontal", style="milestones_horizontal_flow_big_settings", index=gui_index})
     local caption = {"", {"milestones.settings_alias"}, ": ", milestone.name, " = ", milestone.quantity, "x ", milestone.equals}
     milestone_flow.add({type="label", name="milestones_settings_alias_label", caption=caption, tags={name=milestone.name, equals=milestone.equals, quantity=milestone.quantity}})
 

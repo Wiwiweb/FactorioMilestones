@@ -62,7 +62,7 @@ local function add_milestone_label(milestone_flow, milestone, compact_list, show
 end
 
 local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list, show_estimations)
-    local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big", tags={index=milestone.sort_index}}
+    local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_display", tags={index=milestone.sort_index}}
     local prototype = nil
     if milestone.type == "item" then
         prototype = game.item_prototypes[milestone.name]
@@ -213,6 +213,12 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     return column_count
 end
 
+local function add_n_empty_widgets(table, n)
+    for i = 1, n, 1 do
+        table.add({type="empty-widget"})
+    end
+end
+
 function build_display_page(player)
     local main_frame = get_main_frame(player.index)
     main_frame.milestones_titlebar.milestones_main_label.caption = {"milestones.title"}
@@ -231,18 +237,35 @@ function build_display_page(player)
     local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
     local show_estimations = settings.get_player_settings(player)["milestones_show_estimations"].value
 
-    if view_by_group and table_size(global_force.milestones_by_group) > 1 then
+    local nb_groups = table_size(global_force.milestones_by_group)
+    if view_by_group and nb_groups > 1 then
         local column_count = get_column_count_with_groups(player, global_force.milestones_by_group, compact_list, show_estimations)
+        local milestones_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
+        local i = 1
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
-            display_scroll.add{type="label", caption=group_name, style="caption_label"}
-            local group_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
-            for _, milestone in pairs(group_milestones) do
-                add_milestone_item(group_table, milestone, print_milliseconds, compact_list, show_estimations)
-            end
-            display_scroll.add{type="line"}
-        end
-        display_scroll.children[#display_scroll.children].destroy() -- Remove last line
+            -- Group title
+            milestones_table.add({type="label", caption=group_name, style="caption_label"})
+            add_n_empty_widgets(milestones_table, column_count-1)
 
+            for _, milestone in pairs(group_milestones) do
+                add_milestone_item(milestones_table, milestone, print_milliseconds, compact_list, show_estimations)
+            end
+            add_n_empty_widgets(milestones_table, column_count - (#group_milestones % column_count))
+
+            -- Lines
+            if i < nb_groups then -- Don't add line after the last group
+                if column_count == 1 then
+                    milestones_table.add({type="line"})
+                else
+                    milestones_table.add({type="line", style="milestones_line_left"})
+                    for j = 2, column_count-1 do
+                        milestones_table.add({type="line", style="milestones_line_center"})
+                    end
+                    milestones_table.add({type="line", style="milestones_line_right"})
+                end
+                i = i + 1
+            end
+        end
     else
         -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
         local nb_milestones = #global_force.complete_milestones + #global_force.incomplete_milestones

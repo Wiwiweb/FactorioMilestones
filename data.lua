@@ -30,16 +30,23 @@ styles.milestones_horizontal_flow_center = {
   vertical_align = "center",
 }
 
-styles.milestones_horizontal_flow_big = {
+styles.milestones_horizontal_flow_big_settings = {
   type = "horizontal_flow_style",
   parent = "milestones_horizontal_flow_center",
   minimal_width = 150,
-  horizontal_spacing = 8
+  horizontal_spacing = 8,
+}
+
+styles.milestones_horizontal_flow_big_display = {
+  type = "horizontal_flow_style",
+  parent = "milestones_horizontal_flow_big_settings",
+  left_padding = 16,
+  right_padding = 16
 }
 
 styles.milestones_table_style = {
   type = "table_style",
-  horizontal_spacing = 32
+  horizontal_spacing = 0
 }
 
 styles.milestones_small_button = {
@@ -113,6 +120,17 @@ styles.milestones_very_short_spacer = {
   type = "empty_widget_style",
   width = 40
 }
+
+styles.milestones_line_left = table.deepcopy(styles.line)
+styles.milestones_line_left.border.right_end = styles.line.border.horizontal_line
+
+styles.milestones_line_right = table.deepcopy(styles.line)
+styles.milestones_line_right.border.left_end = styles.line.border.horizontal_line
+
+styles.milestones_line_center = table.deepcopy(styles.line)
+styles.milestones_line_center.border.right_end = styles.line.border.horizontal_line
+styles.milestones_line_center.border.left_end = styles.line.border.horizontal_line
+
 
 data:extend{
     {
