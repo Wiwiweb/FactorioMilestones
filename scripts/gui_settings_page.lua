@@ -264,11 +264,12 @@ local function update_checkbox_states(settings_flow, settings_selection_indexes)
 end
 
 local function update_buttons_enabled_state(settings_outer_flow, settings_selection_indexes)
-    local enabled = table_size(settings_selection_indexes) > 0 or #settings_outer_flow.milestones_settings_scroll.milestones_settings_inner_flow.children == 0
+    local is_anything_selected = table_size(settings_selection_indexes) > 0
+    local add_enabled = is_anything_selected or #settings_outer_flow.milestones_settings_scroll.milestones_settings_inner_flow.children == 0
     for _, button in pairs(settings_outer_flow.milestones_button_flow.children) do
-        button.enabled = enabled
+        button.enabled = add_enabled
     end
-    settings_outer_flow.milestones_delete_settings_button.enabled = enabled
+    settings_outer_flow.milestones_delete_settings_button.enabled = is_anything_selected
 end
 
 function select_setting(event)
@@ -357,6 +358,7 @@ function delete_selected_settings(player_index)
     end
 
     global_player.settings_selection_indexes = {}
+    update_buttons_enabled_state(global_player.settings_flow.parent.parent, global_player.settings_selection_indexes)
 end
 
 function add_setting(player_index, button_element)
