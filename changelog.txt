@@ -1,7 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.12
 Date: ????
-  Changes:
+
+  Bugfixes:
+    - Fix GUI sometimes being too wide for the screen when using Compact mode. 
+      Also, the GUI will now try to fit within 90% of the screen width instead of trying to use as much of the screen as possible.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.11
 Date: 2022-11-09

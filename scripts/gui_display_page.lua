@@ -182,15 +182,16 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     local nb_groups = table_size(milestones_by_group)
 
     local real_width = player.display_resolution.width * (1 / player.display_scale)
-    -- 260px is about the max width of one column (3-digit hours time and 2-digit estimation)
-    local max_column_width = 260
+    local target_width = real_width * 0.9
+    -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation)
+    local max_column_width = 283
     if compact_list then
-        max_column_width = max_column_width - 86
+        max_column_width = max_column_width - 76
     end
     if not show_estimations then
-        max_column_width = max_column_width - 46
+        max_column_width = max_column_width - 47
     end
-    local max_nb_columns = math.ceil(real_width / max_column_width) - 1
+    local max_nb_columns = math.ceil(target_width / max_column_width) - 1
     local row_count = nb_groups * 2
     local column_count = 1
     local milestone_counts_by_group = {}
