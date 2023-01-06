@@ -411,7 +411,7 @@ function add_setting(player_index, button_element)
     if only_element then
         update_buttons_enabled_state(settings_flow.parent.parent, global_player.settings_selection_indexes)
     else
-         refresh_arrow_buttons(last_selected_element_index, settings_flow)
+        refresh_arrow_buttons(last_selected_element_index, settings_flow)
     end
 
     local inner_frame = get_inner_frame(player_index)
@@ -514,12 +514,15 @@ end)
 function preset_dropdown_changed(event)
     event.element.tags = {action="milestones_change_preset", imported=false}
     local selected_preset_name = event.element.get_item(event.element.selected_index)
-    local settings_flow = global.players[event.player_index].settings_flow
+    local global_player = global.players[event.player_index]
+    local settings_flow = global_player.settings_flow
     settings_flow.clear()
     if selected_preset_name ~= "Empty" and presets[selected_preset_name] then
         fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
         get_outer_frame(event.player_index).force_auto_center()
     end
+    global_player.settings_selection_indexes = {}
+    update_buttons_enabled_state(settings_flow.parent.parent, global_player.settings_selection_indexes)
 end
 
 function is_settings_page_visible(player_index)
