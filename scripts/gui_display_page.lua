@@ -188,7 +188,9 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     if compact_list then
         max_column_width = max_column_width - 76
     end
-    if not show_estimations then
+    if show_estimations then
+        max_column_width = math.max(max_column_width, 264) -- "XXX - XXX" estimation window is 264px
+    else
         max_column_width = max_column_width - 47
     end
     local max_nb_columns = math.ceil(target_width / max_column_width) - 1

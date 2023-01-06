@@ -18,10 +18,10 @@ script.on_init(function()
 
     initial_preset_string = settings.global["milestones_initial_preset"].value
     if initial_preset_string ~= "" then
-        initial_preset, error = convert_and_validate_imported_json(initial_preset_string)
+        initial_preset, err = convert_and_validate_imported_json(initial_preset_string)
         if initial_preset == nil then
             table.insert(global.delayed_chat_messages, {"milestones.message_invalid_initial_preset"})
-            table.insert(global.delayed_chat_messages, error)
+            table.insert(global.delayed_chat_messages, err)
         else
             global.current_preset_name = "Imported"
             global.loaded_milestones = initial_preset
