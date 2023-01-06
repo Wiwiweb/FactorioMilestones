@@ -2,9 +2,14 @@
 Version: 1.3.14
 Date: ????
 
+  Changes:
+    - Tweaks to IR3 preset (Added Heavy picket, graphene, and electrum. Replaced special projects pack end goal count with a technology milestone, since productivity in labs can actually make the required number of packs variable).
+      As usual you will need to refresh your milestone set yourself if you are already in the middle of a playthrough (Settings -> Switch to Empty -> Switch to the preset you want -> Confirm).
+
   Bugfixes:
     - Fix GUI sometimes being too wide for the screen when using Compact mode. (Again!)
-    - Fix settings GuI "Add X" button state being wrong when changing preset.
+    - Fix settings GUI "Add X" buttons states being wrong when changing preset.
+    - Fix issue where technologies that end with a number (e.g. "Electronics 3") would be considered researched during backfilling even if they were not.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.13

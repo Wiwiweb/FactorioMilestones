@@ -331,7 +331,8 @@ function is_tech_milestone_reached(milestone, technology)
     if milestone.type == "technology" and
        technology.name == milestone.name and
        -- strict > because the level we get is the current researchable level, not the researched level
-       (technology.researched or technology.level > milestone.quantity) then
+       -- if technology.level == technology.prototype.level then this is just a non-repeating tech with a number at the end e.g. 'Electronics 3'
+       (technology.researched or (technology.level > milestone.quantity and technology.level > technology.prototype.level)) then
         return true
     end
     return false
