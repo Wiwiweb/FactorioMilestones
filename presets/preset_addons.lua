@@ -337,4 +337,12 @@ preset_addons = {
             },
         }
     },
+
+    ["Cat"] = {
+        required_mods = {"petcat"},
+        milestones = {
+            {type="group", name="Progress"},
+            {type="item", name="cat", quantity=1},
+        }
+    },
 }

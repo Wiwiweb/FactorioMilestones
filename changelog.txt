@@ -5,6 +5,7 @@ Date: ????
   Changes:
     - Tweaks to IR3 preset (Added Heavy picket, graphene, and electrum. Replaced special projects pack end goal count with a technology milestone, since productivity in labs can actually make the required number of packs variable).
     - Tweaks to PyMods presets (Added Dig-o-saurus, Thikat, Caravan, and Oculus)
+    - Add preset addon for the "Cat" mod.
     - As usual you will need to refresh your milestone set yourself if you are already in the middle of a playthrough (Settings -> Switch to Empty -> Switch to the preset you want -> Confirm).
 
   Bugfixes:
