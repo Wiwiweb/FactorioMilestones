@@ -339,6 +339,35 @@ function is_milestone_reached(milestone, global_force, technologies)
     end
 end
 
+function remove_invalid_milestones_all_forces()
+    for _force_name, global_force in pairs(global.forces) do
+        remove_invalid_milestones_for_force(global_force)
+    end
+end
+
+function remove_invalid_milestones_for_force(global_force)
+    remove_invalid_milestones(global_force.complete_milestones)
+    remove_invalid_milestones(global_force.incomplete_milestones)
+    for _group_name, milestones_by_group in pairs(global_force.milestones_by_group) do
+        remove_invalid_milestones(milestones_by_group, true)
+    end
+end
+
+function remove_invalid_milestones(milestones, silent)
+    local i = 1
+    while i < #milestones do
+        local milestone = milestones[i]
+        if is_valid_milestone(milestone) then
+            i = i + 1
+        else
+            table.remove(milestones, i)
+            if not silent then
+                table.insert(global.delayed_chat_messages, {"milestones.message_invalid_item", milestone.name})
+            end
+        end
+    end
+end
+
 function is_valid_milestone(milestone)
     local prototype
     if milestone.type == "item" then

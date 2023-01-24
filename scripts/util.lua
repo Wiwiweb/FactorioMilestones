@@ -42,3 +42,25 @@ function convert_and_validate_imported_json(import_string)
 
     return validate_milestones(imported_milestones)
 end
+
+local delayed_chat_delay = 240
+
+local function print_chat_delayed(event)
+    log("Printing delayed chat")
+    if event.tick == 0 then return end
+    for _, delayed_chat_message in pairs(global.delayed_chat_messages) do
+        game.print(delayed_chat_message)
+    end
+    global.delayed_chat_messages = {}
+    script.on_nth_tick(delayed_chat_delay, nil)
+end
+
+function create_delayed_chat()
+    script.on_nth_tick(delayed_chat_delay, function(event)
+        print_chat_delayed(event)
+    end)
+end
+
+function print_delayed_red(message)
+    table.insert(global.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
+end

@@ -103,6 +103,7 @@ script.on_configuration_changed(function(event)
 
     if next(event.mod_changes) ~= nil then
         reload_presets()
+        remove_invalid_milestones_all_forces()
     end
 
     -- We also do this here because for some reason on_nth_tick sometimes doesn't work in on_init

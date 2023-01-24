@@ -3,34 +3,6 @@ require("presets.presets")
 require("presets.presets_pymods")
 require("presets.preset_addons")
 
-local function get_delayed_chat_delay()
-    local delay = 240
-    if settings.global["milestones_check_frequency"].value == delay then -- Avoid on_nth_tick collisions
-        return delay + 1
-    end
-    return delay
-end
-
-local function print_chat_delayed(event)
-    log("Printing delayed chat")
-    if event.tick == 0 then return end
-    for _, delayed_chat_message in pairs(global.delayed_chat_messages) do
-        game.print(delayed_chat_message)
-    end
-    global.delayed_chat_messages = {}
-    script.on_nth_tick(get_delayed_chat_delay(), nil)
-end
-
-function create_delayed_chat()
-    script.on_nth_tick(get_delayed_chat_delay(), function(event)
-        print_chat_delayed(event)
-    end)
-end
-
-local function print_delayed_red(message)
-    table.insert(global.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
-end
-
 local function validate_milestone_presets(interface_name, presets_to_validate, existing_table)
     local valid = true
     if type(presets_to_validate) ~= "table" then

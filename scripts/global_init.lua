@@ -3,7 +3,7 @@ local table = require("__flib__.table")
 function initialize_force_if_needed(force)
     if global.forces[force.name] == nil and next(force.players) ~= nil then -- Don't bother with forces without players
         log("Initializing global for force " .. force.name)
-        global.forces[force.name] = {
+        global_force = {
             complete_milestones = {},
             incomplete_milestones = {},
             milestones_by_group = {},
@@ -11,6 +11,7 @@ function initialize_force_if_needed(force)
             fluid_stats = force.fluid_production_statistics,
             kill_stats = force.kill_count_statistics,
         }
+        global.forces[force.name] = global_force
 
         local current_group = "Other"
         for i, loaded_milestone in pairs(global.loaded_milestones) do
@@ -20,12 +21,13 @@ function initialize_force_if_needed(force)
                 local inserted_milestone = table.deep_copy(loaded_milestone)
                 inserted_milestone.sort_index = i
                 inserted_milestone.group = current_group
-                global.forces[force.name].milestones_by_group[current_group] = global.forces[force.name].milestones_by_group[current_group] or {}
+                global_force.milestones_by_group[current_group] = global_force.milestones_by_group[current_group] or {}
                 -- Intentionally insert the same reference in both tables
-                table.insert(global.forces[force.name].incomplete_milestones, inserted_milestone)
-                table.insert(global.forces[force.name].milestones_by_group[current_group], inserted_milestone)
+                table.insert(global_force.incomplete_milestones, inserted_milestone)
+                table.insert(global_force.milestones_by_group[current_group], inserted_milestone)
             end
         end
+        remove_invalid_milestones_for_force(global_force)
         return backfill_completion_times(force)
     end
     return false
