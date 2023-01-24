@@ -5,15 +5,9 @@ function table_contains(table, element)
     return false
 end
 
-function convert_and_validate_imported_json(import_string)
-    local imported_milestones = game.json_to_table(import_string)
-
-    if imported_milestones == nil then
-        return nil, {"milestones.message_invalid_import_json"}
-    end
-
+function validate_milestones(milestones)
     local valid_categories = {'item', 'fluid', 'technology', 'kill', 'group', 'alias'}
-    for _, milestone in pairs(imported_milestones) do
+    for _, milestone in pairs(milestones) do
         if not table_contains(valid_categories, milestone.type) then
             return nil, {"", {"milestones.message_invalid_import_type"}, milestone.type}
         end
@@ -36,6 +30,15 @@ function convert_and_validate_imported_json(import_string)
             return nil, {"", {"milestones.message_invalid_import_missing_field"}, "equals"}
         end
     end
+    return milestones, nil
+end
 
-    return imported_milestones, nil
+function convert_and_validate_imported_json(import_string)
+    local imported_milestones = game.json_to_table(import_string)
+
+    if imported_milestones == nil then
+        return nil, {"milestones.message_invalid_import_json"}
+    end
+
+    return validate_milestones(imported_milestones)
 end

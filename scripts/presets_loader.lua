@@ -27,7 +27,50 @@ function create_delayed_chat()
     end)
 end
 
-local function is_preset_valid(preset)
+local function print_delayed_red(message)
+    table.insert(global.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
+end
+
+local function validate_milestone_presets(interface_name, presets_to_validate)
+    local valid = true
+    if type(presets_to_validate) ~= "table" then
+        print_delayed_red("Interface " .. interface_name .. " should return a table.")
+        valid = false
+    else
+        for preset_name, preset in pairs(presets_to_validate) do
+            if type(preset_name) ~= "string" then
+                print_delayed_red("Interface " .. interface_name .. " should return a table with named keys.")
+                valid = false
+                break
+            end
+            if presets[preset_name] then
+                print_delayed_red("Preset " .. preset_name .. " already exists.")
+                valid = false
+                break
+            end
+            if not preset.required_mods then
+                print_delayed_red("Preset " .. preset_name .. " is missing a `required_mods` value.")
+                valid = false
+            end
+            if not preset.milestones then
+                print_delayed_red("Preset " .. preset_name .. " is missing a `milestones` value.")
+                valid = false
+            else
+                _, error = validate_milestones(preset.milestones)
+                if error then
+                    print_delayed_red({"", "Preset ", preset_name, ": ", error})
+                    valid = false
+                end
+            end
+        end
+    end
+    if not valid then
+        print_delayed_red("[img=utility/danger_icon] Please warn the mod author for " .. interface_name .. " about the errors above.")
+    end
+    return valid
+end
+
+local function is_preset_mods_enabled(preset)
     local forbidden_mods = preset.forbidden_mods or {}
     for _, mod_name in pairs(preset.required_mods) do
         if not game.active_mods[mod_name] then return false end
@@ -42,9 +85,22 @@ function load_presets()
     log("Loading presets")
     global.valid_preset_names = {"Empty"}
 
+    -- See presets.lua to find out how to use this reverse remote interface to add your own preset.
+    for interface_name, functions in pairs(remote.interfaces) do
+        if functions["milestones_presets"] then
+          local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
+          if validate_milestone_presets(interface_name, remote_milestones_presets) then
+            ---@cast remote_milestones_presets table
+            for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
+                presets[remote_preset_name] = remote_preset
+            end
+          end
+        end
+      end
+
     local max_nb_mods_matched = -1
     for preset_name, preset in pairs(presets) do
-        if is_preset_valid(preset) then
+        if is_preset_mods_enabled(preset) then
             table.insert(global.valid_preset_names, preset_name)
             if #preset.required_mods > max_nb_mods_matched then
                 max_nb_mods_matched = #preset.required_mods
@@ -68,7 +124,7 @@ function load_preset_addons()
     preset_addons_loaded = {}
 
     for preset_addon_name, preset_addon in pairs(preset_addons) do
-        if is_preset_valid(preset_addon) then
+        if is_preset_mods_enabled(preset_addon) then
             table.insert(preset_addons_loaded, preset_addon_name)
             for _, milestone in ipairs(preset_addon.milestones) do
                 table.insert(global.loaded_milestones, milestone)
@@ -89,7 +145,7 @@ function reload_presets()
     local added_presets = {}
     local new_valid_preset_names = {"Empty"}
     for preset_name, preset in pairs(presets) do
-        if is_preset_valid(preset) then
+        if is_preset_mods_enabled(preset) then
             table.insert(new_valid_preset_names, preset_name)
             if not table_contains(global.valid_preset_names, preset_name) then
                 table.insert(added_presets, preset_name)

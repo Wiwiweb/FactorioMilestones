@@ -5,6 +5,32 @@
 -- The preset with the highest number of "required mods" matches will be selected. (e.g. Bob's and Angel's will be selected over just Bob's)
 -- If the mod is compatible with a limited amount of other major mods, you can have a preset for combinations (e.g. There is an SE preset, a K2 preset, and a SE+K2 preset)
 
+-- To add your own custom presets, have your mod implement a "milestones_presets" interface, which the Milestones mod will call (in presets_loader.lua).
+-- Example: 
+-- remote.add_interface("my-cool-mod", {
+--     milestones_presets = function()
+--         return {
+--             ["My Cool Mod"] = {
+--                 required_mods = {"my-cool-mod"},
+--                 milestones = {
+--                     {type="group", name="Science"},
+--                     {type="item",  name="my-cool-mod-science-pack", quantity=1},
+--                 }
+--             },
+--             ["My Cool Mod (with Weapons extras)"] = {
+--                 required_mods = {"my-cool-mod", "my-cool-mod-weapons"},
+--                 milestones = {
+--                     {type="group", name="Science"},
+--                     {type="item",  name="my-cool-mod-science-pack", quantity=1},
+--                     {type="group", name="Weapons"},
+--                     {type="item",  name="my-cool-mod-thermonuclear-antimatter-atomic-plasma-multibarrel-automatic-rocket-rifle", quantity=1},
+--                 }
+--             }
+--         }
+--     end
+-- })
+
+
 presets = {
     ["Vanilla"] = {
         required_mods = {},
