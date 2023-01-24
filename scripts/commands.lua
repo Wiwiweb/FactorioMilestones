@@ -24,7 +24,7 @@ function debug_set_milestones_time(command_data)
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
         if milestone.name == name then
-            mark_milestone_reached(force, milestone, tick, i, lower_bound_tick)
+            mark_milestone_reached(global_force, milestone, tick, i, lower_bound_tick)
             refresh_gui_for_force(force)
             game.print("Milestone set.")
             return

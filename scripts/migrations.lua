@@ -129,4 +129,15 @@ return {
             end
         end
     end,
+
+    ["1.3.14"] = function()
+        log("Running 1.3.14 migration")
+        -- Caching some calculations in global_forces for optimisation
+        for force_name, global_force in pairs(global.forces) do
+            local force = game.forces[force_name]
+            global_force.item_stats = force.item_production_statistics
+            global_force.fluid_stats = force.fluid_production_statistics
+            global_force.kill_stats = force.item_production_statistics
+        end
+    end,
 }

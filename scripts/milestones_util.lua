@@ -90,10 +90,9 @@ function initialize_alias_table()
     end
 end
 
-function mark_milestone_reached(force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional
+function mark_milestone_reached(global_force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional
     milestone.completion_tick = tick
     if lower_bound_tick then milestone.lower_bound_tick = lower_bound_tick end
-    local global_force = global.forces[force.name]
     table.insert(global_force.complete_milestones, milestone)
     table.remove(global_force.incomplete_milestones, milestone_index)
     sort_milestones(global_force.milestones_by_group[milestone.group])

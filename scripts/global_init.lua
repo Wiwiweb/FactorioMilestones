@@ -6,7 +6,10 @@ function initialize_force_if_needed(force)
         global.forces[force.name] = {
             complete_milestones = {},
             incomplete_milestones = {},
-            milestones_by_group = {}
+            milestones_by_group = {},
+            item_stats = force.item_production_statistics,
+            fluid_stats = force.fluid_production_statistics,
+            kill_stats = force.item_production_statistics,
         }
 
         local current_group = "Other"
