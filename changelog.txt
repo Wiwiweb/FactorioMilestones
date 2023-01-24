@@ -16,6 +16,9 @@ Date: ????
     - Fix settings GUI "Add X" buttons states being wrong when changing preset.
     - Fix issue where technologies that end with a number (e.g. "Electronics 3") would be considered researched during backfilling even if they were not.
 
+  Locale:
+    - Chinese translation thanks to luaotix.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.13
 Date: 2022-12-26
