@@ -18,6 +18,7 @@ Date: ????
   Bugfixes:
     - Fix GUI sometimes being too wide for the screen when using Compact mode. (Again!)
     - Fix settings GUI "Add X" buttons states being wrong when changing preset.
+    - Fix settings GUI selection state being wrong after moving a selected line.
     - Fix issue where technologies that end with a number (e.g. "Electronics 3") would be considered researched during backfilling even if they were not.
 
   Locale:

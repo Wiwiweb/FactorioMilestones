@@ -329,6 +329,10 @@ function swap_settings(player_index, event)
 
     settings_flow.swap_children(gui_index1, gui_index2)
 
+    -- Swap selection
+    local global_player = global.players[event.player_index]
+    global_player.settings_selection_indexes[gui_index1], global_player.settings_selection_indexes[gui_index2] = global_player.settings_selection_indexes[gui_index2], global_player.settings_selection_indexes[gui_index1]
+
     refresh_arrow_buttons(gui_index1, settings_flow)
     refresh_arrow_buttons(gui_index2, settings_flow)
 end
