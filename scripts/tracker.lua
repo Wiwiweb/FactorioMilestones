@@ -47,15 +47,16 @@ end
 
 function track_item_creation(event)
     for force_name, global_force in pairs(global.forces) do
-        local item_counts = global_force.item_stats.input_counts
-        local fluid_counts = global_force.fluid_stats.input_counts
-        local kill_counts = global_force.kill_stats.input_counts
+        local milestones_per_tick = #global_force.incomplete_milestones / global.milestones_check_frequency_setting
+        local step_nb = event.tick % global.milestones_check_frequency_setting
+        local i = math.floor(milestones_per_tick * step_nb) + 1
+        local to_i = math.floor(milestones_per_tick * (step_nb + 1))
+        -- log("(per tick: "..milestones_per_tick..") tick " .. event.tick .. "  : " .. i .. "-" .. to_i)
 
-        local i = 1
-        while i <= #global_force.incomplete_milestones do
+        while i <= to_i do
             local milestone = global_force.incomplete_milestones[i]
             if milestone.type ~= "technology"
-            and is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts) then
+            and is_production_milestone_reached(milestone, global_force) then
                 if milestone.next then
                     local next_milestone = create_next_milestone(force_name, milestone)
                     if next_milestone then
@@ -75,8 +76,9 @@ function track_item_creation(event)
         end
     end
 end
+script.on_event(defines.events.on_tick, track_item_creation)
 
-script.on_event(defines.events.on_research_finished, function(event)
+function check_technology_milestone_reached(event)
     local technology_researched = event.research
     local force = event.research.force
     local global_force = global.forces[force.name]
@@ -95,5 +97,6 @@ script.on_event(defines.events.on_research_finished, function(event)
             i = i + 1
         end
     end
-end)
+end
+script.on_event(defines.events.on_research_finished, check_technology_milestone_reached)
 

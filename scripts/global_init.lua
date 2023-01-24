@@ -9,7 +9,7 @@ function initialize_force_if_needed(force)
             milestones_by_group = {},
             item_stats = force.item_production_statistics,
             fluid_stats = force.fluid_production_statistics,
-            kill_stats = force.item_production_statistics,
+            kill_stats = force.kill_count_statistics,
         }
 
         local current_group = "Other"

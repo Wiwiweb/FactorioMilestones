@@ -295,24 +295,24 @@ function backfill_completion_times(force)
     return backfilled_anything
 end
 
-function is_production_milestone_reached(milestone, item_counts, fluid_counts, kill_counts)
-    local type_count
+function is_production_milestone_reached(milestone, global_force)
+    local stats
     if milestone.type == "item" then
-        type_count = item_counts
+        stats = global_force.item_stats
     elseif milestone.type == "fluid" then
-        type_count = fluid_counts
+        stats = global_force.fluid_stats
     elseif milestone.type == "kill" then
-        type_count = kill_counts
+        stats = global_force.kill_stats
     else
         error("Invalid milestone type! " .. milestone.type)
     end
 
-    local milestone_count = type_count[milestone.name]
+    local milestone_count = stats.get_input_count(milestone.name)
 
     -- Aliases
     if global.production_aliases[milestone.name] then
         for _, alias in pairs(global.production_aliases[milestone.name]) do
-            local alias_count = type_count[alias.name]
+            local alias_count = stats.get_input_count(alias.name)
             if alias_count then
                 milestone_count = milestone_count or 0 -- Could be nil
                 milestone_count = milestone_count + alias_count * alias.quantity
@@ -320,10 +320,7 @@ function is_production_milestone_reached(milestone, item_counts, fluid_counts, k
         end
     end
 
-    if milestone_count ~= nil and milestone_count >= milestone.quantity then
-        return true
-    end
-    return false
+    return milestone_count and milestone_count >= milestone.quantity
 end
 
 function is_tech_milestone_reached(milestone, technology)

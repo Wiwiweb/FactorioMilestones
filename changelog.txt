@@ -8,6 +8,9 @@ Date: ????
     - Add preset addon for the "Cat" mod.
     - As usual you will need to refresh your milestone set yourself if you are already in the middle of a playthrough (Settings -> Switch to Empty -> Switch to the preset you want -> Confirm).
 
+  Optimizations:
+    - Milestone checks are now spread over every tick of the frequency interval (the "Ticks between each check" mod setting) instead of happening all at once. This should solve spikes of performance hit when playing with a large amount of milestones.
+
   Bugfixes:
     - Fix GUI sometimes being too wide for the screen when using Compact mode. (Again!)
     - Fix settings GUI "Add X" buttons states being wrong when changing preset.
