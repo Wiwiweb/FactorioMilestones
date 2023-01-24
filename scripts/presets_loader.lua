@@ -31,7 +31,7 @@ local function print_delayed_red(message)
     table.insert(global.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
 end
 
-local function validate_milestone_presets(interface_name, presets_to_validate)
+local function validate_milestone_presets(interface_name, presets_to_validate, existing_table)
     local valid = true
     if type(presets_to_validate) ~= "table" then
         print_delayed_red("Interface " .. interface_name .. " should return a table.")
@@ -43,7 +43,7 @@ local function validate_milestone_presets(interface_name, presets_to_validate)
                 valid = false
                 break
             end
-            if presets[preset_name] then
+            if existing_table[preset_name] then
                 print_delayed_red("Preset " .. preset_name .. " already exists.")
                 valid = false
                 break
@@ -89,7 +89,7 @@ function load_presets()
     for interface_name, functions in pairs(remote.interfaces) do
         if functions["milestones_presets"] then
           local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
-          if validate_milestone_presets(interface_name, remote_milestones_presets) then
+          if validate_milestone_presets(interface_name, remote_milestones_presets, presets) then
             ---@cast remote_milestones_presets table
             for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
                 presets[remote_preset_name] = remote_preset
@@ -122,6 +122,19 @@ function load_preset_addons()
     log("Loading presets addons")
     log(serpent.block(game.active_mods))
     preset_addons_loaded = {}
+
+    -- See presets.lua to find out how to use this reverse remote interface to add your own preset addon.
+    for interface_name, functions in pairs(remote.interfaces) do
+        if functions["milestones_preset_addons"] then
+            local remote_milestones_presets = remote.call(interface_name, "milestones_preset_addons")
+            if validate_milestone_presets(interface_name, remote_milestones_presets, preset_addons) then
+                ---@cast remote_milestones_presets table
+                for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
+                    preset_addons[remote_preset_name] = remote_preset
+                end
+            end
+        end
+    end
 
     for preset_addon_name, preset_addon in pairs(preset_addons) do
         if is_preset_mods_enabled(preset_addon) then

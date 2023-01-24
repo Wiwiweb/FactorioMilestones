@@ -11,6 +11,10 @@ Date: ????
   Optimizations:
     - Milestone checks are now spread over every tick of the frequency interval (the "Ticks between each check" mod setting) instead of happening all at once. This should solve spikes of performance hit when playing with a large amount of milestones.
 
+  Compatibility:
+    - You can now have your mod provide presets and preset addons by implementing a `milestones_presets` or `milestones_preset_addons` remote interface.
+      Please check out the comments in presets.lua and preset_addons.lua for more details.
+
   Bugfixes:
     - Fix GUI sometimes being too wide for the screen when using Compact mode. (Again!)
     - Fix settings GUI "Add X" buttons states being wrong when changing preset.

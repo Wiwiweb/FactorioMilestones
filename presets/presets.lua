@@ -5,7 +5,8 @@
 -- The preset with the highest number of "required mods" matches will be selected. (e.g. Bob's and Angel's will be selected over just Bob's)
 -- If the mod is compatible with a limited amount of other major mods, you can have a preset for combinations (e.g. There is an SE preset, a K2 preset, and a SE+K2 preset)
 
--- To add your own custom presets, have your mod implement a "milestones_presets" interface, which the Milestones mod will call (in presets_loader.lua).
+-- If you would rather do things yourself, you can add your preset in your own mod:
+-- Have your mod implement a "milestones_presets" interface, which the Milestones mod will call (in presets_loader.lua).
 -- Example: 
 -- remote.add_interface("my-cool-mod", {
 --     milestones_presets = function()

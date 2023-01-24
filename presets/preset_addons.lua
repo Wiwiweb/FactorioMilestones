@@ -2,6 +2,23 @@
 -- All addons that meet their "required mods" will be used.
 -- Add milestones for a mod here if the mod is highly modular and could be used with any other major mod.
 
+-- If you would rather do things yourself, you can add your preset addon in your own mod:
+-- Have your mod implement a "milestones_preset_addons" interface, which the Milestones mod will call (in presets_loader.lua).
+-- Example: 
+-- remote.add_interface("ice-armor", {
+--     milestones_preset_addons = function()
+--         return {
+--             ["Ice Armor"] = {
+--                 required_mods = {"ice-armor"},
+--                 milestones = {
+--                     {type="group", name="Progress"},
+--                     {type="item",  name="ice-armor", quantity=1},
+--                 }
+--             }
+--         }
+--     end
+-- })
+
 preset_addons = {
     ["Power Armor MK3"] = {
         required_mods = {"Power Armor MK3"},
