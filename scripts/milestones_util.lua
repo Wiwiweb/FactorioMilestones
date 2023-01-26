@@ -278,7 +278,7 @@ function backfill_completion_times(force)
                 table.insert(global_force.incomplete_milestones, next_milestone)
                 table.insert(global_force.milestones_by_group[next_milestone.group], next_milestone)
             end
-            mark_milestone_reached(force, milestone, upper_bound, i, lower_bound)
+            mark_milestone_reached(global_force, milestone, upper_bound, i, lower_bound)
             backfilled_anything = true
         else
             i = i + 1
