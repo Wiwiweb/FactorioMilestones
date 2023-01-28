@@ -355,7 +355,7 @@ end
 
 function remove_invalid_milestones(milestones, silent)
     local i = 1
-    while i < #milestones do
+    while i <= #milestones do
         local milestone = milestones[i]
         if is_valid_milestone(milestone) then
             i = i + 1

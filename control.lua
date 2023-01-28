@@ -44,6 +44,7 @@ script.on_init(function()
     if backfilled_anything then
         table.insert(global.delayed_chat_messages, {"milestones.message_loaded_into_exiting_game"})
     end
+    remove_invalid_milestones_all_forces()
 
     -- Initialize for existing players in existing save file
     for _, player in pairs(game.players) do
@@ -103,8 +104,8 @@ script.on_configuration_changed(function(event)
 
     if next(event.mod_changes) ~= nil then
         reload_presets()
-        remove_invalid_milestones_all_forces()
     end
+    remove_invalid_milestones_all_forces()
 
     -- We also do this here because for some reason on_nth_tick sometimes doesn't work in on_init
     -- I don't know why
