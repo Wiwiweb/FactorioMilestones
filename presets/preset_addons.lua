@@ -170,13 +170,13 @@ preset_addons = {
     },
 
     ["Bob's Modules"] = {
-        required_mods = {"bobenemies"},
+        required_mods = {"bobmodules"},
         forbidden_mods = {"SeaBlock"},
         milestones = {
             {type="group", name="Progress"},
-            {type="kill", name="speed-module-8", quantity=1},
-            {type="kill", name="effectivity-module-8", quantity=1},
-            {type="kill", name="productivity-module-8", quantity=1},
+            {type="item", name="speed-module-8", quantity=1},
+            {type="item", name="effectivity-module-8", quantity=1},
+            {type="item", name="productivity-module-8", quantity=1},
         }
     },
 
