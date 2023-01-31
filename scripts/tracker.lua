@@ -68,6 +68,7 @@ function track_item_creation(event)
                 mark_milestone_reached(global_force, milestone, game.tick, i)
                 print_milestone_reached(force, milestone)
                 refresh_gui_for_force(force)
+                to_i = math.min(to_i, #global_force.incomplete_milestones) -- Don't go past the end of the table
             else
                 -- When a milestone is reached, incomplete_milestones loses an element
                 -- so we only increment when a milestone is not reached
