@@ -5,6 +5,11 @@ Date: ????
   Bugfixes:
     - Remove duplicated plastic bar milestone from Sea Block presets.
 
+  Locale:
+    - Ukrainian translation thanks to Met en Bouldry.
+    - Chinese translation update thanks to luaotix.
+    - German translation update thanks to knniDE.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.16
 Date: 2023-01-31
