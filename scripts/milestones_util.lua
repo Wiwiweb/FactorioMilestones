@@ -84,8 +84,18 @@ function initialize_alias_table()
     global.production_aliases = {}
     for _, loaded_milestone in pairs(global.loaded_milestones) do
         if loaded_milestone.type == "alias" then
-            global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
-            table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+            local valid_alias = false
+            if game.item_prototypes[loaded_milestone.equals] ~= nil then
+                -- This is an item alias
+                valid_alias = game.item_prototypes[loaded_milestone.name] ~= nil
+            elseif game.entity_prototypes[loaded_milestone.equals] ~= nil then
+                -- This is an entity alias
+                valid_alias = game.entity_prototypes[loaded_milestone.name] ~= nil
+            end
+            if valid_alias then
+                global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
+                table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+            end
         end
     end
 end
