@@ -69,7 +69,6 @@ local function add_remote_presets_to_preset_table()
 end
 
 function load_presets()
-    log("Loading presets")
     global.valid_preset_names = {"Empty"}
 
     add_remote_presets_to_preset_table()
@@ -95,8 +94,6 @@ function load_presets()
 end
 
 function load_preset_addons()
-    log("Loading presets addons")
-    log(serpent.block(game.active_mods))
     preset_addons_loaded = {}
 
     -- See presets.lua to find out how to use this reverse remote interface to add your own preset addon.

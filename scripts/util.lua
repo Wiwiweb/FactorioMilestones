@@ -46,7 +46,6 @@ end
 local delayed_chat_delay = 240
 
 local function print_chat_delayed(event)
-    log("Printing delayed chat")
     if event.tick == 0 then return end
     for _, delayed_chat_message in pairs(global.delayed_chat_messages) do
         game.print(delayed_chat_message)
