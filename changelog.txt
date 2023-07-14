@@ -2,6 +2,12 @@
 Version: 1.3.19
 Date: ????
   Changes:
+
+  Locale:
+    - Added Spanish translation thanks to Frodo45127.
+    - Added Polish translation thanks to wuka.
+    - Updated Japanese translation thanks to YAMATO_Hajime.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.18
 Date: 2023-05-20
