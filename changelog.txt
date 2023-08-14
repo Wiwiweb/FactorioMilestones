@@ -1,9 +1,13 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.20
 Date: ????
+
   Changes:
     - Added plague rocket to default SE presets.
     - Removed some overly verbose log lines.
+
+  Bugfixes:
+    - Fixed turning off an inifnite milestone in settings not actually applying the change.
 
   Compatibility:
     - Presets provided via remote interface now have priority over default presets. This means other mods can override default presets.
