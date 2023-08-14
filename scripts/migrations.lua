@@ -96,7 +96,6 @@ return {
                 milestone.group = "Other"
                 table.insert(global_force.milestones_by_group["Other"], milestone)
             end
-            table.insert(global.delayed_chat_messages, {"milestones.message_migration_130_groups"})
 
             -- Update old estimations with new more accurate estimations
             local force = game.forces[force_name]
