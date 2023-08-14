@@ -16,9 +16,7 @@ local function validate_milestone_presets(interface_name, presets_to_validate, e
                 break
             end
             if existing_table[preset_name] then
-                print_delayed_red("Preset " .. preset_name .. " already exists.")
-                valid = false
-                break
+                log("Preset " .. preset_name .. " already exists. Overriding.")
             end
             if not preset.required_mods then
                 print_delayed_red("Preset " .. preset_name .. " is missing a `required_mods` value.")
