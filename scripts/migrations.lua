@@ -140,4 +140,15 @@ return {
             global_force.kill_stats = force.kill_count_statistics
         end
     end,
+
+    ["1.3.20"] = function()
+        log("Running 1.3.20 migration")
+        -- Recalculate the sort_index of infinite milestones (first is n, second is n.0001, third is n.0002, etc.)
+        for force_name, force in pairs(game.forces) do
+            if global.forces[force_name] ~= nil then
+                merge_new_milestones(force_name, global.loaded_milestones)
+                backfill_completion_times(force)
+            end
+        end
+    end,
 }

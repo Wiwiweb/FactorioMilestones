@@ -143,6 +143,7 @@ function create_next_milestone(force_name, milestone)
 
     new_milestone.lower_bound_tick = nil
     new_milestone.completion_tick = nil
+    new_milestone.sort_index = milestone.sort_index + 0.0001 -- Should work until there's 10000 iterations of an infinite milestone, lol
 
     return new_milestone
 end
@@ -262,7 +263,7 @@ function sort_milestones(milestones)
     table.sort(milestones, function(a,b)
         if a.completion_tick and not b.completion_tick then return true end -- a comes first
         if not a.completion_tick and b.completion_tick then return false end -- b comes first
-        if not a.completion_tick and not b.completion_tick then return a.sort_index < b.sort_index end
+        if a.completion_tick == b.completion_tick then return a.sort_index < b.sort_index end
         return a.completion_tick < b.completion_tick
     end)
 end

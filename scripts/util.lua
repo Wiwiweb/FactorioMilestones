@@ -63,3 +63,7 @@ end
 function print_delayed_red(message)
     table.insert(global.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
 end
+
+function approximately_equal(a, b)
+    return math.abs(a - b) < 0.00001
+end

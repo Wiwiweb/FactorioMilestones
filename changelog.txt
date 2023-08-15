@@ -8,6 +8,7 @@ Date: ????
 
   Bugfixes:
     - Fixed turning off an inifnite milestone in settings not actually applying the change.
+    - Fixed milestones added as part of an infinite milestone not editing the right milestone when trying to edit the estimation time.
 
   Compatibility:
     - Presets provided via remote interface now have priority over default presets. This means other mods can override default presets.
