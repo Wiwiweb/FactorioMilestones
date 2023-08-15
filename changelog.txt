@@ -7,7 +7,7 @@ Date: ????
     - Removed some overly verbose log lines.
 
   Bugfixes:
-    - Fixed turning off an inifnite milestone in settings not actually applying the change.
+    - Fixed turning off an infinite milestone in settings not actually applying the change.
     - Fixed milestones added as part of an infinite milestone not editing the right milestone when trying to edit the estimation time.
 
   Compatibility:
