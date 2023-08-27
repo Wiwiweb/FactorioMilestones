@@ -56,17 +56,33 @@ preset_addons = {
         }
     },
 
+    ["Omnimatter"] = {
+        required_mods = {"omnimatter"},
+        milestones = {
+            {type="group", name="Resources"},
+            {type="item", name="omnium-plate",        quantity=1},
+            {type="item", name="omnicium-plate",      quantity=1},
+
+            {type="group",      name="Progress"},
+            {type="item",       name="omnitractor-1", quantity=1},
+        }
+    },
+
     ["Omnienergy"] = {
         required_mods = {"omnimatter_energy"},
         milestones = {
             {type="group", name="Science"},
-            {type="item", name="energy-science-pack", quantity=1},
-            {type="item", name="energy-science-pack", quantity=1000, next="x10"},
+            {type="item", name="energy-science-pack",    quantity=1},
+            {type="item", name="energy-science-pack",    quantity=1000, next="x10"},
+
+            {type="group",      name="Progress"},
+            {type="item",       name="omni-heat-burner", quantity=1},
+            {type="item",       name="steam-engine",     quantity=1},
         }
     },
 
     ["Omniscience"] = {
-        required_mods = {"omnimatter_science"},
+        required_mods = {"omnimatter_science", "omnimatter_crystal"}, --Science pack is only enabled when Omnicrystal is present
         milestones = {
             {type="group", name="Science"},
             {type="item", name="omni-pack", quantity=1},
