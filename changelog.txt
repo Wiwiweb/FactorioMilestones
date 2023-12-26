@@ -5,6 +5,9 @@ Date: ????
   Features:
     - Milestones presets can now mark milestones as "hidden". These milestones are still tracked but will only appear in the GUI after they are reached.
 
+  Changes:
+    - Added a couple hidden milestones for spoiler things to SE default presets. Removed "(No spoilers)" from the name of the presets. The name change will cause a "detected a new preset" message on save file load, but you can ignore it.
+
   Locale:
     - Added Czech translation thanks to Bakendrid.
     - Translation updates for French and Chinese.
