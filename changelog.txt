@@ -9,6 +9,9 @@ Date: ????
     - Small additions to SE default presets: Added a couple hidden milestones for a couple spoilers. Removed "(No spoilers)" from the name of the presets. The name change will cause a "detected a new preset" message on save file load, but you can ignore it.
     - Small additions to PyMods default presets: Added burner assembler 1 and splitter.
 
+  Scripting:
+    - A custom event is now fired when a milestone is reached. Use the new remote interface to get the custom event ID: remote.call("milestones", "get_on_milestone_reached_event"). Thanks to Ziro2k for code inspiration.
+
   Locale:
     - Added Czech translation thanks to Bakendrid.
     - Translation updates for French and Chinese.
