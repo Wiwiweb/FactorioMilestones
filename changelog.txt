@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.21
 Date: ????
+
+  Features:
+    - Milestones presets can now mark milestones as "hidden". These milestones are still tracked but will only appear in the GUI after they are reached.
+
   Locale:
     - Added Czech translation thanks to Bakendrid.
     - Translation updates for French and Chinese.

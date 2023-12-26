@@ -268,6 +268,16 @@ function sort_milestones(milestones)
     end)
 end
 
+function filter_hidden_milestones(milestones)
+    local visible_milestones = {}
+    for _, milestone in pairs(milestones) do
+        if not(milestone.hidden and milestone.completion_tick == nil) then
+            table.insert(visible_milestones, milestone)
+        end
+    end
+    return visible_milestones
+end
+
 function backfill_completion_times(force)
     log("Backfilling completion times for " .. force.name)
     local backfilled_anything = false
