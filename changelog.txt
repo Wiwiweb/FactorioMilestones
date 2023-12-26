@@ -11,6 +11,7 @@ Date: ????
 
   Scripting:
     - A custom event is now fired when a milestone is reached. Use the new remote interface to get the custom event ID: remote.call("milestones", "get_on_milestone_reached_event"). Thanks to Ziro2k for code inspiration.
+    - Milestones can now write reached milestones to a text file in the script output folder. This can be useful for external programs. This is off by default, check the new "Write milestones to file" player setting for details.
 
   Locale:
     - Added Czech translation thanks to Bakendrid.

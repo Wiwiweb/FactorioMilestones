@@ -23,6 +23,29 @@ local function raise_milestone_reached_event(force, milestone, message)
 	end
 end
 
+-- Writes to a file named "milestones-<MAP SEED>.txt"
+-- Each milestone reached appends a new line.
+-- Each line is JSON and looks like this: 
+-- {"force":"player","name":"iron-ore","quantity":10,"type"="item","completion_tick":5279,"completion_time":"1:27"}
+local function write_milestone_to_file(force, milestone, human_timestamp)
+    local file_name = string.format("milestones-%s.txt", game.default_map_gen_settings.seed)
+    local table = {
+        force = force.name,
+        name = milestone.name,
+        quantity = milestone.quantity,
+        type = milestone.type,
+        completion_tick = milestone.completion_tick,
+        completion_time = human_timestamp,
+    }
+    local json = game.table_to_json(table) .. "\n"
+    for player_index, player in pairs(force.players) do
+        if settings.get_player_settings(player)["milestones_write_file"].value then
+            game.write_file(file_name, json, true, player_index)
+        end
+    end
+end
+
+
 local function print_milestone_reached(force, milestone)
     local human_timestamp = misc.ticks_to_timestring(milestone.completion_tick)
     local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
@@ -65,7 +88,8 @@ local function print_milestone_reached(force, milestone)
     end
 
     force_print(force, message)
-    raise_milestone_reached_event(force, milestones, message)
+    raise_milestone_reached_event(force, milestone, message)
+    write_milestone_to_file(force, milestone, human_timestamp)
     force.play_sound{path="utility/achievement_unlocked"}
 end
 

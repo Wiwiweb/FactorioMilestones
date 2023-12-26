@@ -37,5 +37,11 @@ data:extend{
         name = "milestones_disable_chat_notifications",
         setting_type = "runtime-per-user",
         default_value = false,
+    },
+    {
+        type = "bool-setting",
+        name = "milestones_write_file",
+        setting_type = "runtime-per-user",
+        default_value = false,
     }
 }
