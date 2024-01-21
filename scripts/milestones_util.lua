@@ -421,12 +421,14 @@ function is_valid_milestone(milestone)
 end
 
 function sprite_prefix(milestone)
-    if milestone.type == "kill" then
-        return "entity"
-    elseif milestone.type == "item" or milestone.type == "item_consumption" then
+    if milestone.type == "item" or milestone.type == "item_consumption" then
         return "item"
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         return "fluid"
+    elseif milestone.type == "kill" then
+        return "entity"
+    elseif milestone.type == "technology" then
+        return "technology"
     else
         error("Unknown milestone type: " .. milestone.type)
     end
