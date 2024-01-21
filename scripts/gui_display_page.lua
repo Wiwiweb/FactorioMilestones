@@ -1,6 +1,8 @@
 local misc = require("__flib__.misc")
 require("scripts.milestones_util")
 
+local empty_set_label = {type="label", caption={"", "[color=100,100,100]", {"milestones.no_visible_milestones"}, "[/color]"}, style="caption_label"}
+
 local function get_timestamp(ticks, print_milliseconds)
     if print_milliseconds then
         local remaining_ticks = ticks % 60
@@ -9,7 +11,6 @@ local function get_timestamp(ticks, print_milliseconds)
     else
         return misc.ticks_to_timestring(ticks)
     end
-
 end
 
 local function add_milestone_label(milestone_flow, milestone, compact_list, show_estimations, print_milliseconds)
@@ -249,6 +250,15 @@ function build_display_page(player)
         local visible_milestones_per_group = {}
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
             visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones, show_incomplete)
+            if not next(visible_milestones_per_group[group_name]) then
+                visible_milestones_per_group[group_name] = nil
+            end
+        end
+
+        -- No milestones, exit early
+        if not next(visible_milestones_per_group) then
+            display_scroll.add(empty_set_label)
+            return
         end
 
         local column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
@@ -280,6 +290,12 @@ function build_display_page(player)
         end
     else
         local visible_incomplete_milestones = filter_hidden_milestones(global_force.incomplete_milestones, show_incomplete)
+
+        -- No milestones, exit early
+        if not next(visible_incomplete_milestones) then
+            display_scroll.add(empty_set_label)
+            return
+        end
 
         -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
         local nb_milestones = #global_force.complete_milestones + #visible_incomplete_milestones
