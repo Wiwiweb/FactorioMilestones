@@ -238,15 +238,17 @@ function build_display_page(player)
     local global_force = global.forces[player.force.name]
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
-    local compact_list = settings.get_player_settings(player)["milestones_compact_list"].value
-    local view_by_group = settings.get_player_settings(player)["milestones_list_by_group"].value
-    local show_estimations = settings.get_player_settings(player)["milestones_show_estimations"].value
+    local player_settings = settings.get_player_settings(player)
+    local compact_list = player_settings["milestones_compact_list"].value
+    local view_by_group = player_settings["milestones_list_by_group"].value
+    local show_estimations = player_settings["milestones_show_estimations"].value
+    local show_incomplete = player_settings["milestones_show_incomplete"].value
 
     local nb_groups = table_size(global_force.milestones_by_group)
     if view_by_group and nb_groups > 1 then
         local visible_milestones_per_group = {}
         for group_name, group_milestones in pairs(global_force.milestones_by_group) do
-            visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones)
+            visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones, show_incomplete)
         end
 
         local column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
@@ -277,7 +279,7 @@ function build_display_page(player)
             end
         end
     else
-        local visible_incomplete_milestones = filter_hidden_milestones(global_force.incomplete_milestones)
+        local visible_incomplete_milestones = filter_hidden_milestones(global_force.incomplete_milestones, show_incomplete)
 
         -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
         local nb_milestones = #global_force.complete_milestones + #visible_incomplete_milestones

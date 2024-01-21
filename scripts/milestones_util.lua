@@ -278,10 +278,10 @@ function sort_milestones(milestones)
     end)
 end
 
-function filter_hidden_milestones(milestones)
+function filter_hidden_milestones(milestones, show_incomplete)
     local visible_milestones = {}
     for _, milestone in pairs(milestones) do
-        if not(milestone.hidden and milestone.completion_tick == nil) then
+        if milestone.completion_tick ~= nil or (show_incomplete and not milestone.hidden) then
             table.insert(visible_milestones, milestone)
         end
     end

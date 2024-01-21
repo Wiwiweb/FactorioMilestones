@@ -4,6 +4,7 @@ Date: ????
   Features:
     - Added new milestone types "item_consumption" and "fluid_consumption", which trigger on consumption rather than production. This has some niche uses for some modpacks.
       Because of the niche use, these can't be added via the GUI yet. You can add them in presets or with the export feature.
+    - Added a mod setting to allow hiding all incomplete milestones.
 
   Changes:
     - Infinite milestones marked as "hidden" will now only have the initial milestone hidden. Milestones created from the infinite milestone's completion will be visible.
