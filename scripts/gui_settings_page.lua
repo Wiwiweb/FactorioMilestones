@@ -228,10 +228,10 @@ function build_settings_page(player)
     local inner_frame = get_inner_frame(player.index)
     local settings_outer_flow = inner_frame.add{type="flow", name="milestones_settings_outer_flow", direction="vertical", style="milestones_settings_outer_flow"}
 
-    local preset_flow = settings_outer_flow.add{type="flow", name="milestones_preset_flow", direction="horizontal"}
-    preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
+    local preset_flow = settings_outer_flow.add{type="flow", name="milestones_preset_flow", direction="horizontal", style="milestones_horizontal_flow_center"}
 
     -- Preset dropdown
+    preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
     local preset_dropdown = preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=global.valid_preset_names}
     if global.current_preset_name == "Imported" then
         preset_dropdown.caption = {"milestones.settings_imported"}
@@ -249,10 +249,13 @@ function build_settings_page(player)
         preset_dropdown.tags = {action="milestones_change_preset", imported=false}
     end
 
+    preset_flow.add{type="button", caption={"milestones.settings_reset_preset"}, tooltip={"milestones.settings_reset_preset_tooltip"}, style="milestones_stretchable_button",
+        tags={action="milestones_reset_preset"}}
     preset_flow.add{type="sprite-button", name="milestones_import_button", tooltip={"milestones.settings_import"}, sprite="utility/import_slot", style="tool_button",
         tags={action="milestones_open_import"}}
     preset_flow.add{type="sprite-button", name="milestones_export_button", tooltip={"milestones.settings_export"}, sprite="utility/export_slot", style="tool_button",
         tags={action="milestones_open_export"}}
+
 
     local settings_scroll = settings_outer_flow.add{type="scroll-pane", name="milestones_settings_scroll", style="milestones_settings_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
