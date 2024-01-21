@@ -144,6 +144,7 @@ function create_next_milestone(force_name, milestone)
     new_milestone.lower_bound_tick = nil
     new_milestone.completion_tick = nil
     new_milestone.sort_index = milestone.sort_index + 0.0001 -- Should work until there's 10000 iterations of an infinite milestone, lol
+    new_milestone.hidden = nil
 
     return new_milestone
 end
