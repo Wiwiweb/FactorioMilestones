@@ -64,9 +64,9 @@ end
 local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list, show_estimations)
     local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_display", tags={index=milestone.sort_index}}
     local prototype = nil
-    if milestone.type == "item" then
+    if milestone.type == "item" or milestone.type == "item_consumption" then
         prototype = game.item_prototypes[milestone.name]
-    elseif milestone.type == "fluid" then
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         prototype = game.fluid_prototypes[milestone.name]
     elseif milestone.type == "technology" then
         prototype = game.technology_prototypes[milestone.name]
@@ -81,13 +81,11 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     end
 
     -- Sprite
-    local sprite_path_prefix = milestone.type == "kill" and "entity" or milestone.type
-    local sprite_path = sprite_path_prefix .. "/" .. milestone.name
+    local sprite_path = sprite_prefix(milestone) .. "/" .. milestone.name
     local sprite_number
     local tooltip = milestone.tooltip  -- Milestone tooltip has precedence
     if milestone.quantity > 1 then
         sprite_number = milestone.quantity
-        tooltip = tooltip or {"", milestone.quantity, "x ", prototype.localised_name}
     end
     if milestone.type == "technology" then
         local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "Level "..milestone.quantity
@@ -97,7 +95,11 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
         tooltip = tooltip or {"", prefix, prototype.localised_name, " (", {"milestones.type_kill"}, ")"}
     else
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
-        tooltip = tooltip or {"", prefix, prototype.localised_name}
+        local postfix = ""
+        if milestone.type == "item_consumption" or milestone.type == "fluid_consumption" then
+            postfix = {"", " (", {"milestones.type_consumption"}, ")"}
+        end
+        tooltip = tooltip or {"", prefix, prototype.localised_name, postfix}
     end
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
 

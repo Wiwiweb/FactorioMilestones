@@ -47,25 +47,34 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     local prototype
     local elem_button
 
+    local common_type
+    if milestone.type == "item_consumption" then
+        common_type = "item"
+    elseif milestone.type == "fluid_consumption" then
+        common_type = "fluid"
+    else
+        common_type = milestone.type
+    end
+
     local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_settings", index=gui_index}
-    milestone_flow.add{type="sprite", sprite="milestones_icon_"..milestone.type, tooltip={"milestones.type_"..milestone.type}}
+    milestone_flow.add{type="sprite", sprite="milestones_icon_"..common_type, tooltip={"milestones.type_"..common_type}}
 
     if milestone.hidden then
         milestone_flow.tags = {hidden= true}
     end
 
-    if milestone.type == "item" then
+    if milestone.type == "item" or milestone.type == "item_consumption" then
         prototype = game.item_prototypes[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item",
-            item=default_selection, tags={action="milestones_change_setting", milestone_type="item"}}
-    elseif milestone.type == "fluid" then
+            item=default_selection, tags={action="milestones_change_setting", milestone_type=milestone.type}}
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         prototype = game.fluid_prototypes[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="fluid",
-            fluid=default_selection, tags={action="milestones_change_setting", milestone_type="fluid"}}
+            fluid=default_selection, tags={action="milestones_change_setting", milestone_type=milestone.type}}
     elseif milestone.type == "technology" then
         prototype = game.technology_prototypes[milestone.name]
         local default_selection = nil
