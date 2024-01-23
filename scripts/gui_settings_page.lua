@@ -218,6 +218,11 @@ function fill_settings_flow(settings_flow, milestones)
     refresh_all_arrow_buttons(settings_flow)
 end
 
+local function is_preset_modified()
+    return presets[global.current_preset_name] ~= nil
+        and not table.deep_compare(global.loaded_milestones, presets[global.current_preset_name].milestones)
+end
+
 function build_settings_page(player)
     local main_frame = get_main_frame(player.index)
     main_frame.milestones_titlebar.milestones_main_label.caption = {"milestones.settings_title"}
@@ -247,6 +252,9 @@ function build_settings_page(player)
         end
         preset_dropdown.selected_index = current_preset_index
         preset_dropdown.tags = {action="milestones_change_preset", imported=false}
+        if is_preset_modified() then
+            preset_dropdown.caption = {"", global.current_preset_name, " ", {"milestones.settings_preset_modified"}}
+        end
     end
 
     preset_flow.add{type="button", caption={"milestones.settings_reset_preset"}, tooltip={"milestones.settings_reset_preset_tooltip"}, style="milestones_stretchable_button",
