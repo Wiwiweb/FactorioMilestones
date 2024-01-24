@@ -54,10 +54,10 @@ function is_preset_mods_enabled(preset)
 end
 
 local function validate_and_add_to_preset_table(interface_name, remote_milestones_presets, existing_table)
-    if validate_milestone_presets(interface_name, remote_milestones_presets, preset_addons) then
+    if validate_milestone_presets(interface_name, remote_milestones_presets, existing_table) then
         ---@cast remote_milestones_presets table
         for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
-            preset_addons[remote_preset_name] = remote_preset
+            existing_table[remote_preset_name] = remote_preset
         end
     end
 end
