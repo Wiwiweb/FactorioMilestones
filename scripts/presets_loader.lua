@@ -74,23 +74,31 @@ function add_remote_presets_to_preset_tables()
     end
 end
 
+function get_auto_detected_preset_name()
+    local chosen_preset_name
+    local max_nb_mods_matched = -1
+    for _, preset_name in pairs(global.valid_preset_names) do
+        local preset = presets[preset_name]
+        if preset and #preset.required_mods > max_nb_mods_matched then
+            max_nb_mods_matched = #preset.required_mods
+            chosen_preset_name = preset_name
+        end
+    end
+    return chosen_preset_name
+end
+
 function load_presets()
     global.valid_preset_names = {"Empty"}
 
-    local max_nb_mods_matched = -1
     for preset_name, preset in pairs(presets) do
         if is_preset_mods_enabled(preset) then
             table.insert(global.valid_preset_names, preset_name)
-            if #preset.required_mods > max_nb_mods_matched then
-                max_nb_mods_matched = #preset.required_mods
-                chosen_preset_name = preset_name
-            end
         end
     end
     log("Valid presets found: " .. serpent.line(global.valid_preset_names))
 
     if global.current_preset_name == nil then
-        global.current_preset_name = chosen_preset_name
+        global.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. global.current_preset_name)
         table.insert(global.delayed_chat_messages, {"milestones.message_loaded_presets", global.current_preset_name})
         global.loaded_milestones = presets[global.current_preset_name].milestones
