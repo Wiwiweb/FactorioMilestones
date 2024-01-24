@@ -51,25 +51,31 @@ local function is_preset_mods_enabled(preset)
     return true
 end
 
-local function add_remote_presets_to_preset_table()
-    -- See presets.lua to find out how to use this reverse remote interface to add your own preset.
+local function validate_and_add_to_preset_table(interface_name, remote_milestones_presets, existing_table)
+    if validate_milestone_presets(interface_name, remote_milestones_presets, preset_addons) then
+        ---@cast remote_milestones_presets table
+        for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
+            preset_addons[remote_preset_name] = remote_preset
+        end
+    end
+end
+
+function add_remote_presets_to_preset_tables()
+    -- See presets.lua to find out how to use these reverse remote interface to add your own preset or preset addon.
     for interface_name, functions in pairs(remote.interfaces) do
         if functions["milestones_presets"] then
             local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
-            if validate_milestone_presets(interface_name, remote_milestones_presets, presets) then
-                ---@cast remote_milestones_presets table
-                for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
-                    presets[remote_preset_name] = remote_preset
-                end
-            end
+            validate_and_add_to_preset_table("milestones_presets", remote_milestones_presets, presets)
+        end
+        if functions["milestones_preset_addons"] then
+            local remote_milestones_presets = remote.call(interface_name, "milestones_preset_addons")
+            validate_and_add_to_preset_table("milestones_preset_addons", remote_milestones_presets, preset_addons)
         end
     end
 end
 
 function load_presets()
     global.valid_preset_names = {"Empty"}
-
-    add_remote_presets_to_preset_table()
 
     local max_nb_mods_matched = -1
     for preset_name, preset in pairs(presets) do
@@ -92,25 +98,11 @@ function load_presets()
 end
 
 function load_preset_addons()
-    preset_addons_loaded = {}
-
-    -- See presets.lua to find out how to use this reverse remote interface to add your own preset addon.
-    for interface_name, functions in pairs(remote.interfaces) do
-        if functions["milestones_preset_addons"] then
-            local remote_milestones_presets = remote.call(interface_name, "milestones_preset_addons")
-            if validate_milestone_presets(interface_name, remote_milestones_presets, preset_addons) then
-                ---@cast remote_milestones_presets table
-                for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
-                    preset_addons[remote_preset_name] = remote_preset
-                end
-            end
-        end
-    end
-
+    local preset_addons_loaded = {}
     for preset_addon_name, preset_addon in pairs(preset_addons) do
         if is_preset_mods_enabled(preset_addon) then
             table.insert(preset_addons_loaded, preset_addon_name)
-            for _, milestone in ipairs(preset_addon.milestones) do
+            for _, milestone in pairs(preset_addon.milestones) do
                 table.insert(global.loaded_milestones, milestone)
             end
         end
@@ -128,8 +120,6 @@ function reload_presets()
     log("Reloading presets")
     local added_presets = {}
     local new_valid_preset_names = {"Empty"}
-
-    add_remote_presets_to_preset_table()
 
     for preset_name, preset in pairs(presets) do
         if is_preset_mods_enabled(preset) then

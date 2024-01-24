@@ -30,6 +30,7 @@ script.on_init(function()
         end
     end
 
+    add_remote_presets_to_preset_tables()
     load_presets()
     if initial_preset == nil then
         load_preset_addons()
@@ -107,6 +108,7 @@ script.on_configuration_changed(function(event)
     migration.on_config_changed(event, migrations)
 
     if next(event.mod_changes) ~= nil then
+        add_remote_presets_to_preset_tables()
         reload_presets()
     end
     remove_invalid_milestones_all_forces()
