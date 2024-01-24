@@ -5,6 +5,13 @@ function table_contains(table, element)
     return false
 end
 
+function table_get_index(table, element)
+    for i, value in pairs(table) do
+        if value == element then return i end
+    end
+    return nil
+end
+
 function validate_milestones(milestones)
     local valid_categories = {"item", "fluid", "item_consumption", "fluid_consumption", "technology", "kill", "group", "alias"}
     for _, milestone in pairs(milestones) do

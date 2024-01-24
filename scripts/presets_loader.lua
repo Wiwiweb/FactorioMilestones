@@ -1,3 +1,5 @@
+local table = require("__flib__.table")
+
 require("scripts.util")
 require("presets.presets")
 require("presets.presets_pymods")
@@ -40,7 +42,7 @@ local function validate_milestone_presets(interface_name, presets_to_validate, e
     return valid
 end
 
-local function is_preset_mods_enabled(preset)
+function is_preset_mods_enabled(preset)
     local forbidden_mods = preset.forbidden_mods or {}
     for _, mod_name in pairs(preset.required_mods) do
         if not game.active_mods[mod_name] then return false end
@@ -101,7 +103,7 @@ function load_presets()
         global.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. global.current_preset_name)
         table.insert(global.delayed_chat_messages, {"milestones.message_loaded_presets", global.current_preset_name})
-        global.loaded_milestones = presets[global.current_preset_name].milestones
+        global.loaded_milestones = table.deep_copy(presets[global.current_preset_name].milestones)
     end
 end
 

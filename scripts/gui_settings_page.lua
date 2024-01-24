@@ -242,14 +242,7 @@ function build_settings_page(player)
         preset_dropdown.caption = {"milestones.settings_imported"}
         preset_dropdown.tags = {action="milestones_change_preset", imported=true}
     else
-        local current_preset_index = 1
-        for _, value in pairs(global.valid_preset_names) do
-            if value == global.current_preset_name then break end
-            current_preset_index = current_preset_index + 1
-        end
-        if current_preset_index > #global.valid_preset_names then -- Preset not found, can happen when removing mods
-            current_preset_index = 1
-        end
+        local current_preset_index = table_get_index(global.valid_preset_names, chosen_preset_name) or 1
         preset_dropdown.selected_index = current_preset_index
         preset_dropdown.tags = {action="milestones_change_preset", imported=false}
         if is_preset_modified() then
@@ -547,12 +540,46 @@ end)
 function preset_dropdown_changed(event)
     event.element.tags = {action="milestones_change_preset", imported=false}
     local selected_preset_name = event.element.get_item(event.element.selected_index)
-    local global_player = global.players[event.player_index]
+    local preset_milestones = {}
+    if presets[selected_preset_name] then
+        preset_milestones = presets[selected_preset_name].milestones
+    end
+    switch_to_milestones_set(preset_milestones, event.player_index)
+end
+
+function reset_preset(player_index)
+    -- Preset
+    local chosen_preset_name = get_auto_detected_preset_name()
+    local new_milestones = table.deep_copy(presets[chosen_preset_name].milestones)
+
+    -- Preset addons
+    for _preset_addon_name, preset_addon in pairs(preset_addons) do
+        if is_preset_mods_enabled(preset_addon) then
+            for _, milestone in pairs(preset_addon.milestones) do
+                table.insert(new_milestones, milestone)
+            end
+        end
+    end
+
+    local preset_dropdown = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown
+    local current_preset_index = table_get_index(global.valid_preset_names, chosen_preset_name) or 1
+    preset_dropdown.selected_index = current_preset_index
+    preset_dropdown.tags = {action="milestones_change_preset", imported=false}
+
+    switch_to_milestones_set(new_milestones, player_index)
+
+    if is_preset_modified() then -- Can be modified or not depending on addons
+        preset_dropdown.caption = {"", global.current_preset_name, " ", {"milestones.settings_preset_modified"}}
+    end
+end
+
+function switch_to_milestones_set(milestones_set, player_index)
+    local global_player = global.players[player_index]
     local settings_flow = global_player.settings_flow
     settings_flow.clear()
-    if selected_preset_name ~= "Empty" and presets[selected_preset_name] then
-        fill_settings_flow(settings_flow, presets[selected_preset_name].milestones)
-        get_outer_frame(event.player_index).force_auto_center()
+    if next(milestones_set) then
+        fill_settings_flow(settings_flow, milestones_set)
+        get_outer_frame(player_index).force_auto_center()
     end
     global_player.settings_selection_indexes = {}
     update_buttons_enabled_state(settings_flow.parent.parent, global_player.settings_selection_indexes)
