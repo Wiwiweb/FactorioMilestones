@@ -1094,7 +1094,7 @@ presets = {
 
             {type="group",      name="Power"},
             {type="item",       name="steam-engine",            quantity=1},
-            {type="item",       name="steel-generator",         quantity=1},
+            {type="item",       name="petro-generator",         quantity=1},
             {type="item",       name="solar-panel",             quantity=1},
             {type="item",       name="solar-array",             quantity=1},
             {type="item",       name="uranium-fuel-cell",       quantity=1},
@@ -1188,7 +1188,7 @@ presets = {
 
             {type="group",      name="Power"},
             {type="item",       name="steam-engine",            quantity=1},
-            {type="item",       name="steel-generator",         quantity=1},
+            {type="item",       name="petro-generator",         quantity=1},
             {type="item",       name="solar-panel",             quantity=1},
             {type="item",       name="solar-array",             quantity=1},
             {type="item",       name="nuclear-reactor",         quantity=1},
