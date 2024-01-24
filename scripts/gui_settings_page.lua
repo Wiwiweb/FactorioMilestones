@@ -218,9 +218,9 @@ function fill_settings_flow(settings_flow, milestones)
     refresh_all_arrow_buttons(settings_flow)
 end
 
-local function is_preset_modified()
-    return presets[global.current_preset_name] ~= nil
-        and not table.deep_compare(global.loaded_milestones, presets[global.current_preset_name].milestones)
+local function is_preset_modified(current_milestones, preset_name)
+    return presets[preset_name] ~= nil
+        and not table.deep_compare(current_milestones, presets[preset_name].milestones)
 end
 
 function build_settings_page(player)
@@ -245,7 +245,7 @@ function build_settings_page(player)
         local current_preset_index = table_get_index(global.valid_preset_names, global.current_preset_name) or 1
         preset_dropdown.selected_index = current_preset_index
         preset_dropdown.tags = {action="milestones_change_preset", imported=false}
-        if is_preset_modified() then
+        if is_preset_modified(global.loaded_milestones, global.current_preset_name) then
             preset_dropdown.caption = {"", global.current_preset_name, " ", {"milestones.settings_preset_modified"}}
         end
     end
@@ -568,8 +568,9 @@ function reset_preset(player_index)
 
     switch_to_milestones_set(new_milestones, player_index)
 
-    if is_preset_modified() then -- Can be modified or not depending on addons
-        preset_dropdown.caption = {"", global.current_preset_name, " ", {"milestones.settings_preset_modified"}}
+     -- Can be modified or not depending on addons
+    if is_preset_modified(new_milestones, chosen_preset_name) then
+        preset_dropdown.caption = {"", chosen_preset_name, " ", {"milestones.settings_preset_modified"}}
     end
 end
 
