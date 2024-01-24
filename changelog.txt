@@ -11,9 +11,11 @@ Date: ????
     - Infinite milestones marked as "hidden" will now only have the initial milestone hidden. Milestones created from the infinite milestone's completion will be visible.
     - Added a small text to fill the space when no milestones are visible at all, to make it look more intentionally empty.
     - Marked the selected preset name with "(Modified)" if the current set has been modified compared to the preset.
-    - SEK2 preset: Changed science pack order to account for recent SEK2 changes.
-    - PyMods presets: Added Guar and Arqad Queen milestones, and fixed Phaidaisus milestones.
-    - IR3 preset: Fixed petrochemical generator milestone.
+    - Preset updates:
+      - Marked all character kills as "hidden".
+      - SEK2 preset: Changed science pack order to account for recent SEK2 changes.
+      - PyMods presets: Added Guar and Arqad Queen milestones, and fixed Phaidaisus milestones.
+      - IR3 preset: Fixed petrochemical generator milestone.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.21
