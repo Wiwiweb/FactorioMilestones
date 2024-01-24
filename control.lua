@@ -93,7 +93,10 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     local setting_name = event.setting
     if setting_name == "milestones_check_frequency" then
         global.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
-    elseif setting_name == "milestones_compact_list" or setting_name == "milestones_list_by_group" or setting_name == "milestones_show_estimations" then
+    elseif setting_name == "milestones_compact_list"
+        or setting_name == "milestones_list_by_group"
+        or setting_name == "milestones_show_estimations"
+        or setting_name == "milestones_show_incomplete" then
         refresh_gui_for_player(game.get_player(event.player_index))
     end
 end)
