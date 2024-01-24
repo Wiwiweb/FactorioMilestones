@@ -11,6 +11,7 @@ Date: ????
     - Infinite milestones marked as "hidden" will now only have the initial milestone hidden. Milestones created from the infinite milestone's completion will be visible.
     - Added a small text to fill the space when no milestones are visible at all, to make it look more intentionally empty.
     - Marked the selected preset name with "(Modified)" if the current set has been modified compared to the preset.
+    - Changed science pack order in the SEK2 preset to account for recent SEK2 changes.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.21
