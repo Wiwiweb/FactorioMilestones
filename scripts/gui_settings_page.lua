@@ -242,7 +242,7 @@ function build_settings_page(player)
         preset_dropdown.caption = {"milestones.settings_imported"}
         preset_dropdown.tags = {action="milestones_change_preset", imported=true}
     else
-        local current_preset_index = table_get_index(global.valid_preset_names, chosen_preset_name) or 1
+        local current_preset_index = table_get_index(global.valid_preset_names, global.current_preset_name) or 1
         preset_dropdown.selected_index = current_preset_index
         preset_dropdown.tags = {action="milestones_change_preset", imported=false}
         if is_preset_modified() then
