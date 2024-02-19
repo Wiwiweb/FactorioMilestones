@@ -159,8 +159,16 @@ function ceil_to_nearest_minute(tick)
     return tick - modulo + 60*60
 end
 
-local function find_precision_bracket(milestone, stats)
-    local total_count = stats.get_input_count(milestone.name)
+local function get_total_count(stats, item_name, is_consumption)
+    if is_consumption then
+        return stats.get_output_count(item_name)
+    else
+        return stats.get_input_count(item_name)
+    end
+end
+
+local function find_precision_bracket(milestone, stats, is_consumption)
+    local total_count = get_total_count(stats, milestone.name, is_consumption)
     local previous_bracket = "ALL"
     for _, bracket in pairs(FLOW_PRECISION_BRACKETS) do
 
@@ -169,7 +177,7 @@ local function find_precision_bracket(milestone, stats)
         -- then the first creation was between 50 and 250 hours ago, and we should search the 250 hours precision bracket.
 
         if FLOW_PRECISION_BRACKETS_LENGTHS[bracket] <= game.tick then -- Skip bracket if the game is not long enough
-            local bracket_count = stats.get_flow_count{name=milestone.name, input=true, precision_index=bracket, count=true}
+            local bracket_count = stats.get_flow_count{name=milestone.name, input=(not is_consumption), precision_index=bracket, count=true}
             if bracket_count <= total_count - milestone.quantity then
                 return previous_bracket
             end
@@ -182,17 +190,12 @@ local function find_precision_bracket(milestone, stats)
 end
 
 local function find_sample_in_precision_bracket(milestone, bracket, stats, is_consumption)
-    local total_count
-    if is_consumption then
-        total_count = stats.get_output_count(milestone.name)
-    else
-        total_count = stats.get_input_count(milestone.name)
-    end
+    local total_count = get_total_count(stats, milestone.name, is_consumption)
     local bracket_count = stats.get_flow_count{name=milestone.name, input=(not is_consumption), precision_index=bracket, count=true}
     local count_before_bracket = total_count - bracket_count
     local count_this_bracket = 0
     for i = 300,1,-1 do -- Start from oldest
-        sample_count = stats.get_flow_count{name=milestone.name, input=(not is_consumption), precision_index=bracket, count=true, sample_index=i}
+        local sample_count = stats.get_flow_count{name=milestone.name, input=(not is_consumption), precision_index=bracket, count=true, sample_index=i}
         count_this_bracket = count_this_bracket + sample_count
         if count_this_bracket + count_before_bracket >= milestone.quantity then
             return i
@@ -232,7 +235,7 @@ local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks
 end
 
 local function find_production_tick_bounds(milestone, stats, is_consumption)
-    local precision_bracket = find_precision_bracket(milestone, stats)
+    local precision_bracket = find_precision_bracket(milestone, stats, is_consumption)
     log("bracket to search: " ..precision_bracket)
 
     local lower_bound_ticks_ago, upper_bound_ticks_ago
