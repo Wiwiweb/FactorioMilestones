@@ -1,7 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.23
 Date: ????
-  Changes:
+  Bugfixes:
+    - Fixed Reset button not working properly for remote presets when loading a save file without mod changes.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.22
 Date: 2024-01-24

@@ -30,7 +30,7 @@ script.on_init(function()
         end
     end
 
-    add_remote_presets_to_preset_tables()
+    fetch_remote_presets()
     load_presets()
     if initial_preset == nil then
         load_preset_addons()
@@ -62,6 +62,7 @@ script.on_load(function()
     if global.delayed_chat_messages ~= nil and next(global.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
+    add_remote_presets_to_preset_tables()
 end)
 
 script.on_event(defines.events.on_force_created, function(event)
@@ -108,6 +109,8 @@ script.on_configuration_changed(function(event)
     migration.on_config_changed(event, migrations)
 
     if next(event.mod_changes) ~= nil then
+        fetch_remote_presets()
+        -- on_load is called before on_configuration_changed so we have to redo add_remote_presets_to_preset_tables here
         add_remote_presets_to_preset_tables()
         reload_presets()
     end

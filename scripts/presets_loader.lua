@@ -62,16 +62,31 @@ local function validate_and_add_to_preset_table(interface_name, remote_milestone
     end
 end
 
-function add_remote_presets_to_preset_tables()
+function fetch_remote_presets()
     -- See presets.lua to find out how to use these reverse remote interface to add your own preset or preset addon.
+    global.remote_presets = {}
+    global.remote_preset_addons = {}
     for interface_name, functions in pairs(remote.interfaces) do
         if functions["milestones_presets"] then
             local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
-            validate_and_add_to_preset_table("milestones_presets", remote_milestones_presets, presets)
+            validate_and_add_to_preset_table("milestones_presets", remote_milestones_presets, global.remote_presets)
         end
         if functions["milestones_preset_addons"] then
             local remote_milestones_presets = remote.call(interface_name, "milestones_preset_addons")
-            validate_and_add_to_preset_table("milestones_preset_addons", remote_milestones_presets, preset_addons)
+            validate_and_add_to_preset_table("milestones_preset_addons", remote_milestones_presets, global.remote_preset_addons)
+        end
+    end
+end
+
+function add_remote_presets_to_preset_tables()
+    if global.remote_presets then -- Should always be set in on_init, but just for migration safety
+        for remote_preset_name, remote_preset in pairs(global.remote_presets) do
+            presets[remote_preset_name] = remote_preset
+        end
+    end
+    if global.remote_preset_addons then
+        for remote_preset_name, remote_preset in pairs(global.remote_preset_addons) do
+            preset_addons[remote_preset_name] = remote_preset
         end
     end
 end
