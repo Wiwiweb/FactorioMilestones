@@ -31,6 +31,7 @@ script.on_init(function()
     end
 
     fetch_remote_presets()
+    add_remote_presets_to_preset_tables()
     load_presets()
     if initial_preset == nil then
         load_preset_addons()
