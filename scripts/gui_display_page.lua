@@ -182,8 +182,6 @@ local function get_row_count(milestone_counts_by_group, column_count)
 end
 
 local function get_column_count_with_groups(player, milestones_by_group, compact_list, show_estimations)
-    local nb_groups = table_size(milestones_by_group)
-
     local real_width = player.display_resolution.width * (1 / player.display_scale)
     local target_width = real_width * 0.9
     -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation)
@@ -197,7 +195,6 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
         max_column_width = max_column_width - 47
     end
     local max_nb_columns = math.ceil(target_width / max_column_width) - 1
-    local row_count = nb_groups * 2
     local column_count = 1
     local milestone_counts_by_group = {}
     for _group_name, group_milestones in pairs(milestones_by_group) do
@@ -210,8 +207,8 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     end
 
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-    row_count = get_row_count(milestone_counts_by_group, column_count)
-    while row_count < column_count * 3 do
+    local row_count = get_row_count(milestone_counts_by_group, column_count)
+    while row_count < column_count * 3 and column_count > 1 do
         column_count = column_count - 1
         row_count = get_row_count(milestone_counts_by_group, column_count)
     end
