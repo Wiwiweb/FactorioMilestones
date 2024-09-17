@@ -152,15 +152,14 @@ data:extend{
     }
 }
 
-local shortcut_icon = "__Milestones__/graphics/shortcut-icon.png"
 data:extend{
   {
     type = "shortcut",
     name = "milestones_toggle_gui",
-    icon = data_util.build_sprite(nil, {0,0}, shortcut_icon, 32, 2),
-    disabled_icon = data_util.build_sprite(nil, {48,0}, shortcut_icon, 32, 2),
-    small_icon = data_util.build_sprite(nil, {0,32}, shortcut_icon, 24, 2),
-    disabled_small_icon = data_util.build_sprite(nil, {36,32}, shortcut_icon, 24, 2),
+    icon = "__Milestones__/graphics/shortcut-icon-32.png",
+    icon_size = 32,
+    small_icon = "__Milestones__/graphics/shortcut-icon-24.png",
+    small_icon_size = 24,
     associated_control_input = "milestones_toggle_gui",
     toggleable = true,
     action = "lua"
@@ -168,6 +167,7 @@ data:extend{
 }
 
 -- Sprites
+local shortcut_icon = "__Milestones__/graphics/shortcut-icon.png"
 local toolbar_icons = "__Milestones__/graphics/toolbar-icons.png"
 local infinity_icon = "__Milestones__/graphics/infinity-icon.png"
 local arrows = "__Milestones__/graphics/arrows.png"
