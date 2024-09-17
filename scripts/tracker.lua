@@ -102,9 +102,9 @@ local function print_milestone_reached(force, milestone)
 end
 
 function track_item_creation(event)
-    for force_name, global_force in pairs(global.forces) do
-        local milestones_per_tick = #global_force.incomplete_milestones / global.milestones_check_frequency_setting
-        local step_nb = event.tick % global.milestones_check_frequency_setting
+    for force_name, global_force in pairs(storage.forces) do
+        local milestones_per_tick = #global_force.incomplete_milestones / storage.milestones_check_frequency_setting
+        local step_nb = event.tick % storage.milestones_check_frequency_setting
         local i = math.floor(milestones_per_tick * step_nb) + 1
         local to_i = math.floor(milestones_per_tick * (step_nb + 1))
         -- log("(per tick: "..milestones_per_tick..") tick " .. event.tick .. "  : " .. i .. "-" .. to_i)
@@ -138,7 +138,7 @@ script.on_event(defines.events.on_tick, track_item_creation)
 function check_technology_milestone_reached(event)
     local technology_researched = event.research
     local force = event.research.force
-    local global_force = global.forces[force.name]
+    local global_force = storage.forces[force.name]
     if global_force == nil then return end
 
     local i = 1

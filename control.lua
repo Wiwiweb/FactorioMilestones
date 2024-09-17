@@ -12,21 +12,21 @@ local migration = require("__flib__.migration")
 
 
 script.on_init(function()
-    global.delayed_chat_messages = {}
-    global.forces = {}
-    global.players = {}
-    global.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
+    storage.delayed_chat_messages = {}
+    storage.forces = {}
+    storage.players = {}
+    storage.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
 
     initial_preset_string = settings.global["milestones_initial_preset"].value
     if initial_preset_string ~= "" then
         initial_preset, err = convert_and_validate_imported_json(initial_preset_string)
         if initial_preset == nil then
-            table.insert(global.delayed_chat_messages, {"milestones.message_invalid_initial_preset"})
-            table.insert(global.delayed_chat_messages, err)
+            table.insert(storage.delayed_chat_messages, {"milestones.message_invalid_initial_preset"})
+            table.insert(storage.delayed_chat_messages, err)
         else
-            global.current_preset_name = "Imported"
-            global.loaded_milestones = initial_preset
-            table.insert(global.delayed_chat_messages, {"milestones.message_loaded_initial_preset"})
+            storage.current_preset_name = "Imported"
+            storage.loaded_milestones = initial_preset
+            table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_initial_preset"})
         end
     end
 
@@ -45,7 +45,7 @@ script.on_init(function()
         backfilled_anything = backfilled_anything or backfilled_anything_from_this_force
     end
     if backfilled_anything then
-        table.insert(global.delayed_chat_messages, {"milestones.message_loaded_into_exiting_game"})
+        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_into_exiting_game"})
     end
     remove_invalid_milestones_all_forces()
 
@@ -54,13 +54,13 @@ script.on_init(function()
         initialize_player(player)
     end
 
-    if next(global.delayed_chat_messages) ~= nil then
+    if next(storage.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
 end)
 
 script.on_load(function()
-    if global.delayed_chat_messages ~= nil and next(global.delayed_chat_messages) ~= nil then
+    if storage.delayed_chat_messages ~= nil and next(storage.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
     add_remote_presets_to_preset_tables()
@@ -83,7 +83,7 @@ end)
 script.on_event(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
     initialize_player(player)
-    if global.forces[player.force.name] == nil then -- Possible if new player is added to empty force e.g. vanilla freeplay
+    if storage.forces[player.force.name] == nil then -- Possible if new player is added to empty force e.g. vanilla freeplay
         initialize_force_if_needed(player.force)
     end
 end)
@@ -95,7 +95,7 @@ end)
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     local setting_name = event.setting
     if setting_name == "milestones_check_frequency" then
-        global.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
+        storage.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
     elseif setting_name == "milestones_compact_list"
         or setting_name == "milestones_list_by_group"
         or setting_name == "milestones_show_estimations"
@@ -119,7 +119,7 @@ script.on_configuration_changed(function(event)
 
     -- We also do this here because for some reason on_nth_tick sometimes doesn't work in on_init
     -- I don't know why
-    if next(global.delayed_chat_messages) ~= nil then
+    if next(storage.delayed_chat_messages) ~= nil then
         create_delayed_chat()
     end
 end)

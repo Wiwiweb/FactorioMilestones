@@ -3,11 +3,11 @@ require("scripts.gui_settings_page")
 require("scripts.gui_import_export")
 
 local function get_frame(player_index, frame_name)
-    local global_player = global.players[player_index]
+    local global_player = storage.players[player_index]
     if not global_player[frame_name] or not global_player[frame_name].valid then
         reinitialize_player(player_index)
     end
-    return global.players[player_index][frame_name]
+    return storage.players[player_index][frame_name]
 end
 
 function get_outer_frame(player_index)
@@ -130,7 +130,7 @@ local function update_settings_button(player) -- In case permissions changed
 end
 
 local function open_gui(player)
-    local global_player = global.players[player.index]
+    local global_player = storage.players[player.index]
     local outer_frame = get_outer_frame(player.index)
     build_display_page(player)
     update_settings_button(player)
@@ -185,7 +185,7 @@ function refresh_gui_for_force(force)
 end
 
 local function toggle_pinned(player, element)
-    local global_player = global.players[player.index]
+    local global_player = storage.players[player.index]
     global_player.pinned = not global_player.pinned
     if global_player.pinned then
         element.style = "flib_selected_frame_action_button"
@@ -207,7 +207,7 @@ script.on_event(defines.events.on_gui_closed, function(event)
     if event.element and event.element.name == "milestones_main_frame" then
 
         local player = game.get_player(event.player_index)
-        local global_player = global.players[event.player_index]
+        local global_player = storage.players[event.player_index]
         if global_player.one_time_prevent_close then
             global_player.one_time_prevent_close = false
             player.opened = get_main_frame(player.index)
@@ -245,7 +245,7 @@ end)
 script.on_event("milestones_confirm_settings", function(event)
     if is_settings_page_visible(event.player_index) then
         confirm_settings_page(event.player_index)
-        global.players[event.player_index].one_time_prevent_close = true
+        storage.players[event.player_index].one_time_prevent_close = true
     end
 end)
 
@@ -253,7 +253,7 @@ end)
 script.on_event("milestones_cancel_settings", function(event)
     if is_settings_page_visible(event.player_index) then
         cancel_settings_page(event.player_index)
-        global.players[event.player_index].one_time_prevent_close = true
+        storage.players[event.player_index].one_time_prevent_close = true
     end
 end)
 

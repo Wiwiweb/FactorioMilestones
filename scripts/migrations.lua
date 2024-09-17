@@ -6,11 +6,11 @@ return {
         log("Running 1.0.4 migration")
 
         -- delayed_chat_message became a table
-        if global.delayed_chat_message == nil then
-            global.delayed_chat_messages = {}
+        if storage.delayed_chat_message == nil then
+            storage.delayed_chat_messages = {}
         else
-            global.delayed_chat_messages = {global.delayed_chat_message}
-            global.delayed_chat_message = nil
+            storage.delayed_chat_messages = {storage.delayed_chat_message}
+            storage.delayed_chat_message = nil
         end
 
         -- GUI changed and new outer_table global was added
@@ -32,7 +32,7 @@ return {
 
     ["1.0.9"] = function()
         log("Running 1.0.9 migration")
-        for force_name, global_force in pairs(global.forces) do
+        for force_name, global_force in pairs(storage.forces) do
             local affected = false
             for _, milestone in pairs(global_force.complete_milestones) do
                 if milestone.type == "technology" and milestone.completion_tick ==
@@ -56,14 +56,14 @@ return {
 
     ["1.0.10"] = function()
         log("Running 1.0.10 migration")
-        -- Editing settings would cause global.loaded_milestones to share objects with global.forces[].*
-        -- This could cause global.loaded_milestones to gain completion_tick fields, later messing with initialize_force code
-        global.loaded_milestones = table.deep_copy(global.loaded_milestones)
-        for _, milestone in pairs(global.loaded_milestones) do
+        -- Editing settings would cause storage.loaded_milestones to share objects with storage.forces[].*
+        -- This could cause storage.loaded_milestones to gain completion_tick fields, later messing with initialize_force code
+        storage.loaded_milestones = table.deep_copy(storage.loaded_milestones)
+        for _, milestone in pairs(storage.loaded_milestones) do
             milestone.completion_tick = nil
             milestone.lower_bound_tick = nil
         end
-        for _, global_force in pairs(global.forces) do
+        for _, global_force in pairs(storage.forces) do
             for _, milestone in pairs(global_force.incomplete_milestones) do
                 milestone.completion_tick = nil
                 milestone.lower_bound_tick = nil
@@ -73,9 +73,9 @@ return {
 
     ["1.2.1"] = function()
         log("Running 1.2.1 migration")
-        -- Table reference error could have introduced completion times in global.loaded_milestones during merge_new_milestones
-        global.loaded_milestones = table.deep_copy(global.loaded_milestones)
-        for _, milestone in pairs(global.loaded_milestones) do
+        -- Table reference error could have introduced completion times in storage.loaded_milestones during merge_new_milestones
+        storage.loaded_milestones = table.deep_copy(storage.loaded_milestones)
+        for _, milestone in pairs(storage.loaded_milestones) do
             milestone.completion_tick = nil
             milestone.lower_bound_tick = nil
         end
@@ -83,7 +83,7 @@ return {
 
     ["1.3.0"] = function()
         log("Running 1.3.0 migration")
-        for force_name, global_force in pairs(global.forces) do
+        for force_name, global_force in pairs(storage.forces) do
             -- Add new milestones_by_group field, but just put all existing milestones in the Other group
             global_force.milestones_by_group = { ["Other"] = {} }
             for i, milestone in pairs(global_force.complete_milestones) do
@@ -123,7 +123,7 @@ return {
         log("Running 1.3.10 migration")
         -- inner frame GUI changes, we must recreate GUIs
         for _, player in pairs(game.players) do
-            if global.players[player.index] then
+            if storage.players[player.index] then
                 reinitialize_player(player.index)
             end
         end
@@ -132,8 +132,8 @@ return {
     ["1.3.14"] = function()
         log("Running 1.3.14 migration")
         -- Caching some calculations for optimisation
-        global.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
-        for force_name, global_force in pairs(global.forces) do
+        storage.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
+        for force_name, global_force in pairs(storage.forces) do
             local force = game.forces[force_name]
             global_force.item_stats = force.item_production_statistics
             global_force.fluid_stats = force.fluid_production_statistics
@@ -145,8 +145,8 @@ return {
         log("Running 1.3.20 migration")
         -- Recalculate the sort_index of infinite milestones (first is n, second is n.0001, third is n.0002, etc.)
         for force_name, force in pairs(game.forces) do
-            if global.forces[force_name] ~= nil then
-                merge_new_milestones(force_name, global.loaded_milestones)
+            if storage.forces[force_name] ~= nil then
+                merge_new_milestones(force_name, storage.loaded_milestones)
                 backfill_completion_times(force)
             end
         end

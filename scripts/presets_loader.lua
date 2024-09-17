@@ -64,28 +64,28 @@ end
 
 function fetch_remote_presets()
     -- See presets.lua to find out how to use these reverse remote interface to add your own preset or preset addon.
-    global.remote_presets = {}
-    global.remote_preset_addons = {}
+    storage.remote_presets = {}
+    storage.remote_preset_addons = {}
     for interface_name, functions in pairs(remote.interfaces) do
         if functions["milestones_presets"] then
             local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
-            validate_and_add_to_preset_table("milestones_presets", remote_milestones_presets, global.remote_presets)
+            validate_and_add_to_preset_table("milestones_presets", remote_milestones_presets, storage.remote_presets)
         end
         if functions["milestones_preset_addons"] then
             local remote_milestones_presets = remote.call(interface_name, "milestones_preset_addons")
-            validate_and_add_to_preset_table("milestones_preset_addons", remote_milestones_presets, global.remote_preset_addons)
+            validate_and_add_to_preset_table("milestones_preset_addons", remote_milestones_presets, storage.remote_preset_addons)
         end
     end
 end
 
 function add_remote_presets_to_preset_tables()
-    if global.remote_presets then -- Should always be set in on_init, but just for migration safety
-        for remote_preset_name, remote_preset in pairs(global.remote_presets) do
+    if storage.remote_presets then -- Should always be set in on_init, but just for migration safety
+        for remote_preset_name, remote_preset in pairs(storage.remote_presets) do
             presets[remote_preset_name] = remote_preset
         end
     end
-    if global.remote_preset_addons then
-        for remote_preset_name, remote_preset in pairs(global.remote_preset_addons) do
+    if storage.remote_preset_addons then
+        for remote_preset_name, remote_preset in pairs(storage.remote_preset_addons) do
             preset_addons[remote_preset_name] = remote_preset
         end
     end
@@ -94,7 +94,7 @@ end
 function get_auto_detected_preset_name()
     local chosen_preset_name
     local max_nb_mods_matched = -1
-    for _, preset_name in pairs(global.valid_preset_names) do
+    for _, preset_name in pairs(storage.valid_preset_names) do
         local preset = presets[preset_name]
         if preset and #preset.required_mods > max_nb_mods_matched then
             max_nb_mods_matched = #preset.required_mods
@@ -105,20 +105,20 @@ function get_auto_detected_preset_name()
 end
 
 function load_presets()
-    global.valid_preset_names = {"Empty"}
+    storage.valid_preset_names = {"Empty"}
 
     for preset_name, preset in pairs(presets) do
         if is_preset_mods_enabled(preset) then
-            table.insert(global.valid_preset_names, preset_name)
+            table.insert(storage.valid_preset_names, preset_name)
         end
     end
-    log("Valid presets found: " .. serpent.line(global.valid_preset_names))
+    log("Valid presets found: " .. serpent.line(storage.valid_preset_names))
 
-    if global.current_preset_name == nil then
-        global.current_preset_name = get_auto_detected_preset_name()
-        log("Auto-detected preset used: " .. global.current_preset_name)
-        table.insert(global.delayed_chat_messages, {"milestones.message_loaded_presets", global.current_preset_name})
-        global.loaded_milestones = table.deep_copy(presets[global.current_preset_name].milestones)
+    if storage.current_preset_name == nil then
+        storage.current_preset_name = get_auto_detected_preset_name()
+        log("Auto-detected preset used: " .. storage.current_preset_name)
+        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", storage.current_preset_name})
+        storage.loaded_milestones = table.deep_copy(presets[storage.current_preset_name].milestones)
     end
 end
 
@@ -128,16 +128,16 @@ function load_preset_addons()
         if is_preset_mods_enabled(preset_addon) then
             table.insert(preset_addons_loaded, preset_addon_name)
             for _, milestone in pairs(preset_addon.milestones) do
-                table.insert(global.loaded_milestones, milestone)
+                table.insert(storage.loaded_milestones, milestone)
             end
         end
     end
     log("Preset addons loaded: " .. serpent.line(preset_addons_loaded))
 
     if #preset_addons_loaded == 1 then
-        table.insert(global.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
+        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
     elseif #preset_addons_loaded > 1 then
-        table.insert(global.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
+        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
     end
 end
 
@@ -149,17 +149,17 @@ function reload_presets()
     for preset_name, preset in pairs(presets) do
         if is_preset_mods_enabled(preset) then
             table.insert(new_valid_preset_names, preset_name)
-            if not table_contains(global.valid_preset_names, preset_name) then
+            if not table_contains(storage.valid_preset_names, preset_name) then
                 table.insert(added_presets, preset_name)
             end
         end
     end
-    global.valid_preset_names = new_valid_preset_names
+    storage.valid_preset_names = new_valid_preset_names
     log("New presets found: " .. serpent.line(added_presets))
-    log("New list of valid presets: " .. serpent.line(global.valid_preset_names))
+    log("New list of valid presets: " .. serpent.line(storage.valid_preset_names))
     if #added_presets == 1 then
-        table.insert(global.delayed_chat_messages, {"milestones.message_reloaded_presets_singular", added_presets[1]})
+        table.insert(storage.delayed_chat_messages, {"milestones.message_reloaded_presets_singular", added_presets[1]})
     elseif #added_presets > 1 then
-        table.insert(global.delayed_chat_messages, {"milestones.message_reloaded_presets_plural", table.concat(added_presets, ", ")})
+        table.insert(storage.delayed_chat_messages, {"milestones.message_reloaded_presets_plural", table.concat(added_presets, ", ")})
     end
 end

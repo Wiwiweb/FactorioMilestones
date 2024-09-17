@@ -121,7 +121,7 @@ end
 function enable_edit_time(player_index, element)
     local force = game.players[player_index].force
     local milestone_flow = element.parent
-    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, global.forces[force.name])
+    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, storage.forces[force.name])
 
     milestone_flow.milestones_display_time.destroy()
     milestone_flow.milestones_edit_time.destroy()
@@ -156,7 +156,7 @@ end
 function confirm_edit_time(player_index, element)
     local force = game.players[player_index].force
     local milestone_flow = element.parent
-    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, global.forces[force.name])
+    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, storage.forces[force.name])
 
     local time_quantity = milestone_flow.milestones_edit_time_field.text
     if time_quantity ~= nil then
@@ -165,8 +165,8 @@ function confirm_edit_time(player_index, element)
         if completion_tick then -- Could still be nil in case of parse error
             milestone.completion_tick = completion_tick
             milestone.lower_bound_tick = nil
-            sort_milestones(global.forces[force.name].complete_milestones)
-            sort_milestones(global.forces[force.name].milestones_by_group[milestone.group])
+            sort_milestones(storage.forces[force.name].complete_milestones)
+            sort_milestones(storage.forces[force.name].milestones_by_group[milestone.group])
         end
     end
 
@@ -233,7 +233,7 @@ function build_display_page(player)
     inner_frame.clear() -- Just in case the GUI didn't close through close_gui
     local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll", style="flib_naked_scroll_pane"}
 
-    local global_force = global.forces[player.force.name]
+    local global_force = storage.forces[player.force.name]
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local player_settings = settings.get_player_settings(player)

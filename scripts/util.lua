@@ -59,10 +59,10 @@ local delayed_chat_delay = 240
 
 local function print_chat_delayed(event)
     if event.tick == 0 then return end
-    for _, delayed_chat_message in pairs(global.delayed_chat_messages) do
+    for _, delayed_chat_message in pairs(storage.delayed_chat_messages) do
         game.print(delayed_chat_message)
     end
-    global.delayed_chat_messages = {}
+    storage.delayed_chat_messages = {}
     script.on_nth_tick(delayed_chat_delay, nil)
 end
 
@@ -73,7 +73,7 @@ function create_delayed_chat()
 end
 
 function print_delayed_red(message)
-    table.insert(global.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
+    table.insert(storage.delayed_chat_messages, ({"", "[color=red]", message, "[/color]"}))
 end
 
 function approximately_equal(a, b)

@@ -198,7 +198,7 @@ end
 
 function get_resulting_milestones_array(player_index)
     local resulting_milestones = {}
-    local settings_flow = global.players[player_index].settings_flow
+    local settings_flow = storage.players[player_index].settings_flow
     for _, child in pairs(settings_flow.children) do
         if child.type == "flow" then
             local milestone = get_milestones_array_element(child, false, player_index)
@@ -237,16 +237,16 @@ function build_settings_page(player)
 
     -- Preset dropdown
     preset_flow.add{type="label", caption={"milestones.settings_preset"}, style="caption_label"}
-    local preset_dropdown = preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=global.valid_preset_names}
-    if global.current_preset_name == "Imported" then
+    local preset_dropdown = preset_flow.add{type="drop-down", name="milestones_preset_dropdown", items=storage.valid_preset_names}
+    if storage.current_preset_name == "Imported" then
         preset_dropdown.caption = {"milestones.settings_imported"}
         preset_dropdown.tags = {action="milestones_change_preset", imported=true}
     else
-        local current_preset_index = table_get_index(global.valid_preset_names, global.current_preset_name) or 1
+        local current_preset_index = table_get_index(storage.valid_preset_names, storage.current_preset_name) or 1
         preset_dropdown.selected_index = current_preset_index
         preset_dropdown.tags = {action="milestones_change_preset", imported=false}
-        if is_preset_modified(global.loaded_milestones, global.current_preset_name) then
-            preset_dropdown.caption = {"", global.current_preset_name, " ", {"milestones.settings_preset_modified"}}
+        if is_preset_modified(storage.loaded_milestones, storage.current_preset_name) then
+            preset_dropdown.caption = {"", storage.current_preset_name, " ", {"milestones.settings_preset_modified"}}
         end
     end
 
@@ -260,9 +260,9 @@ function build_settings_page(player)
 
     local settings_scroll = settings_outer_flow.add{type="scroll-pane", name="milestones_settings_scroll", style="milestones_settings_scroll"}
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
-    global.players[player.index].settings_flow = settings_flow
-    global.players[player.index].settings_selection_indexes = {}
-    fill_settings_flow(settings_flow, global.loaded_milestones)
+    storage.players[player.index].settings_flow = settings_flow
+    storage.players[player.index].settings_selection_indexes = {}
+    fill_settings_flow(settings_flow, storage.loaded_milestones)
 
     local buttons_flow = settings_outer_flow.add{type="flow", name="milestones_button_flow", direction="horizontal"}
     for _, type in pairs({"group", "item", "fluid", "technology", "kill"}) do
@@ -295,7 +295,7 @@ local function update_buttons_enabled_state(settings_outer_flow, settings_select
 end
 
 function select_setting(event)
-    local global_player = global.players[event.player_index]
+    local global_player = storage.players[event.player_index]
     local checkbox_element = event.element
     local index = checkbox_element.parent.get_index_in_parent()
 
@@ -341,7 +341,7 @@ function swap_settings(player_index, event)
     if event.shift then
         index_delta = index_delta * 5
     end
-    local settings_flow = global.players[player_index].settings_flow
+    local settings_flow = storage.players[player_index].settings_flow
 
     gui_index1 = event.element.parent.parent.get_index_in_parent()
     gui_index2 = gui_index1 + index_delta
@@ -352,7 +352,7 @@ function swap_settings(player_index, event)
     settings_flow.swap_children(gui_index1, gui_index2)
 
     -- Swap selection
-    local global_player = global.players[event.player_index]
+    local global_player = storage.players[event.player_index]
     global_player.settings_selection_indexes[gui_index1], global_player.settings_selection_indexes[gui_index2] = global_player.settings_selection_indexes[gui_index2], global_player.settings_selection_indexes[gui_index1]
 
     refresh_arrow_buttons(gui_index1, settings_flow)
@@ -360,7 +360,7 @@ function swap_settings(player_index, event)
 end
 
 function delete_selected_settings(player_index)
-    local global_player = global.players[player_index]
+    local global_player = storage.players[player_index]
     local settings_flow = global_player.settings_flow
     local inverted_indexes = {}
     for gui_index, _ in pairs(global_player.settings_selection_indexes) do
@@ -388,7 +388,7 @@ function delete_selected_settings(player_index)
 end
 
 function add_setting(player_index, button_element)
-    local global_player = global.players[player_index]
+    local global_player = storage.players[player_index]
     local settings_flow = global_player.settings_flow
     local milestone_type = button_element.tags.type
 
@@ -467,21 +467,21 @@ function confirm_settings_page(player_index)
 
     local new_loaded_milestones = get_resulting_milestones_array(player_index)
 
-    if not table.deep_compare(global.loaded_milestones, new_loaded_milestones) then -- If something changed
+    if not table.deep_compare(storage.loaded_milestones, new_loaded_milestones) then -- If something changed
         local inner_frame = get_inner_frame(player_index)
         local preset_dropdown = inner_frame.milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown
         if preset_dropdown.tags.imported then
-            global.current_preset_name = "Imported"
+            storage.current_preset_name = "Imported"
         else
-            global.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
+            storage.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
         end
 
-        global.loaded_milestones = table.deep_copy(new_loaded_milestones)
+        storage.loaded_milestones = table.deep_copy(new_loaded_milestones)
         initialize_alias_table()
 
         local backfilled_anything = false
         for force_name, force in pairs(game.forces) do
-            local global_force = global.forces[force_name]
+            local global_force = storage.forces[force_name]
             if global_force ~= nil then
                 merge_new_milestones(force_name, new_loaded_milestones)
                 backfilled_anything = backfill_completion_times(force)
@@ -562,7 +562,7 @@ function reset_preset(player_index)
     end
 
     local preset_dropdown = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown
-    local current_preset_index = table_get_index(global.valid_preset_names, chosen_preset_name) or 1
+    local current_preset_index = table_get_index(storage.valid_preset_names, chosen_preset_name) or 1
     preset_dropdown.selected_index = current_preset_index
     preset_dropdown.tags = {action="milestones_change_preset", imported=false}
 
@@ -575,7 +575,7 @@ function reset_preset(player_index)
 end
 
 function switch_to_milestones_set(milestones_set, player_index)
-    local global_player = global.players[player_index]
+    local global_player = storage.players[player_index]
     local settings_flow = global_player.settings_flow
     settings_flow.clear()
     if next(milestones_set) then

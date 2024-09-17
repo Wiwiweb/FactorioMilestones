@@ -106,7 +106,7 @@ function import_settings(player_index)
     if imported_milestones == nil then
         game.players[player_index].print(error)
     else
-        local settings_flow = global.players[player_index].settings_flow
+        local settings_flow = storage.players[player_index].settings_flow
         settings_flow.clear()
         fill_settings_flow(settings_flow, imported_milestones)
         local preset_dropdown = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown

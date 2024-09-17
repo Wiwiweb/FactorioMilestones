@@ -37,7 +37,7 @@ local function find_possible_existing_completion_time(global_force, new_mileston
 end
 
 function merge_new_milestones(force_name, new_loaded_milestones)
-    local global_force = global.forces[force_name]
+    local global_force = storage.forces[force_name]
     local new_complete = {}
     local new_incomplete = {}
     local new_milestones_by_group = {}
@@ -81,8 +81,8 @@ function merge_new_milestones(force_name, new_loaded_milestones)
 end
 
 function initialize_alias_table()
-    global.production_aliases = {}
-    for _, loaded_milestone in pairs(global.loaded_milestones) do
+    storage.production_aliases = {}
+    for _, loaded_milestone in pairs(storage.loaded_milestones) do
         if loaded_milestone.type == "alias" then
             local valid_alias = false
             if game.item_prototypes[loaded_milestone.equals] ~= nil then
@@ -93,8 +93,8 @@ function initialize_alias_table()
                 valid_alias = game.entity_prototypes[loaded_milestone.name] ~= nil
             end
             if valid_alias then
-                global.production_aliases[loaded_milestone.equals] = {} or global.production_aliases[loaded_milestone.equals]
-                table.insert(global.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+                storage.production_aliases[loaded_milestone.equals] = {} or storage.production_aliases[loaded_milestone.equals]
+                table.insert(storage.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
             end
         end
     end
@@ -300,7 +300,7 @@ function backfill_completion_times(force)
 
     local technologies = force.technologies
 
-    local global_force = global.forces[force.name]
+    local global_force = storage.forces[force.name]
     local i = 1
     while i <= #global_force.incomplete_milestones do
         local milestone = global_force.incomplete_milestones[i]
@@ -345,8 +345,8 @@ function is_production_milestone_reached(milestone, global_force)
     end
 
     -- Aliases
-    if global.production_aliases[milestone.name] then
-        for _, alias in pairs(global.production_aliases[milestone.name]) do
+    if storage.production_aliases[milestone.name] then
+        for _, alias in pairs(storage.production_aliases[milestone.name]) do
             local alias_count = stats.get_input_count(alias.name)
             if alias_count then
                 milestone_count = milestone_count or 0 -- Could be nil
@@ -379,7 +379,7 @@ function is_milestone_reached(milestone, global_force, technologies)
 end
 
 function remove_invalid_milestones_all_forces()
-    for _force_name, global_force in pairs(global.forces) do
+    for _force_name, global_force in pairs(storage.forces) do
         remove_invalid_milestones_for_force(global_force)
     end
 end
@@ -401,7 +401,7 @@ function remove_invalid_milestones(milestones, silent)
         else
             table.remove(milestones, i)
             if not silent then
-                table.insert(global.delayed_chat_messages, {"milestones.message_invalid_item", milestone.name})
+                table.insert(storage.delayed_chat_messages, {"milestones.message_invalid_item", milestone.name})
             end
         end
     end

@@ -1,18 +1,18 @@
 function debug_print_forces()
-    game.print(serpent.block(global.forces))
-    log(serpent.block(global.forces))
+    game.print(serpent.block(storage.forces))
+    log(serpent.block(storage.forces))
 end
 commands.add_command("milestones-debug-print-forces", {"milestones.commands.debug-print-forces"}, debug_print_forces)
 
 function debug_print_loaded_milestones()
-    game.print(serpent.block(global.loaded_milestones))
-    log(serpent.block(global.loaded_milestones))
+    game.print(serpent.block(storage.loaded_milestones))
+    log(serpent.block(storage.loaded_milestones))
 end
 commands.add_command("milestones-debug-print-loaded-milestones", {"milestones.commands.debug-print-loaded-milestones"}, debug_print_loaded_milestones)
 
 function debug_set_milestones_time(command_data)
     local force = game.get_player(command_data.player_index).force
-    local global_force = global.forces[force.name]
+    local global_force = storage.forces[force.name]
     local parameters = {}
     for k, v in string.gmatch(command_data.parameter, "([^,]+)") do
         table.insert(parameters, k)

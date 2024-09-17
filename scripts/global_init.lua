@@ -1,7 +1,7 @@
 local table = require("__flib__.table")
 
 function initialize_force_if_needed(force)
-    if global.forces[force.name] == nil and next(force.players) ~= nil then -- Don't bother with forces without players
+    if storage.forces[force.name] == nil and next(force.players) ~= nil then -- Don't bother with forces without players
         log("Initializing global for force " .. force.name)
         global_force = {
             complete_milestones = {},
@@ -11,10 +11,10 @@ function initialize_force_if_needed(force)
             fluid_stats = force.fluid_production_statistics,
             kill_stats = force.kill_count_statistics,
         }
-        global.forces[force.name] = global_force
+        storage.forces[force.name] = global_force
 
         local current_group = "Other"
-        for i, loaded_milestone in pairs(global.loaded_milestones) do
+        for i, loaded_milestone in pairs(storage.loaded_milestones) do
             if loaded_milestone.type == "group" then
                 current_group = loaded_milestone.name
             elseif loaded_milestone.type ~= "alias" then
@@ -34,7 +34,7 @@ function initialize_force_if_needed(force)
 end
 
 function reinitialize_player(player_index)
-    local outer_frame = global.players[player_index].outer_frame
+    local outer_frame = storage.players[player_index].outer_frame
     if outer_frame.valid then
         outer_frame.destroy()
     end
@@ -44,7 +44,7 @@ end
 
 function initialize_player(player)
     local outer_frame, main_frame, inner_frame = build_gui_frames(player)
-    global.players[player.index] = {
+    storage.players[player.index] = {
         outer_frame = outer_frame,
         main_frame = main_frame,
         inner_frame = inner_frame,
@@ -54,9 +54,9 @@ function initialize_player(player)
 end
 
 function clear_force(force_name)
-    global.forces[force_name] = nil
+    storage.forces[force_name] = nil
 end
 
 function clear_player(player_index)
-    global.players[player_index] = nil
+    storage.players[player_index] = nil
 end
