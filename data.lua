@@ -202,7 +202,7 @@ data:extend{
   {
     type = "sprite",
     name = "rename_icon_small_white",
-    filename = "__Milestones__/graphics/rename-small-white.png",
+    filename = "__core__/graphics/rename-icon.png",
     priority = "high",
     size = 32,
     scale = 0.5,
