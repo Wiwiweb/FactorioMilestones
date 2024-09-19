@@ -154,6 +154,14 @@ return {
 
     ["1.4.0"] = function()
         log("Running 1.4.0 migration")
-
+        for force_name, force in pairs(game.forces) do
+            if storage.forces[force_name] ~= nil then
+                local global_force = storage.forces[force_name]
+                global_force.item_stats = {}
+                global_force.fluid_stats = {}
+                global_force.kill_stats = {}
+                add_flow_statistics_to_global_force(force)
+            end
+        end
     end
 }

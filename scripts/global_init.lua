@@ -7,11 +7,14 @@ function initialize_force_if_needed(force)
             complete_milestones = {},
             incomplete_milestones = {},
             milestones_by_group = {},
-            item_stats = force.item_production_statistics,
-            fluid_stats = force.fluid_production_statistics,
-            kill_stats = force.kill_count_statistics,
+            item_stats = {},
+            fluid_stats = {},
+            kill_stats = {},
         }
+
         storage.forces[force.name] = global_force
+
+        add_flow_statistics_to_global_force(force)
 
         local current_group = "Other"
         for i, loaded_milestone in pairs(storage.loaded_milestones) do
@@ -31,6 +34,16 @@ function initialize_force_if_needed(force)
         return backfill_completion_times(force)
     end
     return false
+end
+
+function add_flow_statistics_to_global_force(force)
+    local global_force = storage.forces[force.name]
+    for surface_name, _surface in pairs(game.surfaces) do
+        -- TODO: Check for surfaces that the force has not built on and skip them?
+        table.insert(global_force.item_stats, force.get_item_production_statistics(surface_name))
+        table.insert(global_force.fluid_stats, force.get_fluid_production_statistics(surface_name))
+        table.insert(global_force.kill_stats, force.get_kill_count_statistics(surface_name))
+    end
 end
 
 function reinitialize_player(player_index)
