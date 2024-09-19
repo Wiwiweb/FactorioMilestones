@@ -96,11 +96,15 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
         tooltip = tooltip or {"", prefix, prototype.localised_name, " (", {"milestones.type_kill"}, ")"}
     else
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
-        local postfix = ""
-        if milestone.type == "item_consumption" or milestone.type == "fluid_consumption" then
-            postfix = {"", " (", {"milestones.type_consumption"}, ")"}
+        local postfix1 = ""
+        local postfix2 = ""
+        if milestone.quality ~= nil and milestone.quality ~= "normal" then
+            postfix1 = {"", " (", {"quality-name." .. milestone.quality}, ")"}
         end
-        tooltip = tooltip or {"", prefix, prototype.localised_name, postfix}
+        if milestone.type == "item_consumption" or milestone.type == "fluid_consumption" then
+            postfix2 = {"", " (", {"milestones.type_consumption"}, ")"}
+        end
+        tooltip = tooltip or {"", prefix, prototype.localised_name, postfix1, postfix2}
     end
     milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
 
