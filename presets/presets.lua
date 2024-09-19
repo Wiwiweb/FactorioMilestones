@@ -147,7 +147,7 @@ presets = {
             {type="item",       name="quality-module-2",      quantity=1, quality="rare"},
             {type="item",       name="quality-module-3",      quantity=1, quality="epic"},
             {type="item",       name="quality-module-3",      quantity=1, quality="legendary"},
-            {type="item",       name="productivity-module-3", quantity=1000, next="x10", quality="legendary"},
+            {type="item",       name="productivity-module-3", quantity=100, next="x10", quality="legendary"},
             {type="item",       name="power-armor-mk2",       quantity=1, quality="rare"},
             {type="item",       name="power-armor-mk2",       quantity=1, quality="epic"},
             {type="item",       name="power-armor-mk2",       quantity=1, quality="legendary"},
