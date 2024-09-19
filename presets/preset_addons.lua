@@ -20,6 +20,18 @@
 -- })
 
 preset_addons = {
+    ["Quality"] = {
+        required_mods = {"quality"},
+        forbidden_mods = {"space-age"},
+        milestones = {
+            {type="group", name="Quality"},
+            {type="item", name="quality-module",        quantity=1, quality="rare"},
+            {type="item", name="quality-module-2",      quantity=1, quality="rare"},
+            {type="item", name="quality-module-3",      quantity=1, quality="epic"},
+            {type="item", name="quality-module-3",      quantity=1, quality="legendary"},
+        }
+    },
+
     ["Power Armor MK3"] = {
         required_mods = {"Power Armor MK3"},
         milestones = {
