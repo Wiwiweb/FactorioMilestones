@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.0
 Date: ????
+  Changes:
+    - Updated for Factorio 2.0.
+    - Added a Space Age preset. (May change in the future)
+
   Locale:
     - Added Catalan translation thanks to badall.
     - Translation updates for French and Dutch.
