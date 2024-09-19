@@ -106,7 +106,13 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
         end
         tooltip = tooltip or {"", prefix, prototype.localised_name, postfix1, postfix2}
     end
-    milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
+    if milestone.quality and milestone.quality ~= "normal" then
+        local base_icon = milestone_flow.add{type="sprite-button", sprite=sprite_path, tooltip=tooltip, style="transparent_slot"}
+        base_icon.add{type="sprite-button", sprite="quality/"..milestone.quality, style="milestones_quality_sprite_button"}
+        base_icon.add{type="sprite-button", sprite="", number=sprite_number, style="transparent_slot"}
+    else
+        milestone_flow.add{type="sprite-button", sprite=sprite_path, number=sprite_number, tooltip=tooltip, style="transparent_slot"}
+    end
 
     -- Item name
     add_milestone_label(milestone_flow, milestone, compact_list, show_estimations, print_milliseconds)

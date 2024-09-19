@@ -104,20 +104,27 @@ styles.milestones_small_textfield = {
   natural_width = 70
 }
 
+styles.milestones_very_short_textfield = {
+  type = "textbox_style",
+  width = 40
+}
+
 styles.milestones_import_export_textbox = {
   type = "textbox_style",
   width = 600,
   minimal_height = 300
 }
 
-styles.milestones_very_short_textfield = {
-  type = "textbox_style",
-  width = 40
-}
-
 styles.milestones_very_short_spacer = {
   type = "empty_widget_style",
   width = 40
+}
+
+styles.milestones_quality_sprite_button = {
+  type = "button_style",
+  parent = "transparent_slot",
+  top_padding = 18,
+  right_padding = 18,
 }
 
 styles.milestones_line_left = table.deepcopy(styles.line)
