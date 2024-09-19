@@ -24,7 +24,7 @@ end
 
 function build_gui_frames(player)
     local screen_element = player.gui.screen
-    local outer_frame = screen_element.add{type="frame", name="milestones_outer_frame", style="outer_frame", visible=false}
+    local outer_frame = screen_element.add{type="frame", name="milestones_outer_frame", style="invisible_frame", visible=false}
     local main_frame = outer_frame.add{type="frame", name="milestones_main_frame", direction="vertical"}
 
     local titlebar = main_frame.add{type="flow", name="milestones_titlebar", style="flib_titlebar_flow", direction="horizontal"}
@@ -74,7 +74,7 @@ function build_gui_frames(player)
         name="milestones_close_button",
         style="frame_action_button",
         mouse_button_filter={"left"},
-        sprite="utility/close_white",
+        sprite="utility/close",
         hovered_sprite="utility/close_black",
         clicked_sprite="utility/close_black",
         tooltip = {"gui.close-instruction"},
@@ -94,7 +94,7 @@ function build_gui_frames(player)
 
     -- Import/export side menu
 
-    local import_export_frame = outer_frame.add{type="frame", name="milestones_settings_import_export", style="inner_frame_in_outer_frame", direction="vertical", visible=false}
+    local import_export_frame = outer_frame.add{type="frame", name="milestones_settings_import_export", style="frame", direction="vertical", visible=false}
     local import_export_titlebar = import_export_frame.add{type="flow", name="milestones_settings_import_export_titlebar", style="flib_titlebar_flow", direction="horizontal"}
     import_export_titlebar.add{
         type="label",
