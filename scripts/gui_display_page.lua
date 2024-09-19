@@ -57,7 +57,7 @@ local function add_milestone_label(milestone_flow, milestone, compact_list, show
 
     -- Optional edit button
     if show_edit_button then
-        milestone_flow.add{type="sprite-button", name="milestones_edit_time", sprite="utility/rename_icon_small_white", style="milestones_small_button", 
+        milestone_flow.add{type="sprite-button", name="milestones_edit_time", sprite="rename_icon_small_white", style="milestones_small_button", 
             tooltip={"milestones.edit_time_tooltip"}, tags={action="milestones_edit_time"}}
     end
 end

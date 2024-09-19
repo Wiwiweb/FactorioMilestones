@@ -197,4 +197,15 @@ data:extend{
   data_util.build_sprite("milestones_icon_kill_black", {48, 16}, item_icons, 16),
   data_util.build_sprite("milestones_icon_group", {64, 0}, item_icons, 16),
   data_util.build_sprite("milestones_icon_group_black", {64, 16}, item_icons, 16),
+  data_util.build_sprite("milestones_icon_group_black", {64, 16}, item_icons, 16),
+
+  {
+    type = "sprite",
+    name = "rename_icon_small_white",
+    filename = "__Milestones__/graphics/rename-small-white.png",
+    priority = "high",
+    size = 32,
+    scale = 0.5,
+    invert_colors=true
+  },
 }
