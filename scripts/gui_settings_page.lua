@@ -67,8 +67,10 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
         prototype = game.item_prototypes[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item",
-            item=default_selection, tags={action="milestones_change_setting", milestone_type=milestone.type}}
+        -- Note: This works even with the quality mod disabled
+        local default_selection_quality = milestone.quality or "normal"
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item-with-quality",
+            ["item-with-quality"]={name=default_selection, quality=default_selection_quality}, tags={action="milestones_change_setting", milestone_type=milestone.type}}
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         prototype = game.fluid_prototypes[milestone.name]
         local default_selection = nil
@@ -95,7 +97,15 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     if milestone.name ~= nil and prototype == nil then
         caption = {"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}
     else
-        caption = (prototype ~= nil) and prototype.localised_name or ""
+        if prototype ~= nil then
+            if milestone.quality ~= nil and milestone.quality ~= "normal" then
+                caption = {"", prototype.localised_name, " (", {"quality-name."..milestone.quality}, ")"}
+            else
+                caption = prototype.localised_name
+            end
+        else
+            caption = ""
+        end
     end
     milestone_flow.add{type="label", name="milestones_settings_label", caption=caption}
 
@@ -507,8 +517,10 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_change_setting" then
         local prototype
-        if event.element.elem_type == "item" then
-            prototype = game.item_prototypes[event.element.elem_value]
+        local quality
+        if event.element.elem_type == "item-with-quality" then
+            prototype = game.item_prototypes[event.element.elem_value.name]
+            quality = event.element.elem_value.quality
         elseif event.element.elem_type == "fluid" then
             prototype = game.fluid_prototypes[event.element.elem_value]
         elseif event.element.elem_type == "technology" then
@@ -521,7 +533,15 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
         elseif event.element.elem_type == "entity" then
             prototype = game.entity_prototypes[event.element.elem_value]
         end
-        event.element.parent.milestones_settings_label.caption = prototype ~= nil and prototype.localised_name or ""
+        local caption = ""
+        if prototype ~= nil then
+            if quality ~= nil and quality ~= "normal" then
+                caption = {"", prototype.localised_name, " (", {"quality-name."..quality}, ")"}
+            else
+                caption = prototype.localised_name
+            end
+        end
+        event.element.parent.milestones_settings_label.caption = caption
     end
 end)
 
