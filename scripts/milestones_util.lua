@@ -185,7 +185,7 @@ end
 local function find_precision_bracket(milestone, flow_statistics_table, is_consumption)
     local total_count = get_total_count(flow_statistics_table, milestone.name, is_consumption)
     local previous_bracket = "ALL"
-    local input_type = is_consumption and "output" or "input"
+    local category_type = is_consumption and "output" or "input"
     for _, bracket in pairs(FLOW_PRECISION_BRACKETS) do
 
         -- The first bracket that does NOT match the total count indicates the upper bound first production time.
@@ -193,7 +193,7 @@ local function find_precision_bracket(milestone, flow_statistics_table, is_consu
         -- then the first creation was between 50 and 250 hours ago, and we should search the 250 hours precision bracket.
 
         if FLOW_PRECISION_BRACKETS_LENGTHS[bracket] <= game.tick then -- Skip bracket if the game is not long enough
-            local bracket_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, input=input_type, precision_index=bracket, count=true})
+            local bracket_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, category=category_type, precision_index=bracket, count=true})
             if bracket_count <= total_count - milestone.quantity then
                 return previous_bracket
             end
@@ -207,12 +207,12 @@ end
 
 local function find_sample_in_precision_bracket(milestone, bracket, flow_statistics_table, is_consumption)
     local total_count = get_total_count(flow_statistics_table, milestone.name, is_consumption)
-    local input_type = is_consumption and "output" or "input"
-    local bracket_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, input=input_type, precision_index=bracket, count=true})
+    local category_type = is_consumption and "output" or "input"
+    local bracket_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, category=category_type, precision_index=bracket, count=true})
     local count_before_bracket = total_count - bracket_count
     local count_this_bracket = 0
     for i = 300,1,-1 do -- Start from oldest
-        local sample_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, input=input_type, precision_index=bracket, count=true, sample_index=i})
+        local sample_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, category=category_type, precision_index=bracket, count=true, sample_index=i})
         count_this_bracket = count_this_bracket + sample_count
         if count_this_bracket + count_before_bracket >= milestone.quantity then
             return i
