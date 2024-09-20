@@ -68,7 +68,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         -- Note: This works even with the quality mod disabled
-        local default_selection_quality = milestone.quality or "normal"
+        local default_selection_quality = milestone.quality or "normal" -- Default to "normal" because "any" isn't possible yet
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item-with-quality",
             ["item-with-quality"]={name=default_selection, quality=default_selection_quality}, tags={action="milestones_change_setting", milestone_type=milestone.type}}
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
@@ -98,7 +98,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
         caption = {"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}
     else
         if prototype ~= nil then
-            if milestone.quality ~= nil and milestone.quality ~= "normal" then
+            if milestone.quality ~= nil then
                 caption = {"", prototype.localised_name, " (", {"quality-name."..milestone.quality}, ")"}
             else
                 caption = prototype.localised_name
@@ -521,6 +521,7 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
         if event.element.elem_type == "item-with-quality" then
             prototype = game.item_prototypes[event.element.elem_value.name]
             quality = event.element.elem_value.quality
+            if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
         elseif event.element.elem_type == "fluid" then
             prototype = game.fluid_prototypes[event.element.elem_value]
         elseif event.element.elem_type == "technology" then
@@ -535,7 +536,7 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
         end
         local caption = ""
         if prototype ~= nil then
-            if quality ~= nil and quality ~= "normal" then
+            if quality ~= nil then
                 caption = {"", prototype.localised_name, " (", {"quality-name."..quality}, ")"}
             else
                 caption = prototype.localised_name
