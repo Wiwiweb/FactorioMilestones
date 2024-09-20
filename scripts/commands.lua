@@ -11,6 +11,7 @@ end
 commands.add_command("milestones-debug-print-loaded-milestones", {"milestones.commands.debug-print-loaded-milestones"}, debug_print_loaded_milestones)
 
 function debug_set_milestones_time(command_data)
+    if not command_data.parameter then return end
     local force = game.get_player(command_data.player_index).force
     local global_force = storage.forces[force.name]
     local parameters = {}
@@ -36,6 +37,7 @@ end
 commands.add_command("milestones-debug-set-milestone-time", {"milestones.commands.debug-set-milestone-time"}, debug_set_milestones_time)
 
 function reinitialize_gui(command_data)
+    if not command_data.player_index then return end
     reinitialize_player(command_data.player_index)
 end
 commands.add_command("milestones-reinitialize-gui", {"milestones.commands.reinitialize-gui"}, reinitialize_gui)

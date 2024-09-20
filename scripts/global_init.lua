@@ -47,12 +47,17 @@ function add_flow_statistics_to_global_force(force)
 end
 
 function reinitialize_player(player_index)
-    local outer_frame = storage.players[player_index].outer_frame
-    if outer_frame.valid then
-        outer_frame.destroy()
+    local storage_player = storage.players[player_index]
+    if storage_player then
+        local outer_frame = storage_player.outer_frame
+        if outer_frame.valid then
+            outer_frame.destroy()
+        end
     end
     local player = game.get_player(player_index)
-    initialize_player(player)
+    if player then
+        initialize_player(player)
+    end
 end
 
 function initialize_player(player)
