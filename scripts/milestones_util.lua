@@ -25,6 +25,11 @@ local FLOW_PRECISION_BRACKETS_LENGTHS = {
     [defines.flow_precision_index.five_seconds] =            5*60,
 }
 
+-- TODO: don't hardcode, get them on config changed
+local QUALITY_NAMES = {
+    "normal", "uncommon", "rare", "epic", "legendary"
+}
+
 local function find_possible_existing_completion_time(global_force, new_milestone)
     for _, complete_milestone in pairs(global_force.complete_milestones) do
         if complete_milestone.type == new_milestone.type and
@@ -94,7 +99,7 @@ function initialize_alias_table()
             end
             if valid_alias then
                 storage.production_aliases[loaded_milestone.equals] = {} or storage.production_aliases[loaded_milestone.equals]
-                table.insert(storage.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity})
+                table.insert(storage.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity, quality=loaded_milestone.quality})
             end
         end
     end
@@ -159,33 +164,106 @@ function ceil_to_nearest_minute(tick)
     return tick - modulo + 60*60
 end
 
--- Sums get_input/output_count for an array of LuaFlowStatistics
-local function get_total_count(flow_statistics_table, item_name, is_consumption)
-    local global_count = 0
-    for _, flow_statistics in pairs(flow_statistics_table) do
-        if is_consumption then
-            global_count = global_count + flow_statistics.get_output_count(item_name)
-        else
-            global_count = global_count + flow_statistics.get_input_count(item_name)
-        end
+local function is_consumption_type(milestone_type)
+    if milestone_type == "item_consumption" or milestone_type == "fluid_consumption" then
+        return true
+    else
+        return false
     end
-    return global_count
 end
 
--- Sums get_flow_counts for an array of LuaFlowStatistics
-local function get_global_flow_count(flow_statistics_table, params)
-    local global_count = 0
-    for _, flow_statistics in pairs(flow_statistics_table) do
-        local count = flow_statistics.get_flow_count(params)
-        global_count = global_count + count
+local function get_category_type(milestone)
+    if is_consumption_type(milestone.type) then
+        return "output"
+    else
+        return "input"
     end
-    return global_count
+end
+
+-- These sum_* methods need to be performant, so we sacrifice DRY a bit to avoid checking the same conditions many times
+
+-- item_id could be a String or a ItemIDAndQualityIDPair
+local function sum_counts(flow_statistics_table, item_id, flow_stats_method_name)
+    local total_count = 0
+    for _, flow_statistics in pairs(flow_statistics_table) do
+        total_count = total_count + flow_statistics[flow_stats_method_name](item_id)
+    end
+    return total_count
+end
+
+local function sum_counts_merged_qualities(flow_statistics_table, item_name, flow_stats_method_name)
+    local total_count = 0
+    for _, flow_statistics in pairs(flow_statistics_table) do
+        for _, quality_name in pairs(QUALITY_NAMES) do
+            total_count = total_count + flow_statistics[flow_stats_method_name]({name=item_name, quality=quality_name})
+        end
+    end
+    return total_count
+end
+
+-- item_id could be a String or a ItemIDAndQualityIDPair
+local function sum_get_flow_counts(flow_statistics_table, item_id, category_type, precision_index, sample_index)
+    local total_count = 0
+    for _, flow_statistics in pairs(flow_statistics_table) do
+        total_count = total_count + flow_statistics.get_flow_count({
+            name=item_id,
+            category=category_type,
+            precision_index=precision_index,
+            sample_index=sample_index,
+            count=true,
+        })    
+    end
+    return total_count
+end
+
+local function sum_get_flow_counts_merged_qualities(flow_statistics_table, item_name, category_type, precision_index, sample_index)
+    local total_count = 0
+    for _, flow_statistics in pairs(flow_statistics_table) do
+        for _, quality_name in pairs(QUALITY_NAMES) do
+            total_count = total_count + flow_statistics.get_flow_count({
+                name={name=item_name, quality=quality_name},
+                category=category_type,
+                precision_index=precision_index,
+                sample_index=sample_index,
+                count=true,
+            })
+        end
+    end
+    return total_count
+end
+
+-- Sums get_input/output_count for an array of LuaFlowStatistics, merging qualities if needed
+local function get_total_count(flow_statistics_table, milestone)
+    local flow_stats_method_name = is_consumption_type(milestone.type) and "get_output_count" or "get_input_count"
+    if milestone.type == "item" or milestone.type == "item_consumption" then -- These are the Item LuaFlowStatistics, they always take a quality.
+        if milestone.quality then -- Specific quality
+            return sum_counts(flow_statistics_table, {name=milestone.name, quality=milestone.quality}, flow_stats_method_name)
+        else
+            return sum_counts_merged_qualities(flow_statistics_table, milestone.name, flow_stats_method_name)
+        end
+    else -- Fluid or Kills LuaFlowStatistics, no qualities here.
+        return sum_counts(flow_statistics_table, milestone.name, flow_stats_method_name)
+    end
+end
+
+-- Sums get_flow_counts for an array of LuaFlowStatistics, merging qualities if needed
+local function get_total_flow_count(flow_statistics_table, milestone, precision_index, sample_index)
+    local category_type = get_category_type(milestone)
+    local item_name
+    if milestone.type == "item" or milestone.type == "item_consumption" then -- These are the Item LuaFlowStatistics, they always take a quality.
+        if milestone.quality then -- Specific quality
+            return sum_get_flow_counts(flow_statistics_table, {name=milestone.name, quality=milestone.quality}, category_type, precision_index, sample_index)
+        else
+            return sum_get_flow_counts_merged_qualities(flow_statistics_table, milestone.name, category_type, precision_index, sample_index)
+        end
+    else -- Fluid or Kills LuaFlowStatistics, no qualities here.
+        return sum_get_flow_counts(flow_statistics_table, milestone.name, category_type, precision_index, sample_index)
+    end
 end
 
 local function find_precision_bracket(milestone, flow_statistics_table, is_consumption)
-    local total_count = get_total_count(flow_statistics_table, milestone.name, is_consumption)
+    local total_count = get_total_count(flow_statistics_table, milestone)
     local previous_bracket = "ALL"
-    local category_type = is_consumption and "output" or "input"
     for _, bracket in pairs(FLOW_PRECISION_BRACKETS) do
 
         -- The first bracket that does NOT match the total count indicates the upper bound first production time.
@@ -193,7 +271,7 @@ local function find_precision_bracket(milestone, flow_statistics_table, is_consu
         -- then the first creation was between 50 and 250 hours ago, and we should search the 250 hours precision bracket.
 
         if FLOW_PRECISION_BRACKETS_LENGTHS[bracket] <= game.tick then -- Skip bracket if the game is not long enough
-            local bracket_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, category=category_type, precision_index=bracket, count=true})
+            local bracket_count = get_total_flow_count(flow_statistics_table, milestone, bracket, nil)
             if bracket_count <= total_count - milestone.quantity then
                 return previous_bracket
             end
@@ -205,14 +283,14 @@ local function find_precision_bracket(milestone, flow_statistics_table, is_consu
     return previous_bracket
 end
 
-local function find_sample_in_precision_bracket(milestone, bracket, flow_statistics_table, is_consumption)
-    local total_count = get_total_count(flow_statistics_table, milestone.name, is_consumption)
-    local category_type = is_consumption and "output" or "input"
-    local bracket_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, category=category_type, precision_index=bracket, count=true})
+local function find_sample_in_precision_bracket(milestone, bracket, flow_statistics_table)
+    local total_count = get_total_count(flow_statistics_table, milestone)
+     -- TODO: we already did this get_total_flow_count earlier in this same tick in find_precision_bracket, cache?
+    local bracket_count = get_total_flow_count(flow_statistics_table, milestone, bracket, nil)
     local count_before_bracket = total_count - bracket_count
     local count_this_bracket = 0
     for i = 300,1,-1 do -- Start from oldest
-        local sample_count = get_global_flow_count(flow_statistics_table, {name=milestone.name, category=category_type, precision_index=bracket, count=true, sample_index=i})
+        local sample_count = get_total_flow_count(flow_statistics_table, milestone, bracket, i)
         count_this_bracket = count_this_bracket + sample_count
         if count_this_bracket + count_before_bracket >= milestone.quantity then
             return i
@@ -251,8 +329,8 @@ local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks
     return lower_bound_ticks, upper_bound_ticks
 end
 
-local function find_production_tick_bounds(milestone, flow_statistics_table, is_consumption)
-    local precision_bracket = find_precision_bracket(milestone, flow_statistics_table, is_consumption)
+local function find_production_tick_bounds(milestone, flow_statistics_table)
+    local precision_bracket = find_precision_bracket(milestone, flow_statistics_table)
     log("bracket to search: " ..precision_bracket)
 
     local lower_bound_ticks_ago, upper_bound_ticks_ago
@@ -261,7 +339,7 @@ local function find_production_tick_bounds(milestone, flow_statistics_table, is_
         -- All we know is it's between tick 0 and 1000 hours ago
         lower_bound_ticks_ago, upper_bound_ticks_ago = game.tick, FLOW_PRECISION_BRACKETS_LENGTHS[defines.flow_precision_index.one_thousand_hours]
     else
-        local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, flow_statistics_table, is_consumption)
+        local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, flow_statistics_table)
         if sample_index == 0 then
             return game.tick, game.tick -- Created this exact tick, usually on tick 0 before the start of the game
         end
@@ -276,16 +354,12 @@ end
 function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
     if milestone.type == "technology" then
         return 0, game.tick -- No way to know past research time
-    elseif milestone.type == "item" then
-        return find_production_tick_bounds(milestone, item_stats, false)
-    elseif milestone.type == "fluid" then
-        return find_production_tick_bounds(milestone, fluid_stats, false)
-    elseif milestone.type == "item_consumption" then
-        return find_production_tick_bounds(milestone, item_stats, true)
-    elseif milestone.type == "fluid_consumption" then
-        return find_production_tick_bounds(milestone, fluid_stats, true)
+    elseif milestone.type == "item" or milestone.type == "item_consumption" then
+        return find_production_tick_bounds(milestone, item_stats)
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
+        return find_production_tick_bounds(milestone, fluid_stats)
     elseif milestone.type == "kill" then
-        return find_production_tick_bounds(milestone, kill_stats, false)
+        return find_production_tick_bounds(milestone, kill_stats)
     end
 end
 
@@ -350,16 +424,12 @@ function is_production_milestone_reached(milestone, global_force)
         error("Invalid milestone type! " .. milestone.type)
     end
 
-    local is_consumption = false
-    if milestone.type == "item_consumption" or milestone.type == "fluid_consumption" then
-        is_consumption = true
-    end
-    local milestone_count = get_total_count(flow_statistics_table, milestone.name, is_consumption)
+    local milestone_count = get_total_count(flow_statistics_table, milestone)
 
     -- Aliases
     if storage.production_aliases[milestone.name] then
         for _, alias in pairs(storage.production_aliases[milestone.name]) do
-            local alias_count = get_total_count(flow_statistics_table, alias.name, is_consumption)
+            local alias_count = get_total_count(flow_statistics_table, alias)
             if alias_count then
                 milestone_count = milestone_count or 0 -- Could be nil
                 milestone_count = milestone_count + alias_count * alias.quantity
