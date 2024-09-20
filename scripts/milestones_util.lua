@@ -94,9 +94,9 @@ function initialize_alias_table()
     storage.production_aliases = {}
     for _, loaded_milestone in pairs(storage.loaded_milestones) do
         if loaded_milestone.type == "alias" and (
-            game.item_prototypes[loaded_milestone.name] ~= nil or
-            game.fluid_prototypes[loaded_milestone.name] ~= nil or
-            game.entity_prototypes[loaded_milestone.name] ~= nil
+            prototypes.item[loaded_milestone.name] ~= nil or
+            prototypes.fluid[loaded_milestone.name] ~= nil or
+            prototypes.entity[loaded_milestone.name] ~= nil
         ) then
             local alias_type = milestone_type_by_name[loaded_milestone.equals]
             if alias_type then
@@ -496,13 +496,13 @@ end
 function is_valid_milestone(milestone)
     local prototype
     if milestone.type == "item" or milestone.type == "item_consumption" then
-        prototype = game.item_prototypes[milestone.name]
+        prototype = prototypes.item[milestone.name]
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-        prototype = game.fluid_prototypes[milestone.name]
+        prototype = prototypes.fluid[milestone.name]
     elseif milestone.type == "technology" then
-        prototype = game.technology_prototypes[milestone.name]
+        prototype = prototypes.technology[milestone.name]
     elseif milestone.type == "kill" then
-        prototype = game.entity_prototypes[milestone.name]
+        prototype = prototypes.entity[milestone.name]
     else
         return false
     end

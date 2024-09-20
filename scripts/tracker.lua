@@ -52,7 +52,7 @@ local function print_milestone_reached(force, milestone)
     local milestone_localised_name
     local message
     if milestone.type == "technology" then
-        milestone_localised_name = game.technology_prototypes[milestone.name].localised_name
+        milestone_localised_name = prototypes.technology[milestone.name].localised_name
         local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity.." ")
         message = {"milestones.message_milestone_reached_technology", sprite_name, milestone_localised_name, level_string, human_timestamp}
     else
@@ -60,12 +60,12 @@ local function print_milestone_reached(force, milestone)
             if milestone.name == "se-rocket-launch-pad-silo-dummy-result-item" then
                 milestone_localised_name = "Cargo rocket"
             else
-                milestone_localised_name = game.item_prototypes[milestone.name].localised_name
+                milestone_localised_name = prototypes.item[milestone.name].localised_name
             end
         elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-            milestone_localised_name = game.fluid_prototypes[milestone.name].localised_name
+            milestone_localised_name = prototypes.fluid[milestone.name].localised_name
         elseif milestone.type == "kill" then
-            milestone_localised_name = game.entity_prototypes[milestone.name].localised_name
+            milestone_localised_name = prototypes.entity[milestone.name].localised_name
         else
             error("Invalid milestone type! " .. milestone.type)
         end

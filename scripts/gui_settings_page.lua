@@ -64,7 +64,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     end
 
     if milestone.type == "item" or milestone.type == "item_consumption" then
-        prototype = game.item_prototypes[milestone.name]
+        prototype = prototypes.item[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         -- Note: This works even with the quality mod disabled
@@ -72,19 +72,19 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item-with-quality",
             ["item-with-quality"]={name=default_selection, quality=default_selection_quality}, tags={action="milestones_change_setting", milestone_type=milestone.type}}
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-        prototype = game.fluid_prototypes[milestone.name]
+        prototype = prototypes.fluid[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="fluid",
             fluid=default_selection, tags={action="milestones_change_setting", milestone_type=milestone.type}}
     elseif milestone.type == "technology" then
-        prototype = game.technology_prototypes[milestone.name]
+        prototype = prototypes.technology[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="technology",
             technology=default_selection, tags={action="milestones_change_setting", milestone_type="technology"}}
     elseif milestone.type == "kill" then
-        prototype = game.entity_prototypes[milestone.name]
+        prototype = prototypes.entity[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="entity",
@@ -531,20 +531,20 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
         local quality
         if event.element.elem_value then
             if event.element.elem_type == "item-with-quality" then
-                prototype = game.item_prototypes[event.element.elem_value.name]
+                prototype = prototypes.item[event.element.elem_value.name]
                 quality = event.element.elem_value.quality
                 if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
             elseif event.element.elem_type == "fluid" then
-                prototype = game.fluid_prototypes[event.element.elem_value]
+                prototype = prototypes.fluid[event.element.elem_value]
             elseif event.element.elem_type == "technology" then
-                prototype = game.technology_prototypes[event.element.elem_value]
+                prototype = prototypes.technology[event.element.elem_value]
                 local visible_textfield = prototype ~= nil and prototype.research_unit_count_formula ~= nil -- No text field for unique technologies
                 event.element.parent.milestones_settings_quantity.visible = visible_textfield
                 if not visible_textfield then
                     event.element.parent.milestones_settings_quantity.text = "1"
                 end
             elseif event.element.elem_type == "entity" then
-                prototype = game.entity_prototypes[event.element.elem_value]
+                prototype = prototypes.entity[event.element.elem_value]
             end
         end
         local caption = ""

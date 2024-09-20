@@ -66,13 +66,13 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_display", tags={index=milestone.sort_index}}
     local prototype = nil
     if milestone.type == "item" or milestone.type == "item_consumption" then
-        prototype = game.item_prototypes[milestone.name]
+        prototype = prototypes.item[milestone.name]
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-        prototype = game.fluid_prototypes[milestone.name]
+        prototype = prototypes.fluid[milestone.name]
     elseif milestone.type == "technology" then
-        prototype = game.technology_prototypes[milestone.name]
+        prototype = prototypes.technology[milestone.name]
     elseif milestone.type == "kill" then
-        prototype = game.entity_prototypes[milestone.name]
+        prototype = prototypes.entity[milestone.name]
     end
 
     if prototype == nil then
