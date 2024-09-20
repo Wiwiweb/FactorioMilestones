@@ -111,6 +111,7 @@ presets = {
             {type="item",       name="spidertron",                  quantity=1},
             {type="item",       name="mech-armor",                  quantity=1},
             {type="item_consumption", name="space-platform-starter-pack", quantity=1},
+            {type="item_consumption", name="space-platform-starter-pack", quantity=10, next="+10"},
             {type="item",       name="foundry",                     quantity=1},
             {type="item",       name="biochamber",                  quantity=1},
             {type="item",       name="electromagnetic-plant",       quantity=1},
