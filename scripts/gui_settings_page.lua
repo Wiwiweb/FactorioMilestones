@@ -518,21 +518,23 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
     if event.element.tags.action == "milestones_change_setting" then
         local prototype
         local quality
-        if event.element.elem_type == "item-with-quality" then
-            prototype = game.item_prototypes[event.element.elem_value.name]
-            quality = event.element.elem_value.quality
-            if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
-        elseif event.element.elem_type == "fluid" then
-            prototype = game.fluid_prototypes[event.element.elem_value]
-        elseif event.element.elem_type == "technology" then
-            prototype = game.technology_prototypes[event.element.elem_value]
-            local visible_textfield = prototype ~= nil and prototype.research_unit_count_formula ~= nil -- No text field for unique technologies
-            event.element.parent.milestones_settings_quantity.visible = visible_textfield
-            if not visible_textfield then
-                event.element.parent.milestones_settings_quantity.text = "1"
+        if event.element.elem_value then
+            if event.element.elem_type == "item-with-quality" then
+                prototype = game.item_prototypes[event.element.elem_value.name]
+                quality = event.element.elem_value.quality
+                if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
+            elseif event.element.elem_type == "fluid" then
+                prototype = game.fluid_prototypes[event.element.elem_value]
+            elseif event.element.elem_type == "technology" then
+                prototype = game.technology_prototypes[event.element.elem_value]
+                local visible_textfield = prototype ~= nil and prototype.research_unit_count_formula ~= nil -- No text field for unique technologies
+                event.element.parent.milestones_settings_quantity.visible = visible_textfield
+                if not visible_textfield then
+                    event.element.parent.milestones_settings_quantity.text = "1"
+                end
+            elseif event.element.elem_type == "entity" then
+                prototype = game.entity_prototypes[event.element.elem_value]
             end
-        elseif event.element.elem_type == "entity" then
-            prototype = game.entity_prototypes[event.element.elem_value]
         end
         local caption = ""
         if prototype ~= nil then
