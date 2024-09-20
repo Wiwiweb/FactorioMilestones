@@ -86,20 +86,23 @@ function merge_new_milestones(force_name, new_loaded_milestones)
 end
 
 function initialize_alias_table()
+    -- First make a dict of milestone names to attach a type to aliases later
+    local milestone_type_by_name = {}
+    for _, loaded_milestone in pairs(storage.loaded_milestones) do
+        milestone_type_by_name[loaded_milestone.name] = loaded_milestone.type
+    end
     storage.production_aliases = {}
     for _, loaded_milestone in pairs(storage.loaded_milestones) do
-        if loaded_milestone.type == "alias" then
-            local valid_alias = false
-            if game.item_prototypes[loaded_milestone.equals] ~= nil then
-                -- This is an item alias
-                valid_alias = game.item_prototypes[loaded_milestone.name] ~= nil
-            elseif game.entity_prototypes[loaded_milestone.equals] ~= nil then
-                -- This is an entity alias
-                valid_alias = game.entity_prototypes[loaded_milestone.name] ~= nil
-            end
-            if valid_alias then
+        if loaded_milestone.type == "alias" and (
+            game.item_prototypes[loaded_milestone.name] ~= nil or
+            game.fluid_prototypes[loaded_milestone.name] ~= nil or
+            game.entity_prototypes[loaded_milestone.name] ~= nil
+        ) then
+            local alias_type = milestone_type_by_name[loaded_milestone.equals]
+            if alias_type then
+                local alias_milestone = {type=alias_type, name=loaded_milestone.name, quantity=loaded_milestone.quantity, quality=loaded_milestone.quality}
                 storage.production_aliases[loaded_milestone.equals] = {} or storage.production_aliases[loaded_milestone.equals]
-                table.insert(storage.production_aliases[loaded_milestone.equals], {name=loaded_milestone.name, quantity=loaded_milestone.quantity, quality=loaded_milestone.quality})
+                table.insert(storage.production_aliases[loaded_milestone.equals], alias_milestone)
             end
         end
     end
@@ -351,6 +354,7 @@ local function find_production_tick_bounds(milestone, flow_statistics_table)
     return lower_bound_real_time, upper_bound_real_time
 end
 
+-- TODO FIXME: This does not account for aliases at all!
 function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
     if milestone.type == "technology" then
         return 0, game.tick -- No way to know past research time
