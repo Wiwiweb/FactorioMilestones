@@ -197,10 +197,21 @@ local function get_milestones_array_element(flow, allow_empty, player_index)
     local hidden = flow.tags.hidden
     if not hidden or hidden == "" then hidden = nil end
 
+    local milestone_name
+    local quality
+    if flow.milestones_settings_item.elem_type == "item-with-quality" then
+        milestone_name = flow.milestones_settings_item.elem_value.name
+        quality = flow.milestones_settings_item.elem_value.quality
+        if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
+    else
+        milestone_name = flow.milestones_settings_item.elem_value
+    end
+
     return {
         type=flow.milestones_settings_item.tags.milestone_type,
-        name=flow.milestones_settings_item.elem_value,
+        name=milestone_name,
         quantity=quantity,
+        quality=quality,
         next=next_formula,
         hidden=hidden
     }

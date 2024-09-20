@@ -77,7 +77,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
 
     if prototype == nil then
         log("Milestones error! Invalid milestone: " .. serpent.line(milestone))
-        milestone_flow.add{type="label", caption={"", "[color=red]", {"", {"milestones.invalid_entry"}, " "}, milestone.name, "[/color]"}}
+        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, " "..milestone.name.."[/color]"}}
         return
     end
 
