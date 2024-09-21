@@ -1,4 +1,4 @@
-local misc = require("__flib__.misc")
+local flib_format = require("__flib__.format")
 require("scripts.milestones_util")
 
 local empty_set_label = {type="label", caption={"", "[color=100,100,100]", {"milestones.no_visible_milestones"}, "[/color]"}, style="caption_label"}
@@ -7,9 +7,9 @@ local function get_timestamp(ticks, print_milliseconds)
     if print_milliseconds then
         local remaining_ticks = ticks % 60
         local milliseconds = math.floor((16.66666 * remaining_ticks) + 0.5) -- 16.666666 milliseconds per tick, rounded to int
-        return misc.ticks_to_timestring(ticks) .. "." .. string.format("%03d", milliseconds)
+        return flib_format.time(ticks) .. "." .. string.format("%03d", milliseconds)
     else
-        return misc.ticks_to_timestring(ticks)
+        return flib_format.time(ticks)
     end
 end
 
@@ -136,7 +136,7 @@ function enable_edit_time(player_index, element)
     milestone_flow.milestones_display_time.destroy()
     milestone_flow.milestones_edit_time.destroy()
 
-    local default_value = misc.ticks_to_timestring(ceil_to_nearest_minute(milestone.completion_tick))
+    local default_value = flib_format.time(ceil_to_nearest_minute(milestone.completion_tick))
     local textfield = milestone_flow.add{type="textfield", name="milestones_edit_time_field",
         text=default_value, numeric=false,
         tags={action="milestones_confirm_edit_time_textfield"}, style="milestones_small_textfield"}
