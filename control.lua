@@ -59,6 +59,36 @@ script.on_init(function()
     end
 end)
 
+script.on_event(defines.events.on_surface_created, function(event)
+    for _, force in pairs(game.forces) do
+        local storage_force = storage.forces[force.name]
+        if storage_force then
+            table.insert(storage_force.item_stats, force.get_item_production_statistics(event.surface_index))
+            table.insert(storage_force.fluid_stats, force.get_fluid_production_statistics(event.surface_index))
+            table.insert(storage_force.kill_stats, force.get_kill_count_statistics(event.surface_index))
+        end
+    end
+end)
+
+local function delete_invalid_flow_statistics(flow_statistics_table)
+    -- Reverse iterating to delete in-place
+    for i=#flow_statistics_table,1,-1 do
+        if not flow_statistics_table[i].valid then
+            table.remove(flow_statistics_table, i)
+        end
+    end
+end
+
+script.on_event(defines.events.on_surface_deleted, function(event)
+    -- We can't check which LuaFlowStatistics belonged to that surface id
+    -- Iterating through everything is wasteful, but it shouldn't happen very often so it's fine
+    for _, storage_force in pairs(storage.forces) do
+        delete_invalid_flow_statistics(storage_force.item_stats)
+        delete_invalid_flow_statistics(storage_force.fluid_stats)
+        delete_invalid_flow_statistics(storage_force.kill_stats)
+    end
+end)
+
 script.on_load(function()
     if storage.delayed_chat_messages ~= nil and next(storage.delayed_chat_messages) ~= nil then
         create_delayed_chat()
@@ -92,6 +122,10 @@ script.on_event(defines.events.on_player_removed, function(event)
     clear_player(event.player_index)
 end)
 
+script.on_event(defines.events.on_surface_created, function(event)
+
+end)
+
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     local setting_name = event.setting
     if setting_name == "milestones_check_frequency" then
@@ -103,7 +137,6 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
         refresh_gui_for_player(game.get_player(event.player_index))
     end
 end)
-
 
 script.on_configuration_changed(function(event)
     -- Run migrations for version changes
