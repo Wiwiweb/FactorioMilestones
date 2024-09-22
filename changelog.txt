@@ -4,6 +4,7 @@ Date: ????
   Changes:
     - Updated for Factorio 2.0.
     - Added a Space Age preset. (May change in the future)
+    - Added support for quality. You can select a quality when adding an item as a milestone in the settings GUI. Selecting "normal" will be considered as an "any quality" milestone.
 
   Locale:
     - Added Catalan translation thanks to badall.
