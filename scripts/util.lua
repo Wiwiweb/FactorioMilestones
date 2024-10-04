@@ -46,7 +46,7 @@ function validate_milestones(milestones)
 end
 
 function convert_and_validate_imported_json(import_string)
-    local imported_milestones = game.json_to_table(import_string)
+    local imported_milestones = helpers.json_to_table(import_string)
 
     if imported_milestones == nil then
         return nil, {"milestones.message_invalid_import_json"}

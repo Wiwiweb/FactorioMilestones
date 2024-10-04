@@ -37,10 +37,10 @@ local function write_milestone_to_file(force, milestone, human_timestamp)
         completion_tick = milestone.completion_tick,
         completion_time = human_timestamp,
     }
-    local json = game.table_to_json(table) .. "\n"
+    local json = helpers.table_to_json(table) .. "\n"
     for player_index, player in pairs(force.players) do
         if settings.get_player_settings(player)["milestones_write_file"].value then
-            game.write_file(file_name, json, true, player_index)
+            helpers.write_file(file_name, json, true, player_index)
         end
     end
 end

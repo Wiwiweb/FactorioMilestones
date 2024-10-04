@@ -10,7 +10,7 @@ function toggle_import_export_page(player_index, button_element, import)
 end
 
 local function milestones_table_to_json(table)
-    local json = game.table_to_json(table)
+    local json = helpers.table_to_json(table)
 
     -- Beautification
     -- Example milestone line:
@@ -66,10 +66,10 @@ end
 function toggle_export_encoded(checkbox_element)
     local export_textbox = checkbox_element.parent.parent.milestones_import_export_scroll.milestones_settings_import_export_textbox
     if checkbox_element.state then
-        export_textbox.text = game.encode_string(export_textbox.text)
+        export_textbox.text = helpers.encode_string(export_textbox.text)
         export_textbox.word_wrap = true
     else
-        export_textbox.text = game.decode_string(export_textbox.text)
+        export_textbox.text = helpers.decode_string(export_textbox.text)
         export_textbox.word_wrap = false
     end
     export_textbox.select_all()
