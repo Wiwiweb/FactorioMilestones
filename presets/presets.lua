@@ -90,7 +90,9 @@ presets = {
             {type="item",       name="electromagnetic-science-pack", quantity=1},
             {type="item",       name="agricultural-science-pack",    quantity=1},
             {type="item",       name="cryogenic-science-pack",       quantity=1},
-            {type="item",       name="interstellar-science-pack",    quantity=1},
+            {type="item",       name="promethium-science-pack",      quantity=1},
+
+            {type="group",      name="Science at scale"},
             {type="item",       name="automation-science-pack",      quantity=1000, next="x10"},
             {type="item",       name="logistic-science-pack",        quantity=1000, next="x10"},
             {type="item",       name="military-science-pack",        quantity=1000, next="x10"},
@@ -102,7 +104,7 @@ presets = {
             {type="item",       name="electromagnetic-science-pack", quantity=1000, next="x10"},
             {type="item",       name="agricultural-science-pack",    quantity=1000, next="x10"},
             {type="item",       name="cryogenic-science-pack",       quantity=1000, next="x10"},
-            {type="item",       name="interstellar-science-pack",    quantity=1000, next="x10"},
+            {type="item",       name="promethium-science-pack",      quantity=1000, next="x10"},
 
             {type="group",      name="Progress"},
             {type="item",       name="locomotive",                  quantity=1},
@@ -116,7 +118,7 @@ presets = {
             {type="item",       name="biochamber",                  quantity=1},
             {type="item",       name="electromagnetic-plant",       quantity=1},
             {type="item",       name="cryogenic-plant",             quantity=1},
-            {type="kill",       name="huge-interstellar-asteroid",  quantity=1},
+            {type="kill",       name="huge-promethium-asteroid",    quantity=1},
 
             {type="group",      name="Power"},
             {type="item",       name="solar-panel",             quantity=1},
@@ -140,7 +142,7 @@ presets = {
             {type="kill",       name="small-demolisher",        quantity=1},
             {type="kill",       name="medium-demolisher",       quantity=1},
             {type="kill",       name="big-demolisher",          quantity=1},
-            {type="kill",       name="big-demolisher",          quantity=100, next="x10"},
+            {type="kill",       name="big-demolisher",          quantity=10, next="x10"},
             {type="kill",       name="character",               quantity=1, next="x5", hidden=true},
 
             {type="group",      name="Quality"},
