@@ -122,9 +122,6 @@ script.on_event(defines.events.on_player_removed, function(event)
     clear_player(event.player_index)
 end)
 
-script.on_event(defines.events.on_surface_created, function(event)
-
-end)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     local setting_name = event.setting
