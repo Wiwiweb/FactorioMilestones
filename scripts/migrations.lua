@@ -165,5 +165,19 @@ return {
         add_flow_statistics_to_global_force(force)
       end
     end
+  end,
+
+  ["1.4.1"] = function()
+    log("Running 1.4.1 migration")
+    for force_name, global_force in pairs(storage.forces) do
+      local force = game.forces[force_name]
+      if force then
+        global_force.item_stats = {}
+        global_force.fluid_stats = {}
+        global_force.kill_stats = {}
+        add_flow_statistics_to_global_force(force)
+        backfill_completion_times(force)
+      end
+    end
   end
 }
