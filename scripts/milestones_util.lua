@@ -25,10 +25,10 @@ local FLOW_PRECISION_BRACKETS_LENGTHS = {
     [defines.flow_precision_index.five_seconds] =            5*60,
 }
 
--- TODO: don't hardcode, get them on config changed
-local QUALITY_NAMES = {
-    "normal", "uncommon", "rare", "epic", "legendary"
-}
+QUALITY_NAMES_SET = {}
+for quality_name, _quality_prototype in pairs(prototypes.quality) do
+    QUALITY_NAMES_SET[quality_name] = true
+end
 
 local function find_possible_existing_completion_time(global_force, new_milestone)
     for _, complete_milestone in pairs(global_force.complete_milestones) do
@@ -197,7 +197,7 @@ end
 local function sum_counts_merged_qualities(flow_statistics_table, item_name, flow_stats_method_name)
     local total_count = 0
     for _, flow_statistics in pairs(flow_statistics_table) do
-        for _, quality_name in pairs(QUALITY_NAMES) do
+        for quality_name, _  in pairs(QUALITY_NAMES_SET) do
             total_count = total_count + flow_statistics[flow_stats_method_name]({name=item_name, quality=quality_name})
         end
     end
@@ -222,7 +222,7 @@ end
 local function sum_get_flow_counts_merged_qualities(flow_statistics_table, item_name, category_type, precision_index, sample_index)
     local total_count = 0
     for _, flow_statistics in pairs(flow_statistics_table) do
-        for _, quality_name in pairs(QUALITY_NAMES) do
+        for quality_name, _  in pairs(QUALITY_NAMES_SET) do
             total_count = total_count + flow_statistics.get_flow_count({
                 name={name=item_name, quality=quality_name},
                 category=category_type,
@@ -493,20 +493,27 @@ function remove_invalid_milestones(milestones, silent)
     end
 end
 
-function is_valid_milestone(milestone)
-    local prototype
+function get_milestone_prototype(milestone)
     if milestone.type == "item" or milestone.type == "item_consumption" then
-        prototype = prototypes.item[milestone.name]
+        return prototypes.item[milestone.name]
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-        prototype = prototypes.fluid[milestone.name]
+        return prototypes.fluid[milestone.name]
     elseif milestone.type == "technology" then
-        prototype = prototypes.technology[milestone.name]
+        return prototypes.technology[milestone.name]
     elseif milestone.type == "kill" then
-        prototype = prototypes.entity[milestone.name]
-    else
+        return prototypes.entity[milestone.name]
+    end
+end
+
+function is_valid_milestone(milestone)
+    local prototype = get_milestone_prototype(milestone)
+    if prototype == nil then
         return false
     end
-    return prototype ~= nil
+    if milestone.quality and prototypes.quality[milestone.quality] == nil then
+        return false
+    end
+    return true
 end
 
 function sprite_prefix(milestone)

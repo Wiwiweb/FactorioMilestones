@@ -69,6 +69,9 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
         if prototype ~= nil then default_selection = milestone.name end
         -- Note: This works even with the quality mod disabled
         local default_selection_quality = milestone.quality or "normal" -- Default to "normal" because "any" isn't possible yet
+        if prototypes.quality[default_selection_quality] == nil then
+            default_selection_quality = "normal"
+        end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item-with-quality",
             ["item-with-quality"]={name=default_selection, quality=default_selection_quality}, tags={action="milestones_change_setting", milestone_type=milestone.type}}
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
@@ -94,7 +97,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
 
     milestone_flow.add(elem_button)
     local caption
-    if milestone.name ~= nil and prototype == nil then
+    if milestone.name ~= nil and (prototype == nil or milestone.quality and prototypes.quality[milestone.quality] == nil) then
         caption = {"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}
     else
         if prototype ~= nil then

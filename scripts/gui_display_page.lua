@@ -64,20 +64,12 @@ end
 
 local function add_milestone_item(gui_table, milestone, print_milliseconds, compact_list, show_estimations)
     local milestone_flow = gui_table.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_display", tags={index=milestone.sort_index}}
-    local prototype = nil
-    if milestone.type == "item" or milestone.type == "item_consumption" then
-        prototype = prototypes.item[milestone.name]
-    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-        prototype = prototypes.fluid[milestone.name]
-    elseif milestone.type == "technology" then
-        prototype = prototypes.technology[milestone.name]
-    elseif milestone.type == "kill" then
-        prototype = prototypes.entity[milestone.name]
-    end
 
-    if prototype == nil then
+    local prototype = get_milestone_prototype(milestone)
+
+    if prototype == nil or milestone.quality and prototypes.quality[milestone.quality] == nil then -- Not using is_milestone_valid avoids fetching prototype twice
         log("Milestones error! Invalid milestone: " .. serpent.line(milestone))
-        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, " "..milestone.name.."[/color]"}}
+        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, " "..milestone.name...."[/color]"}}
         return
     end
 
