@@ -367,23 +367,6 @@ preset_addons = {
         }
     },
 
-    ["Fluidic Power"] = {
-        required_mods = {"FluidicPower"},
-        milestones = {
-            {type="group", name="Fluidic Power"},
-            -- My stable 45spm generated 23TJ. Now runs at ~600MW.
-            {type="fluid", name="fluidic-10-kilojoules", quantity=(10e9) / (10e3), 
-                tooltip = {"", {"milestones.fluidic_power_tooltip", "10GJ"}}
-            }, -- Basically 10 steam engines running for two hours, meant to trigger early
-            {type="fluid", name="fluidic-10-kilojoules", quantity=(10e12) / (10e3), 
-                tooltip = {"", {"milestones.fluidic_power_tooltip", "10TJ"}}
-            },
-            {type="fluid", name="fluidic-10-kilojoules", quantity=(100e12) / (10e3), 
-                tooltip = {"", {"milestones.fluidic_power_tooltip", "100TJ"}}
-            },
-        }
-    },
-
     ["Cat"] = {
         required_mods = {"petcat"},
         milestones = {
