@@ -1,6 +1,13 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.4.0
+Version: 1.4.1
 Date: ????
+  Bugfixes:
+    - Fixed new surfaces not being considered for milestone checks.
+    - Fixed crash when removing a mod that added quality levels.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2024-09-21
   Changes:
     - Updated for Factorio 2.0.
     - Added a Space Age preset. (May change in the future)
