@@ -40,9 +40,9 @@ function build_gui_frames(player)
         type="sprite-button",
         name="milestones_settings_button",
         style="frame_action_button",
-        sprite="milestones_settings_white", 
-        hovered_sprite="milestones_settings_black", 
-        clicked_sprite="milestones_settings_black", 
+        sprite="milestones_settings_white",
+        hovered_sprite="milestones_settings_black",
+        clicked_sprite="milestones_settings_black",
         mouse_button_filter={"left"},
         tooltip = {"milestones.settings_instructions"},
         tags={

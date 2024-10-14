@@ -98,7 +98,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     milestone_flow.add(elem_button)
     local caption
     if milestone.name ~= nil and (prototype == nil or milestone.quality and prototypes.quality[milestone.quality] == nil) then
-        caption = {"", "[color=red]", {"milestones.invalid_entry"}, milestone.name, "[/color]"}
+        caption = {"", "[color=red]", {"milestones.invalid_entry"}, " " .. milestone.name .. " " .. (milestone.quality or ""), "[/color]"}
     else
         if prototype ~= nil then
             if milestone.quality ~= nil then

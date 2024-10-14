@@ -69,7 +69,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
 
     if prototype == nil or milestone.quality and prototypes.quality[milestone.quality] == nil then -- Not using is_milestone_valid avoids fetching prototype twice
         log("Milestones error! Invalid milestone: " .. serpent.line(milestone))
-        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, " "..milestone.name...."[/color]"}}
+        milestone_flow.add{type="label", caption={"", "[color=red]", {"milestones.invalid_entry"}, " " .. milestone.name .. " " .. (milestone.quality or "") .. "[/color]"}}
         return
     end
 
