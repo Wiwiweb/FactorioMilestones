@@ -61,6 +61,8 @@ function reinitialize_surfaces()
       global_force.fluid_stats = {}
       global_force.kill_stats = {}
       add_flow_statistics_to_global_force(force)
+      backfill_completion_times(force)
+      force.print("Done. Incomplete milestones were estimated.")
     end
   end
 end
