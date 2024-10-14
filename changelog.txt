@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.1
-Date: ????
+Date: 2024-10-14
   Bugfixes:
     - Fixed new surfaces not being considered for milestone checks.
     - Fixed crash when removing a mod that added quality levels.
