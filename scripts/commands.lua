@@ -52,3 +52,16 @@ function reinitialize_global()
     end
 end
 commands.add_command("milestones-reinitialize-global", {"milestones.commands.reinitialize-global"}, reinitialize_global)
+
+function reinitialize_surfaces()
+    for force_name, global_force in pairs(storage.forces) do
+        local force = game.forces[force_name]
+        if force then
+            global_force.item_stats = {}
+            global_force.fluid_stats = {}
+            global_force.kill_stats = {}
+            add_flow_statistics_to_global_force(force)
+        end
+    end
+end
+commands.add_command("milestones-reinitialize-surfaces", {"milestones.commands.reinitialize-surfaces"}, reinitialize_surfaces)
