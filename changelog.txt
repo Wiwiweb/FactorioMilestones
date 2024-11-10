@@ -2,6 +2,8 @@
 Version: 1.4.2
 Date: ????
   Changes:
+    - When reaching a milestone with a quality condition, the message will now indicate the quality (e.g. "Created the first Rare Power Armor")
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.1
 Date: 2024-10-14

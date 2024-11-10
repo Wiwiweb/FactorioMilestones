@@ -54,7 +54,9 @@ local function print_milestone_reached(force, milestone)
     if milestone.type == "technology" then
         milestone_localised_name = prototypes.technology[milestone.name].localised_name
         local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity.." ")
-        message = {"milestones.message_milestone_reached_technology", sprite_name, milestone_localised_name, level_string, human_timestamp}
+        local image_tag = string.format("[img=%s]", sprite_name)
+        milestone_localised_name = {"", image_tag, milestone_localised_name}
+        message = {"milestones.message_milestone_reached_technology", milestone_localised_name, level_string, human_timestamp}
     else
         if milestone.type == "item" or milestone.type == "item_consumption" then
             if milestone.name == "se-rocket-launch-pad-silo-dummy-result-item" then
@@ -79,19 +81,27 @@ local function print_milestone_reached(force, milestone)
             message_type = "item"
         end
 
+        if milestone.quality then
+            local image_tags = string.format("[img=quality.%s][img=%s]", milestone.quality, sprite_name)
+            milestone_localised_name = {"", image_tags, prototypes.quality[milestone.quality].localised_name, " ", milestone_localised_name}
+        else
+            local image_tag = string.format("[img=%s]", sprite_name)
+            milestone_localised_name = {"", image_tag, milestone_localised_name}
+        end
+
         local postscript
         if milestone.name == "character" then
             postscript = " (haha! 😁)"
         end
 
         if milestone.quantity == 1 then
-            message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_first", sprite_name, milestone_localised_name, human_timestamp}, postscript}
+            message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_first", milestone_localised_name, human_timestamp}, postscript}
         else
             local print_quantity = milestone.quantity
             if milestone.quantity >= 10000 then
                 print_quantity = core_util.format_number(milestone.quantity, true)
             end
-            message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, sprite_name, milestone_localised_name, human_timestamp}, postscript}
+            message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, milestone_localised_name, human_timestamp}, postscript}
         end
     end
 
