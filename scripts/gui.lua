@@ -3,8 +3,8 @@ require("scripts.gui_settings_page")
 require("scripts.gui_import_export")
 
 local function get_frame(player_index, frame_name)
-    local global_player = storage.players[player_index]
-    if not global_player[frame_name] or not global_player[frame_name].valid then
+    local storage_player = storage.players[player_index]
+    if not storage_player[frame_name] or not storage_player[frame_name].valid then
         reinitialize_player(player_index)
     end
     return storage.players[player_index][frame_name]
@@ -130,7 +130,7 @@ local function update_settings_button(player) -- In case permissions changed
 end
 
 local function open_gui(player)
-    local global_player = storage.players[player.index]
+    local storage_player = storage.players[player.index]
     local outer_frame = get_outer_frame(player.index)
     build_display_page(player)
     update_settings_button(player)
@@ -139,9 +139,9 @@ local function open_gui(player)
     player.opened = get_main_frame(player.index)
     player.set_shortcut_toggled("milestones_toggle_gui", true)
 
-    if not global_player.opened_once_before then -- Open in the center the first time
+    if not storage_player.opened_once_before then -- Open in the center the first time
         outer_frame.force_auto_center()
-        global_player.opened_once_before = true
+        storage_player.opened_once_before = true
     end
 end
 
@@ -185,9 +185,9 @@ function refresh_gui_for_force(force)
 end
 
 local function toggle_pinned(player, element)
-    local global_player = storage.players[player.index]
-    global_player.pinned = not global_player.pinned
-    if global_player.pinned then
+    local storage_player = storage.players[player.index]
+    storage_player.pinned = not storage_player.pinned
+    if storage_player.pinned then
         element.style = "flib_selected_frame_action_button"
         element.sprite = "milestones_pin_black"
         player.opened = nil
@@ -207,11 +207,11 @@ script.on_event(defines.events.on_gui_closed, function(event)
     if event.element and event.element.name == "milestones_main_frame" then
 
         local player = game.get_player(event.player_index)
-        local global_player = storage.players[event.player_index]
-        if global_player.one_time_prevent_close then
-            global_player.one_time_prevent_close = false
+        local storage_player = storage.players[event.player_index]
+        if storage_player.one_time_prevent_close then
+            storage_player.one_time_prevent_close = false
             player.opened = get_main_frame(player.index)
-        elseif not global_player.pinned then
+        elseif not storage_player.pinned then
             close_gui(player)
         end
     end

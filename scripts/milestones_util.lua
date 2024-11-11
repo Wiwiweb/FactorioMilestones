@@ -30,8 +30,8 @@ for quality_name, _quality_prototype in pairs(prototypes.quality) do
     QUALITY_NAMES_SET[quality_name] = true
 end
 
-local function find_possible_existing_completion_time(global_force, new_milestone)
-    for _, complete_milestone in pairs(global_force.complete_milestones) do
+local function find_possible_existing_completion_time(storage_force, new_milestone)
+    for _, complete_milestone in pairs(storage_force.complete_milestones) do
         if complete_milestone.type == new_milestone.type and
            complete_milestone.name == new_milestone.name and
            complete_milestone.quantity == new_milestone.quantity then
@@ -42,7 +42,7 @@ local function find_possible_existing_completion_time(global_force, new_mileston
 end
 
 function merge_new_milestones(force_name, new_loaded_milestones)
-    local global_force = storage.forces[force_name]
+    local storage_force = storage.forces[force_name]
     local new_complete = {}
     local new_incomplete = {}
     local new_milestones_by_group = {}
@@ -59,7 +59,7 @@ function merge_new_milestones(force_name, new_loaded_milestones)
 
             local next_milestone = new_milestone
             while next_milestone ~= nil do
-                local completion_tick, lower_bound_tick = find_possible_existing_completion_time(global_force, next_milestone)
+                local completion_tick, lower_bound_tick = find_possible_existing_completion_time(storage_force, next_milestone)
                 if completion_tick == nil then
                     table.insert(new_incomplete, next_milestone)
                     -- Intentionally insert the same reference in both new_milestones_by_group and new_incomplete/new_incomplete
@@ -80,9 +80,9 @@ function merge_new_milestones(force_name, new_loaded_milestones)
         end
     end
 
-    global_force.complete_milestones = new_complete
-    global_force.incomplete_milestones = new_incomplete
-    global_force.milestones_by_group = new_milestones_by_group
+    storage_force.complete_milestones = new_complete
+    storage_force.incomplete_milestones = new_incomplete
+    storage_force.milestones_by_group = new_milestones_by_group
 end
 
 function initialize_alias_table()
@@ -108,12 +108,12 @@ function initialize_alias_table()
     end
 end
 
-function mark_milestone_reached(global_force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional
+function mark_milestone_reached(storage_force, milestone, tick, milestone_index, lower_bound_tick) -- lower_bound_tick is optional
     milestone.completion_tick = tick
     if lower_bound_tick then milestone.lower_bound_tick = lower_bound_tick end
-    table.insert(global_force.complete_milestones, milestone)
-    table.remove(global_force.incomplete_milestones, milestone_index)
-    sort_milestones(global_force.milestones_by_group[milestone.group])
+    table.insert(storage_force.complete_milestones, milestone)
+    table.remove(storage_force.incomplete_milestones, milestone_index)
+    sort_milestones(storage_force.milestones_by_group[milestone.group])
 end
 
 function parse_next_formula(next_formula)
@@ -390,40 +390,40 @@ function backfill_completion_times(force)
     log("Backfilling completion times for " .. force.name)
     local backfilled_anything = false
     local technologies = force.technologies
-    local global_force = storage.forces[force.name]
+    local storage_force = storage.forces[force.name]
 
     local i = 1
-    while i <= #global_force.incomplete_milestones do
-        local milestone = global_force.incomplete_milestones[i]
-        if is_valid_milestone(milestone) and is_milestone_reached(milestone, global_force, technologies) then
-            local lower_bound, upper_bound = find_completion_tick_bounds(milestone, global_force.item_stats, global_force.fluid_stats, global_force.kill_stats)
+    while i <= #storage_force.incomplete_milestones do
+        local milestone = storage_force.incomplete_milestones[i]
+        if is_valid_milestone(milestone) and is_milestone_reached(milestone, storage_force, technologies) then
+            local lower_bound, upper_bound = find_completion_tick_bounds(milestone, storage_force.item_stats, storage_force.fluid_stats, storage_force.kill_stats)
             log("Tick bounds for " ..milestone.name.. " : " ..lower_bound.. " - " ..upper_bound)
             if milestone.next then
                 local next_milestone = create_next_milestone(force.name, milestone)
-                table.insert(global_force.incomplete_milestones, next_milestone)
-                table.insert(global_force.milestones_by_group[next_milestone.group], next_milestone)
+                table.insert(storage_force.incomplete_milestones, next_milestone)
+                table.insert(storage_force.milestones_by_group[next_milestone.group], next_milestone)
             end
-            mark_milestone_reached(global_force, milestone, upper_bound, i, lower_bound)
+            mark_milestone_reached(storage_force, milestone, upper_bound, i, lower_bound)
             backfilled_anything = true
         else
             i = i + 1
         end
     end
-    sort_milestones(global_force.complete_milestones)
-    for _group_name, group_milestones in pairs(global_force.milestones_by_group) do
+    sort_milestones(storage_force.complete_milestones)
+    for _group_name, group_milestones in pairs(storage_force.milestones_by_group) do
         sort_milestones(group_milestones)
     end
     return backfilled_anything
 end
 
-function is_production_milestone_reached(milestone, global_force)
+function is_production_milestone_reached(milestone, storage_force)
     local flow_statistics_table
     if milestone.type == "item" or milestone.type == "item_consumption" then
-        flow_statistics_table = global_force.item_stats
+        flow_statistics_table = storage_force.item_stats
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-        flow_statistics_table = global_force.fluid_stats
+        flow_statistics_table = storage_force.fluid_stats
     elseif milestone.type == "kill" then
-        flow_statistics_table = global_force.kill_stats
+        flow_statistics_table = storage_force.kill_stats
     else
         error("Invalid milestone type! " .. milestone.type)
     end
@@ -455,25 +455,25 @@ function is_tech_milestone_reached(milestone, technology)
     return false
 end
 
-function is_milestone_reached(milestone, global_force, technologies)
+function is_milestone_reached(milestone, storage_force, technologies)
     if milestone.type == "technology" then
         local technology = technologies[milestone.name]
         return is_tech_milestone_reached(milestone, technology)
     else
-        return is_production_milestone_reached(milestone, global_force)
+        return is_production_milestone_reached(milestone, storage_force)
     end
 end
 
 function remove_invalid_milestones_all_forces()
-    for _force_name, global_force in pairs(storage.forces) do
-        remove_invalid_milestones_for_force(global_force)
+    for _force_name, storage_force in pairs(storage.forces) do
+        remove_invalid_milestones_for_force(storage_force)
     end
 end
 
-function remove_invalid_milestones_for_force(global_force)
-    remove_invalid_milestones(global_force.complete_milestones)
-    remove_invalid_milestones(global_force.incomplete_milestones)
-    for _group_name, milestones_by_group in pairs(global_force.milestones_by_group) do
+function remove_invalid_milestones_for_force(storage_force)
+    remove_invalid_milestones(storage_force.complete_milestones)
+    remove_invalid_milestones(storage_force.incomplete_milestones)
+    for _group_name, milestones_by_group in pairs(storage_force.milestones_by_group) do
         remove_invalid_milestones(milestones_by_group, true)
     end
 end

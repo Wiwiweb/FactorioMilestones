@@ -5,7 +5,7 @@ require("scripts.gui")
 require("scripts.presets_loader")
 require("scripts.milestones_util")
 require("scripts.util")
-require("scripts.global_init")
+require("scripts.storage_init")
 local migrations = require("scripts.migrations")
 
 local migration = require("__flib__.migration")

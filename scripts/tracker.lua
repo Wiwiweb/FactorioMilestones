@@ -112,29 +112,29 @@ local function print_milestone_reached(force, milestone)
 end
 
 function track_item_creation(event)
-    for force_name, global_force in pairs(storage.forces) do
-        local milestones_per_tick = #global_force.incomplete_milestones / storage.milestones_check_frequency_setting
+    for force_name, storage_force_force in pairs(storage.forces) do
+        local milestones_per_tick = #storage_force_force.incomplete_milestones / storage.milestones_check_frequency_setting
         local step_nb = event.tick % storage.milestones_check_frequency_setting
         local i = math.floor(milestones_per_tick * step_nb) + 1
         local to_i = math.floor(milestones_per_tick * (step_nb + 1))
         -- log("(per tick: "..milestones_per_tick..") tick " .. event.tick .. "  : " .. i .. "-" .. to_i)
 
         while i <= to_i do
-            local milestone = global_force.incomplete_milestones[i]
+            local milestone = storage_force_force.incomplete_milestones[i]
             if milestone.type ~= "technology"
-            and is_production_milestone_reached(milestone, global_force) then
+            and is_production_milestone_reached(milestone, storage_force_force) then
                 if milestone.next then
                     local next_milestone = create_next_milestone(force_name, milestone)
                     if next_milestone then
-                        table.insert(global_force.incomplete_milestones, next_milestone)
-                        table.insert(global_force.milestones_by_group[next_milestone.group], next_milestone)
+                        table.insert(storage_force_force.incomplete_milestones, next_milestone)
+                        table.insert(storage_force_force.milestones_by_group[next_milestone.group], next_milestone)
                     end
                 end
                 local force = game.forces[force_name]
-                mark_milestone_reached(global_force, milestone, game.tick, i)
+                mark_milestone_reached(storage_force_force, milestone, game.tick, i)
                 print_milestone_reached(force, milestone)
                 refresh_gui_for_force(force)
-                to_i = math.min(to_i, #global_force.incomplete_milestones) -- Don't go past the end of the table
+                to_i = math.min(to_i, #storage_force_force.incomplete_milestones) -- Don't go past the end of the table
             else
                 -- When a milestone is reached, incomplete_milestones loses an element
                 -- so we only increment when a milestone is not reached
@@ -148,14 +148,14 @@ script.on_event(defines.events.on_tick, track_item_creation)
 function check_technology_milestone_reached(event)
     local technology_researched = event.research
     local force = event.research.force
-    local global_force = storage.forces[force.name]
-    if global_force == nil then return end
+    local storage_force = storage.forces[force.name]
+    if storage_force == nil then return end
 
     local i = 1
-    while i <= #global_force.incomplete_milestones do
-        local milestone = global_force.incomplete_milestones[i]
+    while i <= #storage_force.incomplete_milestones do
+        local milestone = storage_force.incomplete_milestones[i]
         if is_tech_milestone_reached(milestone, technology_researched) then
-            mark_milestone_reached(global_force, milestone, game.tick, i)
+            mark_milestone_reached(storage_force, milestone, game.tick, i)
             print_milestone_reached(force, milestone)
             refresh_gui_for_force(force)
         else

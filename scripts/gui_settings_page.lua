@@ -319,16 +319,16 @@ local function update_buttons_enabled_state(settings_outer_flow, settings_select
 end
 
 function select_setting(event)
-    local global_player = storage.players[event.player_index]
+    local storage_player = storage.players[event.player_index]
     local checkbox_element = event.element
     local index = checkbox_element.parent.get_index_in_parent()
 
     if checkbox_element.state then -- The element state was already flipped at this point
-        if event.shift and table_size(global_player.settings_selection_indexes) > 0 then
+        if event.shift and table_size(storage_player.settings_selection_indexes) > 0 then
             -- Shift-selection, update the range, update selections
             local first_selected
             local last_selected
-            for i, checked in pairs(global_player.settings_selection_indexes) do
+            for i, checked in pairs(storage_player.settings_selection_indexes) do
                 if checked then
                     if not first_selected then first_selected = i end
                     last_selected = i
@@ -336,28 +336,28 @@ function select_setting(event)
             end
             if index < first_selected then
                 for i = index, first_selected - 2, 2 do
-                    global_player.settings_selection_indexes[i] = true
+                    storage_player.settings_selection_indexes[i] = true
                 end
             elseif index > last_selected then
                 for i = last_selected + 2, index, 2 do
-                    global_player.settings_selection_indexes[i] = true
+                    storage_player.settings_selection_indexes[i] = true
                 end
             else
-                global_player.settings_selection_indexes[index] = true
+                storage_player.settings_selection_indexes[index] = true
             end
         elseif event.control then
             -- Additive selection
-            global_player.settings_selection_indexes[index] = true
+            storage_player.settings_selection_indexes[index] = true
         else
             -- Normal selection, deselect all others
-            global_player.settings_selection_indexes = {}
-            global_player.settings_selection_indexes[index] = true
+            storage_player.settings_selection_indexes = {}
+            storage_player.settings_selection_indexes[index] = true
         end
     else
-        global_player.settings_selection_indexes[index] = nil
+        storage_player.settings_selection_indexes[index] = nil
     end
-    update_checkbox_states(global_player.settings_flow, global_player.settings_selection_indexes)
-    update_buttons_enabled_state(global_player.settings_flow.parent.parent, global_player.settings_selection_indexes)
+    update_checkbox_states(storage_player.settings_flow, storage_player.settings_selection_indexes)
+    update_buttons_enabled_state(storage_player.settings_flow.parent.parent, storage_player.settings_selection_indexes)
 end
 
 function swap_settings(player_index, event)
@@ -376,18 +376,18 @@ function swap_settings(player_index, event)
     settings_flow.swap_children(gui_index1, gui_index2)
 
     -- Swap selection
-    local global_player = storage.players[event.player_index]
-    global_player.settings_selection_indexes[gui_index1], global_player.settings_selection_indexes[gui_index2] = global_player.settings_selection_indexes[gui_index2], global_player.settings_selection_indexes[gui_index1]
+    local storage_player = storage.players[event.player_index]
+    storage_player.settings_selection_indexes[gui_index1], storage_player.settings_selection_indexes[gui_index2] = storage_player.settings_selection_indexes[gui_index2], storage_player.settings_selection_indexes[gui_index1]
 
     refresh_arrow_buttons(gui_index1, settings_flow)
     refresh_arrow_buttons(gui_index2, settings_flow)
 end
 
 function delete_selected_settings(player_index)
-    local global_player = storage.players[player_index]
-    local settings_flow = global_player.settings_flow
+    local storage_player = storage.players[player_index]
+    local settings_flow = storage_player.settings_flow
     local inverted_indexes = {}
-    for gui_index, _ in pairs(global_player.settings_selection_indexes) do
+    for gui_index, _ in pairs(storage_player.settings_selection_indexes) do
         table.insert(inverted_indexes, 1, gui_index)
     end
     for _, gui_index in pairs(inverted_indexes) do
@@ -407,19 +407,19 @@ function delete_selected_settings(player_index)
         refresh_arrow_buttons(#settings_flow.children, settings_flow)
     end
 
-    global_player.settings_selection_indexes = {}
-    update_buttons_enabled_state(global_player.settings_flow.parent.parent, global_player.settings_selection_indexes)
+    storage_player.settings_selection_indexes = {}
+    update_buttons_enabled_state(storage_player.settings_flow.parent.parent, storage_player.settings_selection_indexes)
 end
 
 function add_setting(player_index, button_element)
-    local global_player = storage.players[player_index]
-    local settings_flow = global_player.settings_flow
+    local storage_player = storage.players[player_index]
+    local settings_flow = storage_player.settings_flow
     local milestone_type = button_element.tags.type
 
     -- Find last selected element
     local last_selected_element_index = 0
     for i = #settings_flow.children, 1, -2 do
-        if global_player.settings_selection_indexes[i] then
+        if storage_player.settings_selection_indexes[i] then
             last_selected_element_index = i
             break
         end
@@ -459,7 +459,7 @@ function add_setting(player_index, button_element)
     refresh_arrow_buttons(insert_at_index, settings_flow)
 
     if only_element then
-        update_buttons_enabled_state(settings_flow.parent.parent, global_player.settings_selection_indexes)
+        update_buttons_enabled_state(settings_flow.parent.parent, storage_player.settings_selection_indexes)
     else
         refresh_arrow_buttons(last_selected_element_index, settings_flow)
     end
@@ -505,8 +505,8 @@ function confirm_settings_page(player_index)
 
         local backfilled_anything = false
         for force_name, force in pairs(game.forces) do
-            local global_force = storage.forces[force_name]
-            if global_force ~= nil then
+            local storage_force = storage.forces[force_name]
+            if storage_force ~= nil then
                 merge_new_milestones(force_name, new_loaded_milestones)
                 backfilled_anything = backfill_completion_times(force)
             end
@@ -612,15 +612,15 @@ function reset_preset(player_index)
 end
 
 function switch_to_milestones_set(milestones_set, player_index)
-    local global_player = storage.players[player_index]
-    local settings_flow = global_player.settings_flow
+    local storage_player = storage.players[player_index]
+    local settings_flow = storage_player.settings_flow
     settings_flow.clear()
     if next(milestones_set) then
         fill_settings_flow(settings_flow, milestones_set)
         get_outer_frame(player_index).force_auto_center()
     end
-    global_player.settings_selection_indexes = {}
-    update_buttons_enabled_state(settings_flow.parent.parent, global_player.settings_selection_indexes)
+    storage_player.settings_selection_indexes = {}
+    update_buttons_enabled_state(settings_flow.parent.parent, storage_player.settings_selection_indexes)
 end
 
 function is_settings_page_visible(player_index)

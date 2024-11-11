@@ -110,9 +110,9 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     add_milestone_label(milestone_flow, milestone, compact_list, show_estimations, print_milliseconds)
 end
 
-local function find_complete_milestone_from_UI_flow(milestone_flow, global_force)
+local function find_complete_milestone_from_UI_flow(milestone_flow, storage_force)
     local milestone_index = milestone_flow.tags.index
-    for _, milestone in pairs(global_force.complete_milestones) do
+    for _, milestone in pairs(storage_force.complete_milestones) do
         if approximately_equal(milestone.sort_index, milestone_index) then
             return milestone
         end
@@ -235,7 +235,7 @@ function build_display_page(player)
     inner_frame.clear() -- Just in case the GUI didn't close through close_gui
     local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll", style="flib_naked_scroll_pane"}
 
-    local global_force = storage.forces[player.force.name]
+    local storage_force = storage.forces[player.force.name]
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local player_settings = settings.get_player_settings(player)
@@ -244,10 +244,10 @@ function build_display_page(player)
     local show_estimations = player_settings["milestones_show_estimations"].value
     local show_incomplete = player_settings["milestones_show_incomplete"].value
 
-    local nb_groups = table_size(global_force.milestones_by_group)
+    local nb_groups = table_size(storage_force.milestones_by_group)
     if view_by_group and nb_groups > 1 then
         local visible_milestones_per_group = {}
-        for group_name, group_milestones in pairs(global_force.milestones_by_group) do
+        for group_name, group_milestones in pairs(storage_force.milestones_by_group) do
             visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones, show_incomplete)
             if not next(visible_milestones_per_group[group_name]) then
                 visible_milestones_per_group[group_name] = nil
@@ -288,7 +288,7 @@ function build_display_page(player)
             end
         end
     else
-        local visible_incomplete_milestones = filter_hidden_milestones(global_force.incomplete_milestones, show_incomplete)
+        local visible_incomplete_milestones = filter_hidden_milestones(storage_force.incomplete_milestones, show_incomplete)
 
         -- No milestones, exit early
         if not next(visible_incomplete_milestones) then
@@ -297,7 +297,7 @@ function build_display_page(player)
         end
 
         -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-        local nb_milestones = #global_force.complete_milestones + #visible_incomplete_milestones
+        local nb_milestones = #storage_force.complete_milestones + #visible_incomplete_milestones
         local column_count = math.max(
             math.min(
                 math.ceil(math.sqrt(nb_milestones / 3)),
@@ -305,7 +305,7 @@ function build_display_page(player)
             1)
 
         local content_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
-        for _, milestone in pairs(global_force.complete_milestones) do
+        for _, milestone in pairs(storage_force.complete_milestones) do
             add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
         end
 

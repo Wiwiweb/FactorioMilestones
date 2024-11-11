@@ -1,5 +1,5 @@
 local table = require("__flib__.table")
-require("scripts.global_init")
+require("scripts.storage_init")
 
 return {
   ["1.0.4"] = function()
@@ -32,9 +32,9 @@ return {
 
   ["1.0.9"] = function()
     log("Running 1.0.9 migration")
-    for force_name, global_force in pairs(storage.forces) do
+    for force_name, storage_force in pairs(storage.forces) do
       local affected = false
-      for _, milestone in pairs(global_force.complete_milestones) do
+      for _, milestone in pairs(storage_force.complete_milestones) do
         if milestone.type == "technology" and milestone.completion_tick ==
             nil then
           affected = true
@@ -63,8 +63,8 @@ return {
       milestone.completion_tick = nil
       milestone.lower_bound_tick = nil
     end
-    for _, global_force in pairs(storage.forces) do
-      for _, milestone in pairs(global_force.incomplete_milestones) do
+    for _, storage_force in pairs(storage.forces) do
+      for _, milestone in pairs(storage_force.incomplete_milestones) do
         milestone.completion_tick = nil
         milestone.lower_bound_tick = nil
       end
@@ -83,18 +83,18 @@ return {
 
   ["1.3.0"] = function()
     log("Running 1.3.0 migration")
-    for force_name, global_force in pairs(storage.forces) do
+    for force_name, storage_force in pairs(storage.forces) do
       -- Add new milestones_by_group field, but just put all existing milestones in the Other group
-      global_force.milestones_by_group = { ["Other"] = {} }
-      for i, milestone in pairs(global_force.complete_milestones) do
+      storage_force.milestones_by_group = { ["Other"] = {} }
+      for i, milestone in pairs(storage_force.complete_milestones) do
         milestone.sort_index = i
         milestone.group = "Other"
-        table.insert(global_force.milestones_by_group["Other"], milestone)
+        table.insert(storage_force.milestones_by_group["Other"], milestone)
       end
-      for i, milestone in pairs(global_force.incomplete_milestones) do
+      for i, milestone in pairs(storage_force.incomplete_milestones) do
         milestone.sort_index = i
         milestone.group = "Other"
-        table.insert(global_force.milestones_by_group["Other"], milestone)
+        table.insert(storage_force.milestones_by_group["Other"], milestone)
       end
 
       -- Update old estimations with new more accurate estimations
@@ -102,7 +102,7 @@ return {
       local item_stats = force.item_production_statistics
       local fluid_stats = force.fluid_production_statistics
       local kill_stats = force.kill_count_statistics
-      for _, milestone in pairs(global_force.complete_milestones) do
+      for _, milestone in pairs(storage_force.complete_milestones) do
         if is_valid_milestone(milestone) and milestone.lower_bound_tick ~= nil then
           local new_lower_bound, new_upper_bound = find_completion_tick_bounds(milestone, item_stats, fluid_stats,
             kill_stats)
@@ -135,11 +135,11 @@ return {
     log("Running 1.3.14 migration")
     -- Caching some calculations for optimisation
     storage.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
-    for force_name, global_force in pairs(storage.forces) do
+    for force_name, storage_force in pairs(storage.forces) do
       local force = game.forces[force_name]
-      global_force.item_stats = force.item_production_statistics
-      global_force.fluid_stats = force.fluid_production_statistics
-      global_force.kill_stats = force.kill_count_statistics
+      storage_force.item_stats = force.item_production_statistics
+      storage_force.fluid_stats = force.fluid_production_statistics
+      storage_force.kill_stats = force.kill_count_statistics
     end
   end,
 
@@ -158,24 +158,24 @@ return {
     log("Running 1.4.0 migration")
     for force_name, force in pairs(game.forces) do
       if storage.forces[force_name] ~= nil then
-        local global_force = storage.forces[force_name]
-        global_force.item_stats = {}
-        global_force.fluid_stats = {}
-        global_force.kill_stats = {}
-        add_flow_statistics_to_global_force(force)
+        local storage_force = storage.forces[force_name]
+        storage_force.item_stats = {}
+        storage_force.fluid_stats = {}
+        storage_force.kill_stats = {}
+        add_flow_statistics_to_storage_force(force)
       end
     end
   end,
 
   ["1.4.1"] = function()
     log("Running 1.4.1 migration")
-    for force_name, global_force in pairs(storage.forces) do
+    for force_name, storage_force in pairs(storage.forces) do
       local force = game.forces[force_name]
       if force then
-        global_force.item_stats = {}
-        global_force.fluid_stats = {}
-        global_force.kill_stats = {}
-        add_flow_statistics_to_global_force(force)
+        storage_force.item_stats = {}
+        storage_force.fluid_stats = {}
+        storage_force.kill_stats = {}
+        add_flow_statistics_to_storage_force(force)
         backfill_completion_times(force)
       end
     end

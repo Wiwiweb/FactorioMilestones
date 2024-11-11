@@ -3,7 +3,7 @@ function debug_print_forces()
   log(serpent.block(storage.forces))
 end
 commands.add_command("milestones-debug-print-forces",
-  "- Print the mod's internal global table, for debugging purposes.",
+  "- Print the mod's internal storage table, for debugging purposes.",
   debug_print_forces)
 
 function debug_print_loaded_milestones()
@@ -17,7 +17,7 @@ commands.add_command("milestones-debug-print-loaded-milestones",
 function debug_set_milestones_time(command_data)
   if not command_data.parameter then return end
   local force = game.get_player(command_data.player_index).force
-  local global_force = storage.forces[force.name]
+  local storage_force = storage.forces[force.name]
   local parameters = {}
   for word in string.gmatch(command_data.parameter, "([^,]+)") do -- Split comma-seperated string
     table.insert(parameters, word)
@@ -26,10 +26,10 @@ function debug_set_milestones_time(command_data)
   local lower_bound_tick = tonumber(parameters[2])
   local tick = tonumber(parameters[3])
   local i = 1
-  while i <= #global_force.incomplete_milestones do
-    local milestone = global_force.incomplete_milestones[i]
+  while i <= #storage_force.incomplete_milestones do
+    local milestone = storage_force.incomplete_milestones[i]
     if milestone.name == name then
-      mark_milestone_reached(global_force, milestone, tick, i, lower_bound_tick)
+      mark_milestone_reached(storage_force, milestone, tick, i, lower_bound_tick)
       refresh_gui_for_force(force)
       game.print("Milestone set.")
       return
@@ -52,13 +52,13 @@ commands.add_command("milestones-reinitialize-gui",
 
 
 function reinitialize_surfaces()
-  for force_name, global_force in pairs(storage.forces) do
+  for force_name, storage_force in pairs(storage.forces) do
     local force = game.forces[force_name]
     if force then
-      global_force.item_stats = {}
-      global_force.fluid_stats = {}
-      global_force.kill_stats = {}
-      add_flow_statistics_to_global_force(force)
+      storage_force.item_stats = {}
+      storage_force.fluid_stats = {}
+      storage_force.kill_stats = {}
+      add_flow_statistics_to_storage_force(force)
       backfill_completion_times(force)
       force.print("Done. Incomplete milestones were estimated.")
     end
@@ -68,7 +68,7 @@ commands.add_command("milestones-reinitialize-surfaces",
   "- Reset the mod's tracking of surfaces and estimate incomplete milestones. Try this if some milestones didn't trigger for you when you would expect it (and please report this issue).",
   reinitialize_surfaces)
 
-function reinitialize_global()
+function reinitialize_storage()
   for _, force in pairs(game.forces) do
     initialize_force_if_needed(force)
   end
@@ -77,6 +77,6 @@ function reinitialize_global()
     reinitialize_player(player.index)
   end
 end
-commands.add_command("milestones-reinitialize-global",
+commands.add_command("milestones-reinitialize-storage",
   "- Reset all of the mod's internal variables (except achieved milestones) for all players. Try this as a last resort.",
-  reinitialize_global)
+  reinitialize_storage)
