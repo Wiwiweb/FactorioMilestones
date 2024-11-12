@@ -4,6 +4,9 @@ Date: ????
   Changes:
     - When reaching a milestone with a quality condition, the message will now indicate the quality (e.g. "Created the first Rare Power Armor")
 
+  Locale:
+    - Added Brazilian Portuguese translation thanks to Lucas (Oliveira).
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.1
 Date: 2024-10-14
