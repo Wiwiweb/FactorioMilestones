@@ -3,6 +3,10 @@ Version: 1.4.3
 Date: ????
   Bugfixes:
     - Fixed a data stage crash caused by a breaking change in flib.
+
+  Locale:
+    - Translation updates for German, French, Spanish, and Catalan.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.2
 Date: 2024-11-12
