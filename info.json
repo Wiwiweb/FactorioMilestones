@@ -1,6 +1,6 @@
 {
     "name": "Milestones",
-    "version": "1.4.3",
+    "version": "1.4.4",
     "title": "Milestones",
     "author": "Wiwiweb",
     "dependencies": ["base >= 2.0.0", "flib >= 0.16.0"],
