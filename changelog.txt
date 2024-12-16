@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.3
-Date: ????
+Date: 2024-12-16
   Bugfixes:
     - Fixed a data stage crash caused by a breaking change in flib.
 
