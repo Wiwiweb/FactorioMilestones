@@ -180,7 +180,7 @@ local infinity_icon = "__Milestones__/graphics/infinity-icon.png"
 local arrows = "__Milestones__/graphics/arrows.png"
 local item_icons = "__Milestones__/graphics/item-icons.png"
 data:extend{
-  data_util.build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32, 2),
+  data_util.build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32),
 
   data_util.build_sprite("milestones_infinity_icon", {0, 0}, infinity_icon, 32),
 
