@@ -3,7 +3,7 @@
     "version": "1.4.3",
     "title": "Milestones",
     "author": "Wiwiweb",
-    "dependencies": ["base >= 2.0.0", "flib >= 0.15.0"],
+    "dependencies": ["base >= 2.0.0", "flib >= 0.16.0"],
     "factorio_version": "2.0",
     "package": {
       "git_publish_branch": "main",
