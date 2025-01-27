@@ -1,7 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.4
 Date: ????
-  Changes:
+  Bugfixes:
+    - Fixed rare crash when another mod changes a player's force the moment the game is created.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.3
 Date: 2024-12-16

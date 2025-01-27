@@ -102,6 +102,9 @@ end)
 
 script.on_event(defines.events.on_player_changed_force, function(event)
     local player = game.get_player(event.player_index)
+    if not storage.players[event.player_index] then -- Can happen if a mod changes a player's force during on_init
+        initialize_player(player)
+    end
     initialize_force_if_needed(player.force)
     refresh_gui_for_player(player)
 end)
@@ -112,8 +115,10 @@ end)
 
 script.on_event(defines.events.on_player_created, function(event)
     local player = game.players[event.player_index]
-    initialize_player(player)
-    if storage.forces[player.force.name] == nil then -- Possible if new player is added to empty force e.g. vanilla freeplay
+    if not storage.players[event.player_index] then -- storage.players could already exist if on_player_changed_force created it already
+        initialize_player(player)
+    end
+    if storage.forces[player.force.name] == nil then -- Can happen if new player is added to empty force e.g. vanilla freeplay
         initialize_force_if_needed(player.force)
     end
 end)
