@@ -2,6 +2,7 @@
 Version: 1.4.4
 Date: ????
   Bugfixes:
+    - Fixed crash when importing a preset.
     - Fixed rare crash when another mod changes a player's force the moment the game is created.
 
 ---------------------------------------------------------------------------------------------------

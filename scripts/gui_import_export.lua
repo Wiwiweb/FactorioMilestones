@@ -99,7 +99,7 @@ function import_settings(player_index)
     if string.len(import_string) == 0 then
         return
     end
-    local decoded_string = game.decode_string(import_string)
+    local decoded_string = helpers.decode_string(import_string)
     if decoded_string then import_string = decoded_string end
 
     local imported_milestones, error = convert_and_validate_imported_json(import_string)
