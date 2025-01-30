@@ -7,6 +7,7 @@ Date: ????
   Bugfixes:
     - Fixed crash when importing a preset.
     - Fixed rare crash when another mod changes a player's force the moment the game is created.
+    - Fixed that the Milestones GUI would not show any milestone when the set only had 1 milestone group and 0 incomplete milestones (but still some completed milestones).
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.3

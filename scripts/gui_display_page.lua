@@ -289,15 +289,15 @@ function build_display_page(player)
         end
     else
         local visible_incomplete_milestones = filter_hidden_milestones(storage_force.incomplete_milestones, show_incomplete)
+        local nb_milestones = #storage_force.complete_milestones + #visible_incomplete_milestones
 
         -- No milestones, exit early
-        if not next(visible_incomplete_milestones) then
+        if nb_milestones == 0 then
             display_scroll.add(empty_set_label)
             return
         end
 
         -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-        local nb_milestones = #storage_force.complete_milestones + #visible_incomplete_milestones
         local column_count = math.max(
             math.min(
                 math.ceil(math.sqrt(nb_milestones / 3)),
