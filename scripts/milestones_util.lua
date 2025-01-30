@@ -238,13 +238,13 @@ end
 -- Sums get_input/output_count for an array of LuaFlowStatistics, merging qualities if needed
 local function get_total_count(flow_statistics_table, milestone)
     local flow_stats_method_name = is_consumption_type(milestone.type) and "get_output_count" or "get_input_count"
-    if milestone.type == "item" or milestone.type == "item_consumption" then -- These are the Item LuaFlowStatistics, they always take a quality.
+    if milestone.type == "item" or milestone.type == "item_consumption" or milestone.type == "kill" then -- These are the Item or Kill LuaFlowStatistics, they always take a quality.
         if milestone.quality then -- Specific quality
             return sum_counts(flow_statistics_table, {name=milestone.name, quality=milestone.quality}, flow_stats_method_name)
         else
             return sum_counts_merged_qualities(flow_statistics_table, milestone.name, flow_stats_method_name)
         end
-    else -- Fluid or Kills LuaFlowStatistics, no qualities here.
+    else -- Fluid LuaFlowStatistics, no qualities here.
         return sum_counts(flow_statistics_table, milestone.name, flow_stats_method_name)
     end
 end

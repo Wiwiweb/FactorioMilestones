@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.4
 Date: ????
+  Changes:
+    - Added support for quality kills, for players who play with mods that add quality enemies.
+
   Bugfixes:
     - Fixed crash when importing a preset.
     - Fixed rare crash when another mod changes a player's force the moment the game is created.

@@ -18,7 +18,7 @@ local function milestones_table_to_json(table)
 
     json = json:gsub("%[{", "[\n  {")
     json = json:gsub("},{", "},\n  {")
-    json = json:gsub("\",\"", "\", \"")
+    json = json:gsub(",\"", ", \"")
     json = json:gsub("}]", "}\n]")
     return json
 end

@@ -63,17 +63,19 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
         milestone_flow.tags = {hidden= true}
     end
 
+    -- Note: This works even with the quality mod disabled
+    local default_selection_quality = milestone.quality or "normal" -- Default to "normal" because "any" isn't possible yet
+    if prototypes.quality[default_selection_quality] == nil then
+        default_selection_quality = "normal"
+    end
+
     if milestone.type == "item" or milestone.type == "item_consumption" then
         prototype = prototypes.item[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
-        -- Note: This works even with the quality mod disabled
-        local default_selection_quality = milestone.quality or "normal" -- Default to "normal" because "any" isn't possible yet
-        if prototypes.quality[default_selection_quality] == nil then
-            default_selection_quality = "normal"
-        end
         elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="item-with-quality",
-            ["item-with-quality"]={name=default_selection, quality=default_selection_quality}, tags={action="milestones_change_setting", milestone_type=milestone.type}}
+            ["item-with-quality"]={name=default_selection, quality=default_selection_quality},
+            tags={action="milestones_change_setting", milestone_type=milestone.type}}
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
         prototype = prototypes.fluid[milestone.name]
         local default_selection = nil
@@ -90,8 +92,9 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
         prototype = prototypes.entity[milestone.name]
         local default_selection = nil
         if prototype ~= nil then default_selection = milestone.name end
-        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="entity",
-            entity=default_selection, tags={action="milestones_change_setting", milestone_type="kill"},
+        elem_button = {type="choose-elem-button", name="milestones_settings_item", elem_type="entity-with-quality",
+            ["entity-with-quality"]={name=default_selection, quality=default_selection_quality},
+            tags={action="milestones_change_setting", milestone_type=milestone.type},
             elem_filters={{filter="entity-with-health"}}}
     end
 
@@ -202,7 +205,7 @@ local function get_milestones_array_element(flow, allow_empty, player_index)
 
     local milestone_name
     local quality
-    if flow.milestones_settings_item.elem_type == "item-with-quality" then
+    if flow.milestones_settings_item.elem_type == "item-with-quality" or flow.milestones_settings_item.elem_type == "entity-with-quality" then
         milestone_name = flow.milestones_settings_item.elem_value.name
         quality = flow.milestones_settings_item.elem_value.quality
         if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
@@ -546,8 +549,10 @@ script.on_event(defines.events.on_gui_elem_changed, function(event)
                 if not visible_textfield then
                     event.element.parent.milestones_settings_quantity.text = "1"
                 end
-            elseif event.element.elem_type == "entity" then
-                prototype = prototypes.entity[event.element.elem_value]
+            elseif event.element.elem_type == "entity-with-quality" then
+                prototype = prototypes.entity[event.element.elem_value.name]
+                quality = event.element.elem_value.quality
+                if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
             end
         end
         local caption = ""
