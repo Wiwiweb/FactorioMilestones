@@ -34,6 +34,7 @@ local function find_possible_existing_completion_time(storage_force, new_milesto
     for _, complete_milestone in pairs(storage_force.complete_milestones) do
         if complete_milestone.type == new_milestone.type and
            complete_milestone.name == new_milestone.name and
+           complete_milestone.quality == new_milestone.quality and
            complete_milestone.quantity == new_milestone.quantity then
             return complete_milestone.completion_tick, complete_milestone.lower_bound_tick
         end
