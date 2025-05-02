@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.5
 Date: ????
-  Changes:
+  Bugfixes:
+    - Fixed that backfilling a quality milestone would wrongly copy the time of an existing milestone with a different quality. (Thanks to stef77)
 
   Locale:
     - Chinese translation update thanks to luaotix.
