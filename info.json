@@ -8,6 +8,6 @@
     "package": {
       "git_publish_branch": "main",
       "removeZipAfterPublish": true,
-      "ignore": ["*.mp4"]
+      "ignore": ["*.mp4", "*.kra"]
     }
 }

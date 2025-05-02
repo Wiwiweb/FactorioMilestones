@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.5
 Date: ????
+  Changes:
+    - Increased the shortcut icon resolution to match the new icons from Factorio 2.0.18.
+
   Bugfixes:
     - Fixed that backfilling a quality milestone would wrongly copy the time of an existing milestone with a different quality. (Thanks to stef77)
     - Fixed that pressing E on the settings UI would just close the UI and lose all changes instead of confirming them.
