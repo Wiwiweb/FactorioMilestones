@@ -6,6 +6,7 @@ Date: ????
     - Removed built-in K2 preset, in favor of K2's own preset provided by their mod.
 
   Bugfixes:
+    - Fixed that chat notifications for technology milestones would not show the time they were achieved.
     - Fixed that backfilling a quality milestone would wrongly copy the time of an existing milestone with a different quality. (Thanks to stef77)
     - Fixed that pressing E on the settings UI would just close the UI and lose all changes instead of confirming them.
 
