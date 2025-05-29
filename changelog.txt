@@ -3,6 +3,7 @@ Version: 1.4.5
 Date: ????
   Changes:
     - Increased the shortcut icon resolution to match the new icons from Factorio 2.0.18.
+    - Removed built-in K2 preset, in favor of K2's own preset provided by their mod.
 
   Bugfixes:
     - Fixed that backfilling a quality milestone would wrongly copy the time of an existing milestone with a different quality. (Thanks to stef77)
