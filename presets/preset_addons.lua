@@ -381,6 +381,8 @@ preset_addons = {
             {type="group", name="Science"},
             {type="item",  name="wood-science-pack",  quantity=1},
             {type="item",  name="steam-science-pack", quantity=1},
+
+            {type="group", name="Science at scale"},
             {type="item",  name="wood-science-pack",  quantity=100, next="x10"},
             {type="item",  name="steam-science-pack", quantity=100, next="x10"},
 
@@ -389,7 +391,7 @@ preset_addons = {
 
             {type="group", name="Kills"},
             {type="kill",  name="lignumis-small-wriggler-pentapod",  quantity=1},
-            {type="kill",  name="lignumis-medium-wriggler-pentapod", quantity=1},
+            {type="kill",  name="lignumis-medium-wriggler-pentapod", quantity=1},  
     }
 },
 }
