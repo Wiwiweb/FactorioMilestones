@@ -1,23 +1,8 @@
--- These preset addons will add new milestones at the end of the detected milestones preset from presets.lua
+-- These preset addons will add new milestones at the end of the detected milestones preset
 -- All addons that meet their "required mods" will be used.
--- Add milestones for a mod here if the mod is highly modular and could be used with any other major mod.
 
--- If you would rather do things yourself, you can add your preset addon in your own mod:
--- Have your mod implement a "milestones_preset_addons" interface, which the Milestones mod will call (in presets_loader.lua).
--- Example: 
--- remote.add_interface("ice-armor", {
---     milestones_preset_addons = function()
---         return {
---             ["Ice Armor"] = {
---                 required_mods = {"ice-armor"},
---                 milestones = {
---                     {type="group", name="Progress"},
---                     {type="item",  name="ice-armor", quantity=1},
---                 }
---             }
---         }
---     end
--- })
+-- If you would like to add a preset addon for your own mod, you will need to implement the remote interface. Please see the README for more info.
+
 
 preset_addons = {
     ["Quality"] = {
