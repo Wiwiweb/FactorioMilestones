@@ -155,29 +155,6 @@ preset_addons = {
         }
     },
 
-    ["Bob's Enemies"] = {
-        required_mods = {"bobenemies"},
-        forbidden_mods = {"SeaBlock"},
-        milestones = {
-            {type="group", name="Kills"},
-            {type="kill", name="bob-titan-biter",     quantity=1},
-            {type="kill", name="bob-behemoth-biter",  quantity=1},
-            {type="kill", name="bob-leviathan-biter", quantity=1},
-            {type="kill", name="bob-leviathan-biter", quantity=100, next="x10"},
-        }
-    },
-
-    ["Bob's Modules"] = {
-        required_mods = {"bobmodules"},
-        forbidden_mods = {"SeaBlock"},
-        milestones = {
-            {type="group", name="Progress"},
-            {type="item", name="speed-module-8", quantity=1},
-            {type="item", name="effectivity-module-8", quantity=1},
-            {type="item", name="productivity-module-8", quantity=1},
-        }
-    },
-
     ["Science Pack Galore"] = {
         required_mods = {"SciencePackGalore"},
         milestones = {
