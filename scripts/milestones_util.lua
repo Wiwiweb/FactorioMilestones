@@ -506,6 +506,20 @@ function get_milestone_prototype(milestone)
     end
 end
 
+function remove_invalid_aliases()
+    for milestone_name, alias_list in pairs(storage.production_aliases) do
+        -- Reverse iterating to delete in-place
+        for i=#alias_list,1,-1 do
+            if not is_valid_milestone(alias_list[i]) then
+                table.remove(alias_list, i)
+            end
+        end
+        if next(alias_list) == nil then
+            storage.production_aliases[milestone_name] = nil
+        end
+    end
+end
+
 function is_valid_milestone(milestone)
     local prototype = get_milestone_prototype(milestone)
     if prototype == nil then

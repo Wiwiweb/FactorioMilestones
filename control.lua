@@ -151,6 +151,7 @@ script.on_configuration_changed(function(event)
         reload_presets()
     end
     remove_invalid_milestones_all_forces()
+    remove_invalid_aliases()
 
     -- We also do this here because for some reason on_nth_tick sometimes doesn't work in on_init
     -- I don't know why
