@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.6
-Date: ????
+Date: 2025-07-30
   Changes:
     - Removed some built-in presets that became redundant, as these mods now provide their own milestones preset: Full Pymods, Krastorio 2, Space Exploration, Bob's and Angel's
     - Removed several presets for mods that became outdated and won't be updated.
