@@ -163,8 +163,8 @@ data:extend{
   {
     type = "shortcut",
     name = "milestones_toggle_gui",
-    icon = "__Milestones__/graphics/shortcut-icon-32.png",
-    icon_size = 32,
+    icon = "__Milestones__/graphics/shortcut-icon-56.png",
+    icon_size = 56,
     small_icon = "__Milestones__/graphics/shortcut-icon-24.png",
     small_icon_size = 24,
     associated_control_input = "milestones_toggle_gui",

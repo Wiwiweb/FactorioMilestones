@@ -53,7 +53,7 @@ local function print_milestone_reached(force, milestone)
     local message
     if milestone.type == "technology" then
         milestone_localised_name = prototypes.technology[milestone.name].localised_name
-        local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity.." ")
+        local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity)
         local image_tag = string.format("[img=%s]", sprite_name)
         milestone_localised_name = {"", image_tag, milestone_localised_name}
         message = {"milestones.message_milestone_reached_technology", milestone_localised_name, level_string, human_timestamp}

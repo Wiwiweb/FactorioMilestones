@@ -629,5 +629,5 @@ function switch_to_milestones_set(milestones_set, player_index)
 end
 
 function is_settings_page_visible(player_index)
-    return get_inner_frame(player_index).milestones_settings_scroll ~= nil
+    return get_inner_frame(player_index).milestones_settings_outer_flow ~= nil
 end

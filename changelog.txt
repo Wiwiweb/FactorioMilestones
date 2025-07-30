@@ -1,7 +1,23 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.4.5
+Version: 1.4.6
 Date: ????
   Changes:
+    - Removed built-in SE and K2SE presets, in favor of the presets included in Space Exploration.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 2025-05-29
+  Changes:
+    - Increased the shortcut icon resolution to match the new icons from Factorio 2.0.18.
+    - Removed built-in K2 preset, in favor of K2's own preset provided by their mod.
+
+  Bugfixes:
+    - Fixed that chat notifications for technology milestones would not show the time they were achieved.
+    - Fixed that backfilling a quality milestone would wrongly copy the time of an existing milestone with a different quality. (Thanks to stef77)
+    - Fixed that pressing E on the settings UI would just close the UI and lose all changes instead of confirming them.
+
+  Locale:
+    - Chinese translation update thanks to luaotix.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.4
 Date: 2025-01-30
