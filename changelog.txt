@@ -2,7 +2,9 @@
 Version: 1.4.6
 Date: ????
   Changes:
-    - Removed built-in SE and K2SE presets, in favor of the presets included in Space Exploration.
+    - Removed some built-in presets that became redundant, as these mods now provide their own milestones preset: Full Pymods, Krastorio 2, Space Exploration, Bob's and Angel's
+    - Removed several presets for mods that became outdated and won't be updated.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.5
 Date: 2025-05-29
