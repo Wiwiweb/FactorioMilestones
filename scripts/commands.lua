@@ -42,7 +42,7 @@ commands.add_command("milestones-set-milestone-time",
 "- Manually set a time for a milestone. Usage: milestone_name,lower_bound_tick,tick. Example: `/milestones-set-milestone-time iron-plate,600,6000` will set the iron-plate milestone time to be between 10 seconds and 100 seconds.",
   debug_set_milestones_time)
 
-function debug_unset_milestones(command_data)
+function debug_reset_milestones(command_data)
   if not command_data.parameter then return end
   local force = game.get_player(command_data.player_index).force
   local storage_force = storage.forces[force.name]
@@ -53,15 +53,15 @@ function debug_unset_milestones(command_data)
     if milestone.name == name then
       mark_milestone_unreached(storage_force, milestone, i)
       refresh_gui_for_force(force)
-      game.print("Milestone unset.")
+      game.print("Milestone reset.")
       return
     end
     i = i + 1
   end
 end
-commands.add_command("milestones-unset-milestone",
-"- Manually unset a milestone. Usage: milestone_name. Example: `/milestones-unset-milestone iron-plate` will unset the iron-plate milestone.",
-  debug_unset_milestones)
+commands.add_command("milestones-reset-milestone",
+"- Manually reset a milestone. Usage: milestone_name. Example: `/milestones-reset-milestone iron-plate` will reset the iron-plate milestone.",
+  debug_reset_milestones)
 
 function reinitialize_gui(command_data)
   if not command_data.player_index then return end
