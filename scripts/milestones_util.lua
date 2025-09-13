@@ -120,8 +120,8 @@ end
 function mark_milestone_unreached(storage_force, milestone, milestone_index)
     milestone.completion_tick = nil
     milestone.lower_bound_tick = nil
-    table.insert(storage_force.incomplete_milestone, milestone)
-    table.remove(storage_force.complete_milestoness, milestone_index)
+    table.insert(storage_force.incomplete_milestones, milestone)
+    table.remove(storage_force.complete_milestones, milestone_index)
     sort_milestones(storage_force.milestones_by_group[milestone.group])
 end
 
