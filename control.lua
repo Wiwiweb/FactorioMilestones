@@ -53,10 +53,6 @@ script.on_init(function()
     for _, player in pairs(game.players) do
         initialize_player(player)
     end
-
-    if next(storage.delayed_chat_messages) ~= nil then
-        create_delayed_chat()
-    end
 end)
 
 script.on_event(defines.events.on_surface_created, function(event)
@@ -90,9 +86,6 @@ script.on_event(defines.events.on_surface_deleted, function(event)
 end)
 
 script.on_load(function()
-    if storage.delayed_chat_messages ~= nil and next(storage.delayed_chat_messages) ~= nil then
-        create_delayed_chat()
-    end
     add_remote_presets_to_preset_tables()
 end)
 
@@ -152,10 +145,4 @@ script.on_configuration_changed(function(event)
     end
     remove_invalid_milestones_all_forces()
     remove_invalid_aliases()
-
-    -- We also do this here because for some reason on_nth_tick sometimes doesn't work in on_init
-    -- I don't know why
-    if next(storage.delayed_chat_messages) ~= nil then
-        create_delayed_chat()
-    end
 end)
