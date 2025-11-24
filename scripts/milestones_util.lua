@@ -117,6 +117,14 @@ function mark_milestone_reached(storage_force, milestone, tick, milestone_index,
     sort_milestones(storage_force.milestones_by_group[milestone.group])
 end
 
+function mark_milestone_unreached(storage_force, milestone, milestone_index)
+    milestone.completion_tick = nil
+    milestone.lower_bound_tick = nil
+    table.insert(storage_force.incomplete_milestones, milestone)
+    table.remove(storage_force.complete_milestones, milestone_index)
+    sort_milestones(storage_force.milestones_by_group[milestone.group])
+end
+
 function parse_next_formula(next_formula)
     if next_formula == nil or string.len(next_formula) < 2 then return nil, nil end
     local operator = string.sub(next_formula, 1, 1)

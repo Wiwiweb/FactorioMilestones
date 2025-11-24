@@ -2,6 +2,7 @@
 Version: 1.4.7
 Date: ????
   Changes:
+    - Added command /milestones-reset-milestone to reset achieved milestones.
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.6
 Date: 2025-07-30
