@@ -6,6 +6,7 @@ Date: ????
 
   Bugfixes:
     - Fixed rare multiplayer desync at the start of a game. (Thanks to Techjar)
+    - Fixed crash when migrating Milestones from a mod version older than 1.3.20.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.6

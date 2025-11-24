@@ -1,6 +1,18 @@
 local table = require("__flib__.table")
 require("scripts.storage_init")
 
+function reset_storage_flow_statistics()
+    for force_name, storage_force in pairs(storage.forces) do
+      local force = game.forces[force_name]
+      if force then
+        storage_force.item_stats = {}
+        storage_force.fluid_stats = {}
+        storage_force.kill_stats = {}
+        add_flow_statistics_to_storage_force(force)
+      end
+    end
+  end
+
 return {
   ["1.0.4"] = function()
     log("Running 1.0.4 migration")
@@ -146,6 +158,7 @@ return {
   ["1.3.20"] = function()
     log("Running 1.3.20 migration")
     -- Recalculate the sort_index of infinite milestones (first is n, second is n.0001, third is n.0002, etc.)
+    reset_storage_flow_statistics()
     for force_name, force in pairs(game.forces) do
       if storage.forces[force_name] ~= nil then
         merge_new_milestones(force_name, storage.loaded_milestones)
@@ -156,26 +169,15 @@ return {
 
   ["1.4.0"] = function()
     log("Running 1.4.0 migration")
-    for force_name, force in pairs(game.forces) do
-      if storage.forces[force_name] ~= nil then
-        local storage_force = storage.forces[force_name]
-        storage_force.item_stats = {}
-        storage_force.fluid_stats = {}
-        storage_force.kill_stats = {}
-        add_flow_statistics_to_storage_force(force)
-      end
-    end
+    reset_storage_flow_statistics()
   end,
 
   ["1.4.1"] = function()
     log("Running 1.4.1 migration")
+    reset_storage_flow_statistics()
     for force_name, storage_force in pairs(storage.forces) do
       local force = game.forces[force_name]
       if force then
-        storage_force.item_stats = {}
-        storage_force.fluid_stats = {}
-        storage_force.kill_stats = {}
-        add_flow_statistics_to_storage_force(force)
         backfill_completion_times(force)
       end
     end
