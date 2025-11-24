@@ -58,6 +58,7 @@ function debug_reset_milestones(command_data)
     end
     i = i + 1
   end
+  game.print("Milestone not found.")
 end
 commands.add_command("milestones-reset-milestone",
 "- Manually reset a milestone. Usage: milestone_name. Example: `/milestones-reset-milestone iron-plate` will reset the iron-plate milestone.",
