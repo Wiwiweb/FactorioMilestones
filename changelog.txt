@@ -2,7 +2,11 @@
 Version: 1.4.7
 Date: ????
   Changes:
-    - Added command /milestones-reset-milestone to reset achieved milestones.
+    - Added command /milestones-reset-milestone to reset achieved milestones. (Thanks to QuingKhaos)
+
+  Bugfixes:
+    - Fixed rare multiplayer desync at the start of a game. (Thanks to Techjar)
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.6
 Date: 2025-07-30
