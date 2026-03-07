@@ -181,5 +181,14 @@ return {
         backfill_completion_times(force)
       end
     end
+  end,
+
+  ["1.4.8"] = function()
+    log("Running 1.4.8 migration")
+    for _, force in pairs(game.forces) do
+      if storage.forces[force.name] and not next(force.players) then
+        storage.forces[force.name] = nil
+      end
+    end
   end
 }
