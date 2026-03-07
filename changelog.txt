@@ -1,7 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.8
 Date: ????
-  Changes:
+  Bugfixes:
+    - Fixed that some forces were being checked when those forces had no players resulting in performance degredation.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.7
 Date: 2025-11-23
