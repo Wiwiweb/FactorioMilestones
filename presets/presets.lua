@@ -136,7 +136,7 @@ presets = {
 
 
     ["Nullius"] = {
-        required_mods = {"angelssmelting", "nullius"},
+        required_mods = {"nullius"},
         milestones = {
             {type="group",      name="Science"},
             {type="item",       name="nullius-geology-pack",             quantity=1},
