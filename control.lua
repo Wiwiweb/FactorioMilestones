@@ -6,10 +6,6 @@ require("scripts.presets_loader")
 require("scripts.milestones_util")
 require("scripts.util")
 require("scripts.storage_init")
-local migrations = require("scripts.migrations")
-
-local migration = require("__flib__.migration")
-
 
 script.on_init(function()
     storage.delayed_chat_messages = {}
@@ -134,9 +130,6 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 end)
 
 script.on_configuration_changed(function(event)
-    -- Run migrations for version changes
-    migration.on_config_changed(event, migrations)
-
     if next(event.mod_changes) ~= nil then
         fetch_remote_presets()
         -- on_load is called before on_configuration_changed so we have to redo add_remote_presets_to_preset_tables here
