@@ -77,3 +77,17 @@ end
 function approximately_equal(a, b)
     return math.abs(a - b) < 0.00001
 end
+
+-- Taken and modified from flib
+function format_time(nb_ticks)
+  local total_seconds = math.floor(nb_ticks / 60)
+  local seconds = total_seconds % 60
+  local minutes = math.floor(total_seconds / 60)
+  if minutes > 59 then
+    minutes = minutes % 60
+    local hours = math.floor(total_seconds / 3600)
+    return string.format("%d:%02d:%02d", hours, minutes, seconds)
+  else
+    return string.format("%d:%02d", minutes, seconds)
+  end
+end

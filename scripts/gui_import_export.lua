@@ -1,7 +1,7 @@
 require("scripts.gui_settings_page")
 
 function toggle_import_export_page(player_index, button_element, import)
-    if button_element.style.name == "flib_selected_tool_button" then
+    if button_element.style.name == "flib_selected_tool_button" then -- Oof, ugly
         close_import_export_page(player_index)
     else
         close_import_export_page(player_index)

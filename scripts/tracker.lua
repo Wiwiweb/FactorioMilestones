@@ -1,6 +1,6 @@
 local core_util = require("__core__/lualib/util.lua")
-local flib_format = require("__flib__.format")
 require("scripts.gui")
+require("scripts.util")
 require("scripts.milestones_util")
 
 local function force_print(force, message)
@@ -45,9 +45,8 @@ local function write_milestone_to_file(force, milestone, human_timestamp)
     end
 end
 
-
 local function print_milestone_reached(force, milestone)
-    local human_timestamp = flib_format.time(milestone.completion_tick)
+    local human_timestamp = format_time(milestone.completion_tick)
     local sprite_name = sprite_prefix(milestone) .. "." .. milestone.name
     local milestone_localised_name
     local message
