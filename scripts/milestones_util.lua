@@ -1,5 +1,3 @@
-local table = require("__flib__.table")
-
 -- Each production graph bracket, from highest to lowest
 -- Used in find_precision_bracket()
 local FLOW_PRECISION_BRACKETS = {
@@ -53,7 +51,7 @@ function merge_new_milestones(force_name, new_loaded_milestones)
         if new_loaded_milestone.type == "group" then
             current_group = new_loaded_milestone.name
         elseif new_loaded_milestone.type ~= "alias" then
-            local new_milestone = table.deep_copy(new_loaded_milestone)
+            local new_milestone = table.deepcopy(new_loaded_milestone)
             new_milestone.sort_index = i
             new_milestone.group = current_group
             new_milestones_by_group[current_group] = new_milestones_by_group[current_group] or {}
@@ -151,7 +149,7 @@ function create_next_milestone(force_name, milestone)
         return
     end
 
-    local new_milestone = table.deep_copy(milestone)
+    local new_milestone = table.deepcopy(milestone)
     if operator == '+' then
         new_milestone.quantity = milestone.quantity + next_value
     elseif operator == 'x' then

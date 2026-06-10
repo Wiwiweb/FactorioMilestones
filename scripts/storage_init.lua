@@ -1,5 +1,3 @@
-local table = require("__flib__.table")
-
 function initialize_force_if_needed(force)
     if storage.forces[force.name] == nil and next(force.players) ~= nil then -- Don't bother with forces without players
         log("Initializing storage for force " .. force.name)
@@ -21,7 +19,7 @@ function initialize_force_if_needed(force)
             if loaded_milestone.type == "group" then
                 current_group = loaded_milestone.name
             elseif loaded_milestone.type ~= "alias" then
-                local inserted_milestone = table.deep_copy(loaded_milestone)
+                local inserted_milestone = table.deepcopy(loaded_milestone)
                 inserted_milestone.sort_index = i
                 inserted_milestone.group = current_group
                 storage_force.milestones_by_group[current_group] = storage_force.milestones_by_group[current_group] or {}

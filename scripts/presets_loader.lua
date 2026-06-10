@@ -1,5 +1,3 @@
-local table = require("__flib__.table")
-
 require("scripts.util")
 require("presets.presets")
 require("presets.presets_pymods")
@@ -118,7 +116,7 @@ function load_presets()
         storage.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. storage.current_preset_name)
         table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", storage.current_preset_name})
-        storage.loaded_milestones = table.deep_copy(presets[storage.current_preset_name].milestones)
+        storage.loaded_milestones = table.deepcopy(presets[storage.current_preset_name].milestones)
     end
 end
 

@@ -1,4 +1,3 @@
-local table = require("__flib__.table")
 require("presets.presets")
 require("scripts.milestones_util")
 
@@ -503,7 +502,7 @@ function confirm_settings_page(player_index)
             storage.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
         end
 
-        storage.loaded_milestones = table.deep_copy(new_loaded_milestones)
+        storage.loaded_milestones = table.deepcopy(new_loaded_milestones)
         initialize_alias_table()
 
         local backfilled_anything = false
@@ -592,7 +591,7 @@ end
 function reset_preset(player_index)
     -- Preset
     local chosen_preset_name = get_auto_detected_preset_name()
-    local new_milestones = table.deep_copy(presets[chosen_preset_name].milestones)
+    local new_milestones = table.deepcopy(presets[chosen_preset_name].milestones)
 
     -- Preset addons
     for _preset_addon_name, preset_addon in pairs(preset_addons) do
