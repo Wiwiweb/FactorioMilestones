@@ -91,3 +91,31 @@ function format_time(nb_ticks)
     return string.format("%d:%02d", minutes, seconds)
   end
 end
+
+-- Taken from flib
+--- @generic T: table
+--- @param tbl1 T
+--- @param tbl2 T
+--- @return boolean
+function table.deep_compare(tbl1, tbl2)
+  if tbl1 == tbl2 then
+    return true
+  end
+  for k, v in pairs(tbl1) do
+    if type(v) == "table" and type(tbl2[k]) == "table" then
+      if not table.deep_compare(v, tbl2[k]) then
+        return false
+      end
+    else
+      if v ~= tbl2[k] then
+        return false
+      end
+    end
+  end
+  for k in pairs(tbl2) do
+    if tbl1[k] == nil then
+      return false
+    end
+  end
+  return true
+end
