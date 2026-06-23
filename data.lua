@@ -2,15 +2,25 @@ local data_util = require("__flib__.data-util")
 local styles = data.raw["gui-style"].default
 
 styles.milestones_settings_outer_flow = {
-    type = "vertical_flow_style",
-    horizontal_align = "center",
-    vertical_spacing = 8,
-    padding = 15
+  type = "vertical_flow_style",
+  horizontal_align = "center",
+  vertical_spacing = 8,
+  padding = 15
+}
+
+-- Copied from flib_naked_scroll_pane
+styles.milestones_naked_scroll_pane = {
+  type = "scroll_pane_style",
+  extra_padding_when_activated = 0,
+  padding = 12,
+  graphical_set = {
+    shadow = default_inner_shadow,
+  },
 }
 
 styles.milestones_settings_scroll = {
   type = "scroll_pane_style",
-  parent = "flib_naked_scroll_pane",
+  parent = "milestones_naked_scroll_pane",
   padding = 0
 }
 
