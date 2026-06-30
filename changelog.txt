@@ -2,6 +2,9 @@
 Version: 1.5.1
 Date: ????
   Changes:
+    - Removed the outdated built-in Nullius preset, in favor of Nullius' own preset provided by their mod.
+
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.0
 Date: 2026-06-23
