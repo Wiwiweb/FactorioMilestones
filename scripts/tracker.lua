@@ -45,6 +45,10 @@ local function write_milestone_to_file(force, milestone, human_timestamp)
     end
 end
 
+local function colorTableToString(colourTable)
+    return string.format("%s,%s,%s", colourTable.r, colourTable.g, colourTable.b);
+end
+
 local function print_milestone_reached(force, milestone)
     local human_timestamp = format_time(milestone.completion_tick)
     local sprite_name = sprite_prefix(milestone) .. "." .. milestone.name
@@ -104,10 +108,18 @@ local function print_milestone_reached(force, milestone)
         end
     end
 
-    force_print(force, message)
+    if (settings.global["milestones_global_announcements"].value) then
+        local colorStr = colorTableToString(force.custom_color or force.color);
+        local forceMsg = {"milestones.message_team_completion", force.players[1].name, colorStr};
+        game.print({"", forceMsg, " ", message})
+        game.play_sound{path="utility/achievement_unlocked"}
+    else
+        force.play_sound{path="utility/achievement_unlocked"}
+        force_print(force, message);
+    end
+
     raise_milestone_reached_event(force, milestone, message)
     write_milestone_to_file(force, milestone, human_timestamp)
-    force.play_sound{path="utility/achievement_unlocked"}
 end
 
 function track_item_creation(event)
