@@ -1,4 +1,3 @@
-local data_util = require("__flib__.data-util")
 local styles = data.raw["gui-style"].default
 
 styles.milestones_settings_outer_flow = {
@@ -184,39 +183,51 @@ data:extend{
 }
 
 -- Sprites
+
+--- Copied and adapted from flib
+function build_sprite(name, position, filename, size)
+  return {
+    type = "sprite",
+    name = name,
+    filename = filename,
+    position = position,
+    size = size,
+    flags = { "icon" },
+  }
+end
+
 local shortcut_icon = "__Milestones__/graphics/shortcut-icon.png"
 local settings_icon_white = "__Milestones__/graphics/settings-icon-white.png"
 local infinity_icon = "__Milestones__/graphics/infinity-icon.png"
 local arrows = "__Milestones__/graphics/arrows.png"
 local item_icons = "__Milestones__/graphics/item-icons.png"
 data:extend{
-  data_util.build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32),
+  build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32),
 
-  data_util.build_sprite("milestones_infinity_icon", {0, 0}, infinity_icon, 32),
+  build_sprite("milestones_infinity_icon", {0, 0}, infinity_icon, 32),
 
-  data_util.build_sprite("milestones_settings_white", {0, 0}, settings_icon_white, 32),
+  build_sprite("milestones_settings_white", {0, 0}, settings_icon_white, 32),
 
-  data_util.build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
-  data_util.build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),
+  build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
+  build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),
 
-  data_util.build_sprite("milestones_icon_item", {0, 0}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_item_black", {0, 16}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_fluid", {16, 0}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_fluid_black", {16, 16}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_technology", {32, 0}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_technology_black", {32, 16}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_kill", {48, 0}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_kill_black", {48, 16}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_group", {64, 0}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_group_black", {64, 16}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_group_black", {64, 16}, item_icons, 16),
+  build_sprite("milestones_icon_item", {0, 0}, item_icons, 16),
+  build_sprite("milestones_icon_item_black", {0, 16}, item_icons, 16),
+  build_sprite("milestones_icon_fluid", {16, 0}, item_icons, 16),
+  build_sprite("milestones_icon_fluid_black", {16, 16}, item_icons, 16),
+  build_sprite("milestones_icon_technology", {32, 0}, item_icons, 16),
+  build_sprite("milestones_icon_technology_black", {32, 16}, item_icons, 16),
+  build_sprite("milestones_icon_kill", {48, 0}, item_icons, 16),
+  build_sprite("milestones_icon_kill_black", {48, 16}, item_icons, 16),
+  build_sprite("milestones_icon_group", {64, 0}, item_icons, 16),
+  build_sprite("milestones_icon_group_black", {64, 16}, item_icons, 16),
 
   {
     type = "sprite",
     name = "rename_icon_small_white",
     filename = "__core__/graphics/rename-icon.png",
-    priority = "high",
     size = 32,
+    flags = { "icon" },
     scale = 0.5,
     invert_colors=true
   },
