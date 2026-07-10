@@ -2,6 +2,7 @@
 Version: 1.5.1
 Date: ????
   Changes:
+    - Removed dependency on flib.
     - Removed the outdated built-in Nullius preset, in favor of Nullius' own preset provided by their mod.
     - Reduced mod size by excluding some source graphic files.
     - Slight tweaks to the look of top right frame buttons, to match vanilla equivalents.

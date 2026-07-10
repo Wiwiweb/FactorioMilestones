@@ -48,7 +48,7 @@ function build_import_export_page(player_index, button_element, import)
     end
 
     local button_frame = inside_frame.add{type="flow", direction="horizontal"}
-    button_frame.add{type="empty-widget", style="flib_horizontal_pusher"}
+    button_frame.add{type="empty-widget", style="milestones_horizontal_pusher"}
     if import then
         button_frame.add{type="button", style="dialog_button", caption={"milestones.settings_import"}, tags={action="milestones_import_settings"}}
     else
