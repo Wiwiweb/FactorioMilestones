@@ -185,7 +185,7 @@ data:extend{
 
 -- Sprites
 local shortcut_icon = "__Milestones__/graphics/shortcut-icon.png"
-local toolbar_icons = "__Milestones__/graphics/toolbar-icons.png"
+local settings_icon_white = "__Milestones__/graphics/settings-icon-white.png"
 local infinity_icon = "__Milestones__/graphics/infinity-icon.png"
 local arrows = "__Milestones__/graphics/arrows.png"
 local item_icons = "__Milestones__/graphics/item-icons.png"
@@ -194,9 +194,7 @@ data:extend{
 
   data_util.build_sprite("milestones_infinity_icon", {0, 0}, infinity_icon, 32),
 
-  data_util.build_sprite("milestones_settings_black", {0, 0}, toolbar_icons, 32),
-  data_util.build_sprite("milestones_settings_white", {32, 0}, toolbar_icons, 32),
-  data_util.build_sprite("milestones_settings_disabled", {64, 0}, toolbar_icons, 32),
+  data_util.build_sprite("milestones_settings_white", {0, 0}, settings_icon_white, 32),
 
   data_util.build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
   data_util.build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),

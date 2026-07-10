@@ -41,8 +41,6 @@ function build_gui_frames(player)
         name="milestones_settings_button",
         style="frame_action_button",
         sprite="milestones_settings_white",
-        hovered_sprite="milestones_settings_black",
-        clicked_sprite="milestones_settings_black",
         mouse_button_filter={"left"},
         tooltip = {"milestones.settings_instructions"},
         tags={
@@ -52,9 +50,6 @@ function build_gui_frames(player)
     if not player.admin then
         settings_button.enabled = false
         settings_button.tooltip = {"milestones.settings_disabled"}
-        settings_button.sprite = "milestones_settings_disabled"
-        settings_button.hovered_sprite = "milestones_settings_disabled"
-        settings_button.clicked_sprite = "milestones_settings_disabled"
     end
     titlebar.add{
         type="sprite-button",
@@ -62,7 +57,7 @@ function build_gui_frames(player)
         style="frame_action_button",
         mouse_button_filter={"left"},
         sprite="utility/track_button_white",
-        tooltip = {"milestones.pin_instructions"},
+        tooltip = {"factoriopedia.pin-tooltip"},
         tags={
             action="milestones_pin_gui"
         }
@@ -73,8 +68,6 @@ function build_gui_frames(player)
         style="close_button",
         mouse_button_filter={"left"},
         sprite="utility/close",
-        hovered_sprite="utility/close_black",
-        clicked_sprite="utility/close_black",
         tags={
             action="milestones_close_gui"
         }
@@ -114,15 +107,9 @@ local function update_settings_button(player) -- In case permissions changed
     if player.admin then
         settings_button.enabled = true
         settings_button.tooltip = {"milestones.settings_instructions"}
-        settings_button.sprite = "milestones_settings_white"
-        settings_button.hovered_sprite = "milestones_settings_black"
-        settings_button.clicked_sprite = "milestones_settings_black"
     else
         settings_button.enabled = false
         settings_button.tooltip = {"milestones.settings_disabled"}
-        settings_button.sprite = "milestones_settings_disabled"
-        settings_button.hovered_sprite = "milestones_settings_disabled"
-        settings_button.clicked_sprite = "milestones_settings_disabled"
     end
 end
 
