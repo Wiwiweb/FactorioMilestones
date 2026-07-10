@@ -31,7 +31,7 @@ function build_gui_frames(player)
     titlebar.add{
         type="label",
         name="milestones_main_label",
-        style="frame_title",
+        style="milestones_frame_title",
         caption={"milestones.title"},
         ignored_by_interaction=true
     }
@@ -89,7 +89,7 @@ function build_gui_frames(player)
     import_export_titlebar.add{
         type="label",
         name="milestones_settings_import_export_titlebar_label",
-        style="frame_title",
+        style="milestones_frame_title",
         ignored_by_interaction=true
     }
     import_export_titlebar.add{type="empty-widget", style="milestones_titlebar_drag_handle", ignored_by_interaction=true}

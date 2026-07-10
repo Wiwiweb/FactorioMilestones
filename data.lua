@@ -1,5 +1,12 @@
 local styles = data.raw["gui-style"].default
 
+styles.milestones_frame_title = {
+  type = "label_style",
+  parent = "frame_title",
+  top_margin = -3,
+  bottom_padding = 3
+}
+
 styles.milestones_settings_outer_flow = {
   type = "vertical_flow_style",
   horizontal_align = "center",
