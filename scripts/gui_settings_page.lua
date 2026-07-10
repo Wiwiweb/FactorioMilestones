@@ -161,17 +161,16 @@ end
 function toggle_infinity_button(button_element)
     local textfield_element = button_element.parent.milestones_settings_next_textfield
     local spacer_element = button_element.parent.milestones_settings_next_spacer
-    if button_element.style.name == "milestones_selected_grey_button" then
-        button_element.style = "milestones_grey_button"
-        textfield_element.visible = false
-        spacer_element.visible = true
-    else
-        button_element.style = "milestones_selected_grey_button"
+    button_element.toggled = not button_element.toggled
+    if button_element.toggled then
         textfield_element.visible = true
         spacer_element.visible = false
         if textfield_element.text == nil or textfield_element.text == "" then
             textfield_element.text = "x10"
         end
+    else
+        textfield_element.visible = false
+        spacer_element.visible = true
     end
 end
 

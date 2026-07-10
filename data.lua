@@ -80,14 +80,6 @@ styles.milestones_grey_button = {
   padding = 0
 }
 
-styles.milestones_selected_grey_button = {
-  type = "button_style",
-  parent = "flib_selected_tool_button",
-  width = 24,
-  height = 24,
-  padding = 0
-}
-
 styles.milestones_confirm_button = {
   type = "button_style",
   parent = "tool_button_green",
