@@ -133,3 +133,4 @@ presets = {
             {type="item",       name="raw-fish",              quantity=1, quality="legendary"},
         }
     },
+}
