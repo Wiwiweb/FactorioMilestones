@@ -7,16 +7,6 @@ styles.milestones_settings_outer_flow = {
   padding = 15
 }
 
--- Copied from flib_naked_scroll_pane
-styles.milestones_naked_scroll_pane = {
-  type = "scroll_pane_style",
-  extra_padding_when_activated = 0,
-  padding = 12,
-  graphical_set = {
-    shadow = default_inner_shadow,
-  },
-}
-
 styles.milestones_settings_scroll = {
   type = "scroll_pane_style",
   parent = "milestones_naked_scroll_pane",
@@ -138,6 +128,46 @@ styles.milestones_line_center = table.deepcopy(styles.line)
 styles.milestones_line_center.border.right_end = styles.line.border.horizontal_line
 styles.milestones_line_center.border.left_end = styles.line.border.horizontal_line
 
+
+-- Styles below are copied from flib
+
+styles.milestones_titlebar_flow = {
+  type = "horizontal_flow_style",
+  horizontal_spacing = 8,
+}
+
+styles.milestones_horizontal_pusher = {
+  type = "empty_widget_style",
+  horizontally_stretchable = "on",
+}
+
+styles.milestones_naked_scroll_pane = {
+  type = "scroll_pane_style",
+  extra_padding_when_activated = 0,
+  padding = 12,
+  graphical_set = {
+    shadow = default_inner_shadow,
+  },
+}
+
+styles.milestones_titlebar_drag_handle = {
+  type = "empty_widget_style",
+  parent = "draggable_space",
+  left_margin = 4,
+  right_margin = 4,
+  height = 24,
+  horizontally_stretchable = "on",
+}
+
+styles.milestones_dialog_footer_drag_handle = {
+  type = "empty_widget_style",
+  parent = "draggable_space",
+  height = 32,
+  horizontally_stretchable = "on",
+}
+
+
+-- Inputs
 
 data:extend{
     {

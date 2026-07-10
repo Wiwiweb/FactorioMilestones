@@ -27,7 +27,7 @@ function build_gui_frames(player)
     local outer_frame = screen_element.add{type="frame", name="milestones_outer_frame", style="invisible_frame", visible=false}
     local main_frame = outer_frame.add{type="frame", name="milestones_main_frame", direction="vertical"}
 
-    local titlebar = main_frame.add{type="flow", name="milestones_titlebar", style="flib_titlebar_flow", direction="horizontal"}
+    local titlebar = main_frame.add{type="flow", name="milestones_titlebar", style="milestones_titlebar_flow", direction="horizontal"}
     titlebar.add{
         type="label",
         name="milestones_main_label",
@@ -35,7 +35,7 @@ function build_gui_frames(player)
         caption={"milestones.title"},
         ignored_by_interaction=true
     }
-    titlebar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
+    titlebar.add{type="empty-widget", style="milestones_titlebar_drag_handle", ignored_by_interaction=true}
     local settings_button = titlebar.add{
         type="sprite-button",
         name="milestones_settings_button",
@@ -78,21 +78,21 @@ function build_gui_frames(player)
 
     local dialog_buttons_bar = main_frame.add{type="flow", style="dialog_buttons_horizontal_flow", name="milestones_dialog_buttons", direction="horizontal"}
     dialog_buttons_bar.add{type="button", style="back_button", caption={"milestones.settings_back"}, tags={action="milestones_cancel_settings"}}
-    dialog_buttons_bar.add{type="empty-widget", style="flib_dialog_footer_drag_handle", ignored_by_interaction=true}
+    dialog_buttons_bar.add{type="empty-widget", style="milestones_dialog_footer_drag_handle", ignored_by_interaction=true}
     dialog_buttons_bar.add{type="button", style="confirm_button", caption={"milestones.settings_confirm"}, tags={action="milestones_confirm_settings"}}
     dialog_buttons_bar.drag_target = outer_frame
 
     -- Import/export side menu
 
     local import_export_frame = outer_frame.add{type="frame", name="milestones_settings_import_export", style="frame", direction="vertical", visible=false}
-    local import_export_titlebar = import_export_frame.add{type="flow", name="milestones_settings_import_export_titlebar", style="flib_titlebar_flow", direction="horizontal"}
+    local import_export_titlebar = import_export_frame.add{type="flow", name="milestones_settings_import_export_titlebar", style="milestones_titlebar_flow", direction="horizontal"}
     import_export_titlebar.add{
         type="label",
         name="milestones_settings_import_export_titlebar_label",
         style="frame_title",
         ignored_by_interaction=true
     }
-    import_export_titlebar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
+    import_export_titlebar.add{type="empty-widget", style="milestones_titlebar_drag_handle", ignored_by_interaction=true}
     import_export_titlebar.drag_target = outer_frame
 
     import_export_frame.add{type="flow", name="milestones_settings_import_export_inside", direction="vertical"}
