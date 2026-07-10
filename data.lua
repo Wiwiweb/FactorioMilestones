@@ -196,17 +196,15 @@ function build_sprite(name, position, filename, size)
   }
 end
 
-local shortcut_icon = "__Milestones__/graphics/shortcut-icon.png"
+local icons = "__Milestones__/graphics/icons-32.png"
 local settings_icon_white = "__Milestones__/graphics/settings-icon-white.png"
 local infinity_icon = "__Milestones__/graphics/infinity-icon.png"
 local arrows = "__Milestones__/graphics/arrows.png"
 local item_icons = "__Milestones__/graphics/item-icons.png"
 data:extend{
-  build_sprite("milestones_main_icon_white", {48,0}, shortcut_icon, 32),
-
-  build_sprite("milestones_infinity_icon", {0, 0}, infinity_icon, 32),
-
-  build_sprite("milestones_settings_white", {0, 0}, settings_icon_white, 32),
+  build_sprite("milestones_main_icon_white", {0,0}, icons, 32),
+  build_sprite("milestones_settings_white", {32, 0}, icons, 32),
+  build_sprite("milestones_infinity_icon", {64, 0}, icons, 32),
 
   build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
   build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),
