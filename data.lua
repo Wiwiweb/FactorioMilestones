@@ -197,9 +197,6 @@ data:extend{
   data_util.build_sprite("milestones_settings_black", {0, 0}, toolbar_icons, 32),
   data_util.build_sprite("milestones_settings_white", {32, 0}, toolbar_icons, 32),
   data_util.build_sprite("milestones_settings_disabled", {64, 0}, toolbar_icons, 32),
-  data_util.build_sprite("milestones_pin_black", {0, 32}, toolbar_icons, 32),
-  data_util.build_sprite("milestones_pin_white", {32, 32}, toolbar_icons, 32),
-  data_util.build_sprite("milestones_pin_disabled", {64, 32}, toolbar_icons, 32),
 
   data_util.build_sprite("milestones_arrow_up", {0, 0}, arrows, 16),
   data_util.build_sprite("milestones_arrow_down", {16, 0}, arrows, 16),

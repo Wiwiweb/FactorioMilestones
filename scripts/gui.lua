@@ -61,9 +61,9 @@ function build_gui_frames(player)
         name="milestones_pin_button",
         style="frame_action_button",
         mouse_button_filter={"left"},
-        sprite="milestones_pin_white",
-        hovered_sprite="milestones_pin_black",
-        clicked_sprite="milestones_pin_black",
+        sprite="utility/track_button_white",
+        hovered_sprite="utility/track_button",
+        clicked_sprite="utility/track_button",
         tooltip = {"milestones.pin_instructions"},
         tags={
             action="milestones_pin_gui"
@@ -189,11 +189,11 @@ local function toggle_pinned(player, element)
     storage_player.pinned = not storage_player.pinned
     if storage_player.pinned then
         element.style = "flib_selected_frame_action_button"
-        element.sprite = "milestones_pin_black"
+        element.sprite = "utility/track_button"
         player.opened = nil
     else
         element.style = "frame_action_button"
-        element.sprite = "milestones_pin_white"
+        element.sprite = "utility/track_button_white"
         local main_frame = get_main_frame(player.index)
         if player.opened == nil then
             player.opened = main_frame
