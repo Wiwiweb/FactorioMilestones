@@ -72,12 +72,11 @@ function build_gui_frames(player)
     titlebar.add{
         type="sprite-button",
         name="milestones_close_button",
-        style="frame_action_button",
+        style="close_button",
         mouse_button_filter={"left"},
         sprite="utility/close",
         hovered_sprite="utility/close_black",
         clicked_sprite="utility/close_black",
-        tooltip = {"gui.close-instruction"},
         tags={
             action="milestones_close_gui"
         }
