@@ -180,6 +180,9 @@ local function get_row_count(milestone_counts_by_group, column_count)
     for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
         row_count = row_count + math.ceil(milestone_count_in_group / column_count) + 1 -- +1 for the title of the group
     end
+    if table_size(milestone_counts_by_group) == 1 then
+        row_count = row_count - 1 -- If there's only 1 group we don't display the title 
+    end
     return row_count
 end
 
@@ -251,72 +254,60 @@ function build_display_page(player)
     local show_incomplete = player_settings["milestones_show_incomplete"].value
 
     local nb_groups = table_size(storage_force.milestones_by_group)
-    if view_by_group and nb_groups > 1 then
-        local visible_milestones_per_group = {}
-        for group_name, group_milestones in pairs(storage_force.milestones_by_group) do
-            visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones, show_incomplete)
-            if not next(visible_milestones_per_group[group_name]) then
-                visible_milestones_per_group[group_name] = nil
-            end
-        end
-
-        -- No milestones, exit early
-        if not next(visible_milestones_per_group) then
-            display_scroll.add(empty_set_label)
-            return
-        end
-
-        local column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
-        local milestones_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
-        local i = 1
-        for group_name, group_milestones in pairs(visible_milestones_per_group) do
-            -- Group title
-            milestones_table.add({type="label", caption=group_name, style="caption_label"})
-            add_n_empty_widgets(milestones_table, column_count-1)
-
-            for _, milestone in pairs(group_milestones) do
-                add_milestone_item(milestones_table, milestone, print_milliseconds, compact_list, show_estimations)
-            end
-            add_n_empty_widgets(milestones_table, column_count - (#group_milestones % column_count))
-
-            -- Lines
-            if i < nb_groups then -- Don't add line after the last group
-                if column_count == 1 then
-                    milestones_table.add({type="line"})
-                else
-                    milestones_table.add({type="line", style="milestones_line_left"})
-                    for j = 2, column_count-1 do
-                        milestones_table.add({type="line", style="milestones_line_center"})
-                    end
-                    milestones_table.add({type="line", style="milestones_line_right"})
-                end
-                i = i + 1
-            end
-        end
+    local show_groups = nb_groups > 1 and view_by_group
+    
+    local milestones_by_group_used_for_display
+    if show_groups then
+        milestones_by_group_used_for_display = storage_force.milestones_by_group
     else
         local visible_incomplete_milestones = filter_hidden_milestones(storage_force.incomplete_milestones, show_incomplete)
-        local nb_milestones = #storage_force.complete_milestones + #visible_incomplete_milestones
+        milestones_by_group_used_for_display = storage_force.complete_milestones
+        for i=1, #visible_incomplete_milestones do
+            milestones_by_group_used_for_display[#milestones_by_group_used_for_display+1] = visible_incomplete_milestones[i]
+        end
+    end
 
-        -- No milestones, exit early
-        if nb_milestones == 0 then
-            display_scroll.add(empty_set_label)
-            return
+    local visible_milestones_per_group = {}
+    for group_name, group_milestones in pairs(milestones_by_group_used_for_display) do
+        visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones, show_incomplete)
+        if not next(visible_milestones_per_group[group_name]) then
+            visible_milestones_per_group[group_name] = nil
+        end
+    end
+
+    -- No milestones, exit early
+    if not next(visible_milestones_per_group) then
+        display_scroll.add(empty_set_label)
+        return
+    end
+
+    local column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
+    local milestones_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
+    local i = 1
+    for group_name, group_milestones in pairs(visible_milestones_per_group) do
+        -- Group title
+        if show_groups then
+            milestones_table.add({type="label", caption=group_name, style="caption_label"})
+            add_n_empty_widgets(milestones_table, column_count-1)
         end
 
-        -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-        local column_count = math.max(
-            math.min(
-                math.ceil(math.sqrt(nb_milestones / 3)),
-                8),
-            1)
-
-        local content_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
-        for _, milestone in pairs(storage_force.complete_milestones) do
-            add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
+        for _, milestone in pairs(group_milestones) do
+            add_milestone_item(milestones_table, milestone, print_milliseconds, compact_list, show_estimations)
         end
+        add_n_empty_widgets(milestones_table, column_count - (#group_milestones % column_count))
 
-        for _, milestone in pairs(visible_incomplete_milestones) do
-            add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
+        -- Lines
+        if i < nb_groups then -- Don't add line after the last group
+            if column_count == 1 then
+                milestones_table.add({type="line"})
+            else
+                milestones_table.add({type="line", style="milestones_line_left"})
+                for j = 2, column_count-1 do
+                    milestones_table.add({type="line", style="milestones_line_center"})
+                end
+                milestones_table.add({type="line", style="milestones_line_right"})
+            end
+            i = i + 1
         end
     end
 end
