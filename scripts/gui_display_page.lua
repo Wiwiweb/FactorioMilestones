@@ -178,15 +178,13 @@ end
 local function get_row_count(milestone_counts_by_group, column_count)
     row_count = 0
     for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
-        row_count = row_count + math.ceil(milestone_count_in_group / column_count) + 1
+        row_count = row_count + math.ceil(milestone_count_in_group / column_count) + 1 -- +1 for the title of the group
     end
     return row_count
 end
 
-local function get_column_count_with_groups(player, milestones_by_group, compact_list, show_estimations)
-    local real_width = player.display_resolution.width * (1 / player.display_scale)
-    local target_width = real_width * 0.9
-    -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation)
+local function get_max_nb_columns(compact_list, show_estimations)
+    -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation), +5px extra for leeway
     local max_column_width = 283
     if compact_list then
         max_column_width = max_column_width - 76
@@ -196,16 +194,24 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     else
         max_column_width = max_column_width - 47
     end
-    local max_nb_columns = math.ceil(target_width / max_column_width) - 1
+    return math.ceil(target_width / max_column_width) - 1
+end
+
+local function get_column_count_with_groups(player, milestones_by_group, compact_list, show_estimations)
+    local real_width = player.display_resolution.width * (1 / player.display_scale)
+    local target_width = real_width * 0.9
+
     local column_count = 1
     local milestone_counts_by_group = {}
     for _group_name, group_milestones in pairs(milestones_by_group) do
         table.insert(milestone_counts_by_group, #group_milestones)
         column_count = math.max(column_count, #group_milestones)
+    end
 
-        if column_count >= max_nb_columns then
-            column_count = max_nb_columns
-        end
+    local max_nb_columns = get_max_nb_columns(compact_list, show_estimations)
+
+    if column_count > max_nb_columns then
+        column_count = max_nb_columns
     end
 
     -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
