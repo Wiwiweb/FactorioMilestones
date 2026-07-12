@@ -186,7 +186,7 @@ local function get_row_count(milestone_counts_by_group, column_count)
     return row_count
 end
 
-local function get_max_nb_columns(compact_list, show_estimations)
+local function get_max_nb_columns(target_width, compact_list, show_estimations)
     -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation), +5px extra for leeway
     local max_column_width = 283
     if compact_list then
@@ -211,7 +211,7 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
         column_count = math.max(column_count, #group_milestones)
     end
 
-    local max_nb_columns = get_max_nb_columns(compact_list, show_estimations)
+    local max_nb_columns = get_max_nb_columns(target_width, compact_list, show_estimations)
 
     if column_count > max_nb_columns then
         column_count = max_nb_columns
@@ -260,11 +260,13 @@ function build_display_page(player)
     if show_groups then
         milestones_by_group_used_for_display = storage_force.milestones_by_group
     else
+        -- Create a dummy group made of the complete then incomplete milestones
+        milestones_used_for_display = table_shallow_copy(storage_force.complete_milestones)
         local visible_incomplete_milestones = filter_hidden_milestones(storage_force.incomplete_milestones, show_incomplete)
-        milestones_by_group_used_for_display = storage_force.complete_milestones
         for i=1, #visible_incomplete_milestones do
-            milestones_by_group_used_for_display[#milestones_by_group_used_for_display+1] = visible_incomplete_milestones[i]
+            milestones_used_for_display[#milestones_used_for_display+1] = visible_incomplete_milestones[i]
         end
+        milestones_by_group_used_for_display = {["Dummy group"] = milestones_used_for_display}
     end
 
     local visible_milestones_per_group = {}

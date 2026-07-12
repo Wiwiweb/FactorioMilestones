@@ -12,6 +12,14 @@ function table_get_index(table, element)
     return nil
 end
 
+function table_shallow_copy(orig)
+    local copy = {}
+    for orig_key, orig_value in pairs(orig) do
+        copy[orig_key] = orig_value
+    end
+    return copy
+end
+
 function validate_milestones(milestones)
     local valid_categories = {"item", "fluid", "item_consumption", "fluid_consumption", "technology", "kill", "group", "alias"}
     for _, milestone in pairs(milestones) do
