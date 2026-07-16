@@ -186,7 +186,7 @@ local function get_row_count(milestone_counts_by_group, column_count)
     return row_count
 end
 
-local function get_max_nb_columns(target_width, compact_list, show_estimations)
+local function get_max_column_width(compact_list, show_estimations)
     -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation), +5px extra for leeway
     local max_column_width = 283
     if compact_list then
@@ -197,7 +197,26 @@ local function get_max_nb_columns(target_width, compact_list, show_estimations)
     else
         max_column_width = max_column_width - 47
     end
+    return max_column_width
+end
+
+local function get_max_nb_columns(target_width, compact_list, show_estimations)
+    local max_column_width = get_max_column_width(compact_list, show_estimations)
     return math.ceil(target_width / max_column_width) - 1
+end
+
+local function get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
+    local width = column_count * max_column_width
+    local height = get_row_count(milestone_counts_by_group, column_count) * 36 + 20
+    return width / height
+end
+
+local function debug_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
+    local width = column_count * max_column_width
+    local row_count = get_row_count(milestone_counts_by_group, column_count)
+    local height = row_count * 36 + 20
+    local ratio = width / height
+    game.print(string.format("%d columns: width: %d, height: %d, row_count: %s, ratio: %f", column_count, width, height, row_count, ratio))
 end
 
 local function get_column_count_with_groups(player, milestones_by_group, compact_list, show_estimations)
@@ -217,12 +236,26 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
         column_count = max_nb_columns
     end
 
-    -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-    local row_count = get_row_count(milestone_counts_by_group, column_count)
-    while row_count < column_count * 3 and column_count > 1 do
+    -- Potentially reduce the number of columns to try and keep a roughly 16:9 shape
+    local max_column_width = get_max_column_width(compact_list, show_estimations)
+    local target_ratio = 16/9
+
+    local ratio = get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
+    local last_ratio = 0
+    while (column_count > 1) and (ratio > target_ratio) do
+        debug_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
+        last_ratio = ratio
         column_count = column_count - 1
-        row_count = get_row_count(milestone_counts_by_group, column_count)
+        ratio = get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
     end
+    -- We now have the 2 column counts that surround the target ratio. Use the closest one.
+    -- Always true: ratio <= target_ratio <= last_ratio
+    debug_ui_ratio(column_count+1, milestone_counts_by_group, max_column_width)
+    debug_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
+    if (last_ratio - target_ratio) < (target_ratio - ratio) and column_count > 1 then
+        column_count = column_count + 1
+    end
+    game.print("Target was "..target_ratio..", Used " .. column_count .. " columns")
 
     return column_count
 end
@@ -267,6 +300,7 @@ function build_display_page(player)
             milestones_used_for_display[#milestones_used_for_display+1] = visible_incomplete_milestones[i]
         end
         milestones_by_group_used_for_display = {["Dummy group"] = milestones_used_for_display}
+        nb_groups = 1
     end
 
     local visible_milestones_per_group = {}
@@ -275,6 +309,7 @@ function build_display_page(player)
         if not next(visible_milestones_per_group[group_name]) then
             visible_milestones_per_group[group_name] = nil
         end
+        nb_groups = table_size(visible_milestones_per_group)
     end
 
     -- No milestones, exit early
