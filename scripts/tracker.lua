@@ -16,6 +16,7 @@ local function raise_milestone_reached_event(force, milestone, message)
 		script.raise_event(On_milestone_reached_event, {
             force = force,
             milestone_name = milestone.name,
+            type = milestone.type,
             quantity = milestone.quantity,
             completion_tick = milestone.completion_tick,
             message = message
