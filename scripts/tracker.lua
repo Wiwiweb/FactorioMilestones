@@ -43,6 +43,9 @@ local function write_milestone_to_file(force, milestone, human_timestamp)
             helpers.write_file(file_name, json, true, player_index)
         end
     end
+    if settings.global["milestones_write_file_server"].value then
+        helpers.write_file(file_name, json, true, 0) -- 0 means server
+    end
 end
 
 local function print_milestone_reached(force, milestone)
