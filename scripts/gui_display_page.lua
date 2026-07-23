@@ -281,14 +281,16 @@ function build_display_page(player)
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local player_settings = settings.get_player_settings(player)
-    local compact_list = player_settings["milestones_compact_list"].value
+    local compact_list_string = player_settings["milestones_compact_list"].value
     local view_by_group = player_settings["milestones_list_by_group"].value
     local show_estimations = player_settings["milestones_show_estimations"].value
     local show_incomplete = player_settings["milestones_show_incomplete"].value
 
+    local compact_list = compact_list_string == "on" or compact_list_string == "auto" -- TEMP
+
     local nb_groups = table_size(storage_force.milestones_by_group)
     local show_groups = nb_groups > 1 and view_by_group
-    
+
     local milestones_by_group_used_for_display
     if show_groups then
         milestones_by_group_used_for_display = storage_force.milestones_by_group
