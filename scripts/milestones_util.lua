@@ -280,7 +280,7 @@ local function find_precision_bracket(milestone, flow_statistics_table, is_consu
         -- e.g: if total_count = 4, and 4 were created in the last 1000 hours, 4 were created in the last 250 hours, and 2 were created in the last 50 hours,
         -- then the first creation was between 50 and 250 hours ago, and we should search the 250 hours precision bracket.
 
-        if FLOW_PRECISION_BRACKETS_LENGTHS[bracket] <= game.tick then -- Skip bracket if the game is not long enough
+        if FLOW_PRECISION_BRACKETS_LENGTHS[bracket] <= game.ticks_played then -- Skip bracket if the game is not long enough
             local bracket_count = get_total_flow_count(flow_statistics_table, milestone, bracket, nil)
             if bracket_count <= total_count - milestone.quantity then
                 return previous_bracket
@@ -322,7 +322,7 @@ end
 
 -- Converts from "X ticks ago" to "X ticks since start of the game"
 local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago, bracket)
-    local lower_bound_ticks, upper_bound_ticks = game.tick - lower_bound_ticks_ago, game.tick - upper_bound_ticks_ago
+    local lower_bound_ticks, upper_bound_ticks = game.ticks_played - lower_bound_ticks_ago, game.ticks_played - upper_bound_ticks_ago
     log("lower_bound_ticks: " ..lower_bound_ticks.. " - upper_bound_ticks: " ..upper_bound_ticks)
 
     -- Samples are bound to absolute game time. e.g. sample #3 for defines.flow_precision_index.one_minute corresponds to ticks 25 to 36.
@@ -347,11 +347,11 @@ local function find_production_tick_bounds(milestone, flow_statistics_table)
     if precision_bracket == "ALL" then
         -- Completion time is over 1000 hours ago, there are no samples to go through
         -- All we know is it's between tick 0 and 1000 hours ago
-        lower_bound_ticks_ago, upper_bound_ticks_ago = game.tick, FLOW_PRECISION_BRACKETS_LENGTHS[defines.flow_precision_index.one_thousand_hours]
+        lower_bound_ticks_ago, upper_bound_ticks_ago = game.ticks_played, FLOW_PRECISION_BRACKETS_LENGTHS[defines.flow_precision_index.one_thousand_hours]
     else
         local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, flow_statistics_table)
         if sample_index == 0 then
-            return game.tick, game.tick -- Created this exact tick, usually on tick 0 before the start of the game
+            return game.ticks_played, game.ticks_played -- Created this exact tick, usually on tick 0 before the start of the game
         end
         lower_bound_ticks_ago, upper_bound_ticks_ago = get_tick_bounds_from_sample(precision_bracket, sample_index)
     end
@@ -364,7 +364,7 @@ end
 -- TODO FIXME: This does not account for aliases at all!
 function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
     if milestone.type == "technology" then
-        return 0, game.tick -- No way to know past research time
+        return 0, game.ticks_played -- No way to know past research time
     elseif milestone.type == "item" or milestone.type == "item_consumption" then
         return find_production_tick_bounds(milestone, item_stats)
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then

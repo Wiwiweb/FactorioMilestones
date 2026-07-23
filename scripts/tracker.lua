@@ -130,7 +130,7 @@ function track_item_creation(event)
                     end
                 end
                 local force = game.forces[force_name]
-                mark_milestone_reached(storage_force_force, milestone, game.tick, i)
+                mark_milestone_reached(storage_force_force, milestone, game.ticks_played, i)
                 print_milestone_reached(force, milestone)
                 refresh_gui_for_force(force)
                 to_i = math.min(to_i, #storage_force_force.incomplete_milestones) -- Don't go past the end of the table
@@ -154,7 +154,7 @@ function check_technology_milestone_reached(event)
     while i <= #storage_force.incomplete_milestones do
         local milestone = storage_force.incomplete_milestones[i]
         if is_tech_milestone_reached(milestone, technology_researched) then
-            mark_milestone_reached(storage_force, milestone, game.tick, i)
+            mark_milestone_reached(storage_force, milestone, game.ticks_played, i)
             print_milestone_reached(force, milestone)
             refresh_gui_for_force(force)
         else

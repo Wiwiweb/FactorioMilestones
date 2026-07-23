@@ -5,7 +5,8 @@ Date: ????
     - Removed dependency on flib.
     - Removed the outdated built-in Nullius preset, in favor of Nullius' own preset provided by their mod.
     - Reduced mod size by excluding some source graphic files.
-    - Slight tweaks to the look of top right frame buttons, to match vanilla equivalents.
+    - When other mods use `game.tick_paused` to freeze time, Milestones will now continue counting time. This matches the behaviour of the in-game playtime counter, and should resolve any discrepancy. The time on already-achieved milestones will not be changed.
+    - Slight tweaks to the look of the top right frame buttons, to match vanilla equivalents.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.0
