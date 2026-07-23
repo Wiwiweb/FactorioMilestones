@@ -238,7 +238,7 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
 
     -- Potentially reduce the number of columns to try and keep a roughly 16:9 shape
     local max_column_width = get_max_column_width(compact_list, show_estimations)
-    local target_ratio = 16/9
+    local target_ratio = player.display_resolution.width / player.display_resolution.height
 
     local ratio = get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
     local last_ratio = 0
