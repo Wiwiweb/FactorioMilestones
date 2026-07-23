@@ -159,6 +159,8 @@ function refresh_gui_for_player(player)
     if is_display_page_visible(player.index) then
         get_inner_frame(player.index).clear()
         build_display_page(player)
+    else
+        storage.players[player.index].opened_once_before = false -- Center next open
     end
 end
 
