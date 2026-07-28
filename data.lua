@@ -153,7 +153,7 @@ styles.milestones_naked_scroll_pane = {
   extra_padding_when_activated = 0,
   padding = 12,
   graphical_set = {
-    shadow = default_inner_shadow,
+    shadow = default_inner_shadow, -- global defined in core factorio
   },
 }
 

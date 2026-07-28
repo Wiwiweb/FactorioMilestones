@@ -204,9 +204,14 @@ local function get_max_nb_columns(target_width, compact_list, show_estimations)
     return math.ceil(target_width / max_column_width) - 1
 end
 
+local function get_ui_height(milestone_counts_by_group, column_count)
+    --- Each row is 36px high, plus 36px for the frame and frame padding
+    return get_row_count(milestone_counts_by_group, column_count) * 36 + 36
+end
+
 local function get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
     local width = column_count * max_column_width
-    local height = get_row_count(milestone_counts_by_group, column_count) * 36 + 20
+    local height = get_ui_height(milestone_counts_by_group, column_count)
     return width / height
 end
 
@@ -231,7 +236,6 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
 
     local max_nb_columns = get_max_nb_columns(target_width, compact_list, show_estimations)
     game.print("required columns: " .. column_count .. ", max columns: " .. max_nb_columns)
-    -- TODO this isn't right with compact list
 
     if column_count > max_nb_columns then
         column_count = max_nb_columns
@@ -249,13 +253,16 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
         column_count = column_count - 1
         ratio = get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
     end
+    if column_count >= max_nb_columns then
+        return max_nb_columns
+    end
     -- We now have the 2 column counts that surround the target ratio. Use the closest one.
     -- Always true: ratio <= target_ratio <= last_ratio
-    debug_ui_ratio(column_count+1, milestone_counts_by_group, max_column_width)
-    debug_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
     if (last_ratio - target_ratio) < (target_ratio - ratio) and column_count > 1 then
         column_count = column_count + 1
     end
+    debug_ui_ratio(column_count+1, milestone_counts_by_group, max_column_width)
+    debug_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
     game.print("Target was "..target_ratio..", Used " .. column_count .. " columns")
 
     return column_count
@@ -286,8 +293,6 @@ function build_display_page(player)
     local view_by_group = player_settings["milestones_list_by_group"].value
     local show_estimations = player_settings["milestones_show_estimations"].value
     local show_incomplete = player_settings["milestones_show_incomplete"].value
-
-    local compact_list = compact_list_string == "on" or compact_list_string == "auto" -- TEMP
 
     local nb_groups = table_size(storage_force.milestones_by_group)
     local show_groups = nb_groups > 1 and view_by_group
@@ -321,7 +326,28 @@ function build_display_page(player)
         return
     end
 
-    local column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
+    -- Compact list "auto" calculation
+    local compact_list
+    local column_count
+    if compact_list_string == "auto" then
+        local real_height = player.display_resolution.height * (1 / player.display_scale)
+        compact_list = false
+        column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
+        local milestone_counts_by_group = {}
+        for _group_name, group_milestones in pairs(visible_milestones_per_group) do
+            table.insert(milestone_counts_by_group, #group_milestones)
+        end
+        local height = get_ui_height(milestone_counts_by_group, column_count)
+        game.print("Auto compact list: column_count: " .. column_count .. ", height: " .. height .. ", real_height: " .. real_height)
+        if height > real_height then
+            compact_list = true
+            column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
+        end
+    else
+        compact_list = compact_list_string == "on"
+        column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
+    end
+
     local milestones_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
     local i = 1
     for group_name, group_milestones in pairs(visible_milestones_per_group) do
