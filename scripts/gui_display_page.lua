@@ -215,14 +215,6 @@ local function get_ui_ratio(column_count, milestone_counts_by_group, max_column_
     return width / height
 end
 
-local function debug_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
-    local width = column_count * max_column_width
-    local row_count = get_row_count(milestone_counts_by_group, column_count)
-    local height = row_count * 36 + 20
-    local ratio = width / height
-    game.print(string.format("%d columns: width: %d, height: %d, row_count: %s, ratio: %f", column_count, width, height, row_count, ratio))
-end
-
 local function get_column_count_with_groups(player, milestones_by_group, compact_list, show_estimations)
     local real_width = player.display_resolution.width * (1 / player.display_scale)
     local target_width = real_width * 0.9
@@ -235,8 +227,6 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     end
 
     local max_nb_columns = get_max_nb_columns(target_width, compact_list, show_estimations)
-    game.print("required columns: " .. column_count .. ", max columns: " .. max_nb_columns)
-
     if column_count > max_nb_columns then
         column_count = max_nb_columns
     end
@@ -248,7 +238,6 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     local ratio = get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
     local last_ratio = 0
     while (column_count > 1) and (ratio > target_ratio) do
-        debug_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
         last_ratio = ratio
         column_count = column_count - 1
         ratio = get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
@@ -261,9 +250,6 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     if (last_ratio - target_ratio) < (target_ratio - ratio) and column_count > 1 then
         column_count = column_count + 1
     end
-    debug_ui_ratio(column_count+1, milestone_counts_by_group, max_column_width)
-    debug_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
-    game.print("Target was "..target_ratio..", Used " .. column_count .. " columns")
 
     return column_count
 end
@@ -338,7 +324,6 @@ function build_display_page(player)
             table.insert(milestone_counts_by_group, #group_milestones)
         end
         local height = get_ui_height(milestone_counts_by_group, column_count)
-        game.print("Auto compact list: column_count: " .. column_count .. ", height: " .. height .. ", real_height: " .. real_height)
         if height > real_height then
             compact_list = true
             column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
