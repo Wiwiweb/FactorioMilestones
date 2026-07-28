@@ -190,11 +190,10 @@ local function get_max_column_width(compact_list, show_estimations)
     -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation), +5px extra for leeway
     local max_column_width = 283
     if compact_list then
-        max_column_width = max_column_width - 76
+        max_column_width = max_column_width - 88
     end
-    if show_estimations then
-        max_column_width = math.max(max_column_width, 264) -- "XXX - XXX" estimation window is 264px
-    else
+    -- "XXX - XXX" estimation window is 264px but these are rare so let's ignore them
+    if not show_estimations then
         max_column_width = max_column_width - 47
     end
     return max_column_width
@@ -231,6 +230,8 @@ local function get_column_count_with_groups(player, milestones_by_group, compact
     end
 
     local max_nb_columns = get_max_nb_columns(target_width, compact_list, show_estimations)
+    game.print("required columns: " .. column_count .. ", max columns: " .. max_nb_columns)
+    -- TODO this isn't right with compact list
 
     if column_count > max_nb_columns then
         column_count = max_nb_columns
