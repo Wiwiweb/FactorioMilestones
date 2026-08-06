@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.1
-Date: ????
+Date: 2026-08-05
   Changes:
     - When other mods use `game.tick_paused` to freeze time, Milestones will now continue counting time. This matches the behaviour of the in-game playtime counter, and should resolve any discrepancy. The time on already-achieved milestones will not be changed.
     - The "compact list" setting now has an "Auto" option (enabled by default), which will automatically switch to compact mode when the GUI is too tall for the screen.
