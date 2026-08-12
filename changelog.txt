@@ -4,6 +4,9 @@ Date: ????
   Changes:
     - Removed outdated built-in Space Extension preset addon.
 
+  Bugfixes:
+    - Fixed that the custom event from "get_on_milestone_reached_event" would not actually be fired. (Thanks to devdot)
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.1
 Date: 2026-08-05
