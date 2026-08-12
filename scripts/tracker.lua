@@ -125,7 +125,7 @@ local function print_milestone_reached(force, milestone)
         end
     end
 
-    local message = {"", Icon_with_space, sub_message, postscript}
+    local message = {"", Icon_with_space, "[font=default-large-bold]", sub_message, "[/font]", postscript}
 
     if settings.global["milestones_global_announcements"].value then
         local force_color = color_table_to_string(force.custom_color or force.color);

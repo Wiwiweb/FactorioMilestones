@@ -3,11 +3,14 @@ Version: 1.5.2
 Date: ????
   Changes:
     - Added a new map setting that allows printing milestones to all teams in a multiplayer team game. (Thanks to GravityCY)
-    - Removed outdated built-in Space Extension preset addon.
+    - Removed the outdated built-in Space Extension preset addon.
 
   Scripting:
     - Added a defined custom event `prototypes.custom_event.milestones_on_milestone_reached` that other mods can listen to to react to milestones. See main mod page for an example on how to use it.
     - Removed the "get_on_milestone_reached_event" remote interface which is no longer needed thanks to the new custom event definition. (Thanks to devdot for pointing out issues with this custom event)
+
+  Locale:
+    - Note to translators: Some strings have been updated to remove the icon and font tags (which shouldn't need any change between languages). This should make translating the new strings easier.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.1
