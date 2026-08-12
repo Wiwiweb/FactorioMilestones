@@ -33,7 +33,7 @@ local function add_group(settings_flow, default_name, gui_index)
     group_flow.add{type="label", name="milestones_settings_label", caption={"", {"milestones.type_group"}, ":"}}
     group_flow.add{type="textfield", name="milestones_settings_group_name", text=default_name, clear_and_focus_on_right_click=true}
 
-    group_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
+    group_flow.add{type="empty-widget", style="milestones_horizontal_pusher"}
 
     group_flow.add{type="flow", name="milestones_arrows_flow", direction="vertical"}
     group_flow.add{type="checkbox", name="milestones_settings_checkbox", state=false,
@@ -114,7 +114,7 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     end
     milestone_flow.add{type="label", name="milestones_settings_label", caption=caption}
 
-    milestone_flow.add{type="empty-widget", style="flib_horizontal_pusher"}
+    milestone_flow.add{type="empty-widget", style="milestones_horizontal_pusher"}
 
     local unique_technology = milestone.type ~= "technology" or (prototype ~= nil and prototype.research_unit_count_formula ~= nil) -- No text field or infinity button for unique technologies
 
@@ -141,7 +141,7 @@ local function add_alias_setting(milestone, settings_flow, gui_index)
     local caption = {"", {"milestones.settings_alias"}, ": ", milestone.name, " = ", milestone.quantity, "x ", milestone.equals}
     milestone_flow.add({type="label", name="milestones_settings_alias_label", caption=caption, tags={name=milestone.name, equals=milestone.equals, quantity=milestone.quantity}})
 
-    milestone_flow.add({type="empty-widget", style="flib_horizontal_pusher"})
+    milestone_flow.add({type="empty-widget", style="milestones_horizontal_pusher"})
 
     milestone_flow.add({type="flow", name="milestones_arrows_flow", direction="vertical"})
     milestone_flow.add{type="checkbox", name="milestones_settings_checkbox", state=false,
@@ -161,17 +161,16 @@ end
 function toggle_infinity_button(button_element)
     local textfield_element = button_element.parent.milestones_settings_next_textfield
     local spacer_element = button_element.parent.milestones_settings_next_spacer
-    if button_element.style.name == "milestones_selected_grey_button" then
-        button_element.style = "milestones_grey_button"
-        textfield_element.visible = false
-        spacer_element.visible = true
-    else
-        button_element.style = "milestones_selected_grey_button"
+    button_element.toggled = not button_element.toggled
+    if button_element.toggled then
         textfield_element.visible = true
         spacer_element.visible = false
         if textfield_element.text == nil or textfield_element.text == "" then
             textfield_element.text = "x10"
         end
+    else
+        textfield_element.visible = false
+        spacer_element.visible = true
     end
 end
 

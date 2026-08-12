@@ -178,41 +178,77 @@ end
 local function get_row_count(milestone_counts_by_group, column_count)
     row_count = 0
     for _, milestone_count_in_group in pairs(milestone_counts_by_group) do
-        row_count = row_count + math.ceil(milestone_count_in_group / column_count) + 1
+        row_count = row_count + math.ceil(milestone_count_in_group / column_count) + 1 -- +1 for the title of the group
+    end
+    if table_size(milestone_counts_by_group) == 1 then
+        row_count = row_count - 1 -- If there's only 1 group we don't display the title 
     end
     return row_count
+end
+
+local function get_max_column_width(compact_list, show_estimations)
+    -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation), +5px extra for leeway
+    local max_column_width = 283
+    if compact_list then
+        max_column_width = max_column_width - 88
+    end
+    -- "XXX - XXX" estimation window is 264px but these are rare so let's ignore them
+    if not show_estimations then
+        max_column_width = max_column_width - 47
+    end
+    return max_column_width
+end
+
+local function get_max_nb_columns(target_width, compact_list, show_estimations)
+    local max_column_width = get_max_column_width(compact_list, show_estimations)
+    return math.ceil(target_width / max_column_width) - 1
+end
+
+local function get_ui_height(milestone_counts_by_group, column_count)
+    --- Each row is 36px high, plus 36px for the frame and frame padding
+    return get_row_count(milestone_counts_by_group, column_count) * 36 + 36
+end
+
+local function get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
+    local width = column_count * max_column_width
+    local height = get_ui_height(milestone_counts_by_group, column_count)
+    return width / height
 end
 
 local function get_column_count_with_groups(player, milestones_by_group, compact_list, show_estimations)
     local real_width = player.display_resolution.width * (1 / player.display_scale)
     local target_width = real_width * 0.9
-    -- 278px is about the max width of one column (3-digit hours time and 2-digit estimation)
-    local max_column_width = 283
-    if compact_list then
-        max_column_width = max_column_width - 76
-    end
-    if show_estimations then
-        max_column_width = math.max(max_column_width, 264) -- "XXX - XXX" estimation window is 264px
-    else
-        max_column_width = max_column_width - 47
-    end
-    local max_nb_columns = math.ceil(target_width / max_column_width) - 1
+
     local column_count = 1
     local milestone_counts_by_group = {}
     for _group_name, group_milestones in pairs(milestones_by_group) do
         table.insert(milestone_counts_by_group, #group_milestones)
         column_count = math.max(column_count, #group_milestones)
-
-        if column_count >= max_nb_columns then
-            column_count = max_nb_columns
-        end
     end
 
-    -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-    local row_count = get_row_count(milestone_counts_by_group, column_count)
-    while row_count < column_count * 3 and column_count > 1 do
+    local max_nb_columns = get_max_nb_columns(target_width, compact_list, show_estimations)
+    if column_count > max_nb_columns then
+        column_count = max_nb_columns
+    end
+
+    -- Potentially reduce the number of columns to try and keep a roughly 16:9 shape
+    local max_column_width = get_max_column_width(compact_list, show_estimations)
+    local target_ratio = player.display_resolution.width / player.display_resolution.height
+
+    local ratio = get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
+    local last_ratio = 0
+    while (column_count > 1) and (ratio > target_ratio) do
+        last_ratio = ratio
         column_count = column_count - 1
-        row_count = get_row_count(milestone_counts_by_group, column_count)
+        ratio = get_ui_ratio(column_count, milestone_counts_by_group, max_column_width)
+    end
+    if column_count >= max_nb_columns then
+        return max_nb_columns
+    end
+    -- We now have the 2 column counts that surround the target ratio. Use the closest one.
+    -- Always true: ratio <= target_ratio <= last_ratio
+    if (last_ratio - target_ratio) < (target_ratio - ratio) and column_count > 1 then
+        column_count = column_count + 1
     end
 
     return column_count
@@ -239,78 +275,90 @@ function build_display_page(player)
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local player_settings = settings.get_player_settings(player)
-    local compact_list = player_settings["milestones_compact_list"].value
+    local compact_list_string = player_settings["milestones_compact_list"].value
     local view_by_group = player_settings["milestones_list_by_group"].value
     local show_estimations = player_settings["milestones_show_estimations"].value
     local show_incomplete = player_settings["milestones_show_incomplete"].value
 
     local nb_groups = table_size(storage_force.milestones_by_group)
-    if view_by_group and nb_groups > 1 then
-        local visible_milestones_per_group = {}
-        for group_name, group_milestones in pairs(storage_force.milestones_by_group) do
-            visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones, show_incomplete)
-            if not next(visible_milestones_per_group[group_name]) then
-                visible_milestones_per_group[group_name] = nil
-            end
+    local show_groups = nb_groups > 1 and view_by_group
+
+    local milestones_by_group_used_for_display
+    if show_groups then
+        milestones_by_group_used_for_display = storage_force.milestones_by_group
+    else
+        -- Create a dummy group made of the complete then incomplete milestones
+        milestones_used_for_display = table_shallow_copy(storage_force.complete_milestones)
+        local visible_incomplete_milestones = filter_hidden_milestones(storage_force.incomplete_milestones, show_incomplete)
+        for i=1, #visible_incomplete_milestones do
+            milestones_used_for_display[#milestones_used_for_display+1] = visible_incomplete_milestones[i]
         end
+        milestones_by_group_used_for_display = {["Dummy group"] = milestones_used_for_display}
+        nb_groups = 1
+    end
 
-        -- No milestones, exit early
-        if not next(visible_milestones_per_group) then
-            display_scroll.add(empty_set_label)
-            return
+    local visible_milestones_per_group = {}
+    for group_name, group_milestones in pairs(milestones_by_group_used_for_display) do
+        visible_milestones_per_group[group_name] = filter_hidden_milestones(group_milestones, show_incomplete)
+        if not next(visible_milestones_per_group[group_name]) then
+            visible_milestones_per_group[group_name] = nil
         end
+        nb_groups = table_size(visible_milestones_per_group)
+    end
 
-        local column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
-        local milestones_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
-        local i = 1
-        for group_name, group_milestones in pairs(visible_milestones_per_group) do
-            -- Group title
-            milestones_table.add({type="label", caption=group_name, style="caption_label"})
-            add_n_empty_widgets(milestones_table, column_count-1)
+    -- No milestones, exit early
+    if not next(visible_milestones_per_group) then
+        display_scroll.add(empty_set_label)
+        return
+    end
 
-            for _, milestone in pairs(group_milestones) do
-                add_milestone_item(milestones_table, milestone, print_milliseconds, compact_list, show_estimations)
-            end
-            add_n_empty_widgets(milestones_table, column_count - (#group_milestones % column_count))
-
-            -- Lines
-            if i < nb_groups then -- Don't add line after the last group
-                if column_count == 1 then
-                    milestones_table.add({type="line"})
-                else
-                    milestones_table.add({type="line", style="milestones_line_left"})
-                    for j = 2, column_count-1 do
-                        milestones_table.add({type="line", style="milestones_line_center"})
-                    end
-                    milestones_table.add({type="line", style="milestones_line_right"})
-                end
-                i = i + 1
-            end
+    -- Compact list "auto" calculation
+    local compact_list
+    local column_count
+    if compact_list_string == "auto" then
+        local real_height = player.display_resolution.height * (1 / player.display_scale)
+        compact_list = false
+        column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
+        local milestone_counts_by_group = {}
+        for _group_name, group_milestones in pairs(visible_milestones_per_group) do
+            table.insert(milestone_counts_by_group, #group_milestones)
+        end
+        local height = get_ui_height(milestone_counts_by_group, column_count)
+        if height > real_height then
+            compact_list = true
+            column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
         end
     else
-        local visible_incomplete_milestones = filter_hidden_milestones(storage_force.incomplete_milestones, show_incomplete)
-        local nb_milestones = #storage_force.complete_milestones + #visible_incomplete_milestones
+        compact_list = compact_list_string == "on"
+        column_count = get_column_count_with_groups(player, visible_milestones_per_group, compact_list, show_estimations)
+    end
 
-        -- No milestones, exit early
-        if nb_milestones == 0 then
-            display_scroll.add(empty_set_label)
-            return
+    local milestones_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
+    local i = 1
+    for group_name, group_milestones in pairs(visible_milestones_per_group) do
+        -- Group title
+        if show_groups then
+            milestones_table.add({type="label", caption=group_name, style="caption_label"})
+            add_n_empty_widgets(milestones_table, column_count-1)
         end
 
-        -- This tries to keep 3 rows per column, which results in roughly 16:9 shape
-        local column_count = math.max(
-            math.min(
-                math.ceil(math.sqrt(nb_milestones / 3)),
-                8),
-            1)
-
-        local content_table = display_scroll.add{type="table", column_count=column_count, style="milestones_table_style"}
-        for _, milestone in pairs(storage_force.complete_milestones) do
-            add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
+        for _, milestone in pairs(group_milestones) do
+            add_milestone_item(milestones_table, milestone, print_milliseconds, compact_list, show_estimations)
         end
+        add_n_empty_widgets(milestones_table, column_count - (#group_milestones % column_count))
 
-        for _, milestone in pairs(visible_incomplete_milestones) do
-            add_milestone_item(content_table, milestone, print_milliseconds, compact_list, show_estimations)
+        -- Lines
+        if i < nb_groups then -- Don't add line after the last group
+            if column_count == 1 then
+                milestones_table.add({type="line"})
+            else
+                milestones_table.add({type="line", style="milestones_line_left"})
+                for j = 2, column_count-1 do
+                    milestones_table.add({type="line", style="milestones_line_center"})
+                end
+                milestones_table.add({type="line", style="milestones_line_right"})
+            end
+            i = i + 1
         end
     end
 end

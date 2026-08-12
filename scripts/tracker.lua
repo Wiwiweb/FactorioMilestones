@@ -15,7 +15,8 @@ local function raise_milestone_reached_event(force, milestone, message)
 	if On_milestone_reached_event then
 		script.raise_event(On_milestone_reached_event, {
             force = force,
-            name = milestone.name,
+            milestone_name = milestone.name,
+            type = milestone.type,
             quantity = milestone.quantity,
             completion_tick = milestone.completion_tick,
             message = message
@@ -42,6 +43,9 @@ local function write_milestone_to_file(force, milestone, human_timestamp)
         if settings.get_player_settings(player)["milestones_write_file"].value then
             helpers.write_file(file_name, json, true, player_index)
         end
+    end
+    if settings.global["milestones_write_file_server"].value then
+        helpers.write_file(file_name, json, true, 0) -- 0 means server
     end
 end
 
@@ -142,7 +146,7 @@ function track_item_creation(event)
                     end
                 end
                 local force = game.forces[force_name]
-                mark_milestone_reached(storage_force_force, milestone, game.tick, i)
+                mark_milestone_reached(storage_force_force, milestone, game.ticks_played, i)
                 print_milestone_reached(force, milestone)
                 refresh_gui_for_force(force)
                 to_i = math.min(to_i, #storage_force_force.incomplete_milestones) -- Don't go past the end of the table
@@ -166,7 +170,7 @@ function check_technology_milestone_reached(event)
     while i <= #storage_force.incomplete_milestones do
         local milestone = storage_force.incomplete_milestones[i]
         if is_tech_milestone_reached(milestone, technology_researched) then
-            mark_milestone_reached(storage_force, milestone, game.tick, i)
+            mark_milestone_reached(storage_force, milestone, game.ticks_played, i)
             print_milestone_reached(force, milestone)
             refresh_gui_for_force(force)
         else

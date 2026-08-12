@@ -1,7 +1,7 @@
 require("scripts.gui_settings_page")
 
 function toggle_import_export_page(player_index, button_element, import)
-    if button_element.style.name == "flib_selected_tool_button" then -- Oof, ugly
+    if button_element.toggled then
         close_import_export_page(player_index)
     else
         close_import_export_page(player_index)
@@ -48,7 +48,7 @@ function build_import_export_page(player_index, button_element, import)
     end
 
     local button_frame = inside_frame.add{type="flow", direction="horizontal"}
-    button_frame.add{type="empty-widget", style="flib_horizontal_pusher"}
+    button_frame.add{type="empty-widget", style="milestones_horizontal_pusher"}
     if import then
         button_frame.add{type="button", style="dialog_button", caption={"milestones.settings_import"}, tags={action="milestones_import_settings"}}
     else
@@ -60,7 +60,7 @@ function build_import_export_page(player_index, button_element, import)
     import_export_frame.visible = true
     outer_frame.force_auto_center()
 
-    button_element.style = "flib_selected_tool_button"
+    button_element.toggled = true
 end
 
 function toggle_export_encoded(checkbox_element)
@@ -85,8 +85,8 @@ function close_import_export_page(player_index)
     import_export_frame.visible = false
 
     local button_flow = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow
-    button_flow.milestones_import_button.style = "tool_button"
-    button_flow.milestones_export_button.style = "tool_button"
+    button_flow.milestones_import_button.toggled = false
+    button_flow.milestones_export_button.toggled = false
 end
 
 function import_settings(player_index)

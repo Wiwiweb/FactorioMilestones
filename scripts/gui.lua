@@ -27,22 +27,20 @@ function build_gui_frames(player)
     local outer_frame = screen_element.add{type="frame", name="milestones_outer_frame", style="invisible_frame", visible=false}
     local main_frame = outer_frame.add{type="frame", name="milestones_main_frame", direction="vertical"}
 
-    local titlebar = main_frame.add{type="flow", name="milestones_titlebar", style="flib_titlebar_flow", direction="horizontal"}
+    local titlebar = main_frame.add{type="flow", name="milestones_titlebar", style="milestones_titlebar_flow", direction="horizontal"}
     titlebar.add{
         type="label",
         name="milestones_main_label",
-        style="frame_title",
+        style="milestones_frame_title",
         caption={"milestones.title"},
         ignored_by_interaction=true
     }
-    titlebar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
+    titlebar.add{type="empty-widget", style="milestones_titlebar_drag_handle", ignored_by_interaction=true}
     local settings_button = titlebar.add{
         type="sprite-button",
         name="milestones_settings_button",
         style="frame_action_button",
         sprite="milestones_settings_white",
-        hovered_sprite="milestones_settings_black",
-        clicked_sprite="milestones_settings_black",
         mouse_button_filter={"left"},
         tooltip = {"milestones.settings_instructions"},
         tags={
@@ -52,19 +50,14 @@ function build_gui_frames(player)
     if not player.admin then
         settings_button.enabled = false
         settings_button.tooltip = {"milestones.settings_disabled"}
-        settings_button.sprite = "milestones_settings_disabled"
-        settings_button.hovered_sprite = "milestones_settings_disabled"
-        settings_button.clicked_sprite = "milestones_settings_disabled"
     end
     titlebar.add{
         type="sprite-button",
         name="milestones_pin_button",
         style="frame_action_button",
         mouse_button_filter={"left"},
-        sprite="milestones_pin_white",
-        hovered_sprite="milestones_pin_black",
-        clicked_sprite="milestones_pin_black",
-        tooltip = {"milestones.pin_instructions"},
+        sprite="utility/track_button_white",
+        tooltip = {"factoriopedia.pin-tooltip"},
         tags={
             action="milestones_pin_gui"
         }
@@ -72,12 +65,9 @@ function build_gui_frames(player)
     titlebar.add{
         type="sprite-button",
         name="milestones_close_button",
-        style="frame_action_button",
+        style="close_button",
         mouse_button_filter={"left"},
         sprite="utility/close",
-        hovered_sprite="utility/close_black",
-        clicked_sprite="utility/close_black",
-        tooltip = {"gui.close-instruction"},
         tags={
             action="milestones_close_gui"
         }
@@ -88,21 +78,21 @@ function build_gui_frames(player)
 
     local dialog_buttons_bar = main_frame.add{type="flow", style="dialog_buttons_horizontal_flow", name="milestones_dialog_buttons", direction="horizontal"}
     dialog_buttons_bar.add{type="button", style="back_button", caption={"milestones.settings_back"}, tags={action="milestones_cancel_settings"}}
-    dialog_buttons_bar.add{type="empty-widget", style="flib_dialog_footer_drag_handle", ignored_by_interaction=true}
+    dialog_buttons_bar.add{type="empty-widget", style="milestones_dialog_footer_drag_handle", ignored_by_interaction=true}
     dialog_buttons_bar.add{type="button", style="confirm_button", caption={"milestones.settings_confirm"}, tags={action="milestones_confirm_settings"}}
     dialog_buttons_bar.drag_target = outer_frame
 
     -- Import/export side menu
 
     local import_export_frame = outer_frame.add{type="frame", name="milestones_settings_import_export", style="frame", direction="vertical", visible=false}
-    local import_export_titlebar = import_export_frame.add{type="flow", name="milestones_settings_import_export_titlebar", style="flib_titlebar_flow", direction="horizontal"}
+    local import_export_titlebar = import_export_frame.add{type="flow", name="milestones_settings_import_export_titlebar", style="milestones_titlebar_flow", direction="horizontal"}
     import_export_titlebar.add{
         type="label",
         name="milestones_settings_import_export_titlebar_label",
-        style="frame_title",
+        style="milestones_frame_title",
         ignored_by_interaction=true
     }
-    import_export_titlebar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
+    import_export_titlebar.add{type="empty-widget", style="milestones_titlebar_drag_handle", ignored_by_interaction=true}
     import_export_titlebar.drag_target = outer_frame
 
     import_export_frame.add{type="flow", name="milestones_settings_import_export_inside", direction="vertical"}
@@ -117,15 +107,9 @@ local function update_settings_button(player) -- In case permissions changed
     if player.admin then
         settings_button.enabled = true
         settings_button.tooltip = {"milestones.settings_instructions"}
-        settings_button.sprite = "milestones_settings_white"
-        settings_button.hovered_sprite = "milestones_settings_black"
-        settings_button.clicked_sprite = "milestones_settings_black"
     else
         settings_button.enabled = false
         settings_button.tooltip = {"milestones.settings_disabled"}
-        settings_button.sprite = "milestones_settings_disabled"
-        settings_button.hovered_sprite = "milestones_settings_disabled"
-        settings_button.clicked_sprite = "milestones_settings_disabled"
     end
 end
 
@@ -175,6 +159,8 @@ function refresh_gui_for_player(player)
     if is_display_page_visible(player.index) then
         get_inner_frame(player.index).clear()
         build_display_page(player)
+    else
+        storage.players[player.index].opened_once_before = false -- Center next open
     end
 end
 
@@ -188,12 +174,10 @@ local function toggle_pinned(player, element)
     local storage_player = storage.players[player.index]
     storage_player.pinned = not storage_player.pinned
     if storage_player.pinned then
-        element.style = "flib_selected_frame_action_button"
-        element.sprite = "milestones_pin_black"
+        element.toggled = true
         player.opened = nil
     else
-        element.style = "frame_action_button"
-        element.sprite = "milestones_pin_white"
+        element.toggled = false
         local main_frame = get_main_frame(player.index)
         if player.opened == nil then
             player.opened = main_frame

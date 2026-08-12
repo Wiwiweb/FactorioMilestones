@@ -1,9 +1,20 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.5.1
+Version: 1.5.2
 Date: ????
   Changes:
-    - Removed the outdated built-in Nullius preset, in favor of Nullius' own preset provided by their mod.
+    - Removed outdated built-in Space Extension preset addon.
 
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2026-08-05
+  Changes:
+    - When other mods use `game.tick_paused` to freeze time, Milestones will now continue counting time. This matches the behaviour of the in-game playtime counter, and should resolve any discrepancy. The time on already-achieved milestones will not be changed.
+    - The "compact list" setting now has an "Auto" option (enabled by default), which will automatically switch to compact mode when the GUI is too tall for the screen.
+    - Added new map setting "Write milestones to file (server)", to allow writing achieved milestones to a file on a dedicated server (The existing "Write milestones to file" player setting could only write to the players' local machines).
+    - Slight tweaks to the look of the top right frame buttons, to match vanilla equivalents.
+    - Removed dependency on flib.
+    - Removed the outdated built-in Nullius preset, in favor of Nullius' own preset provided by their mod.
+    - Reduced mod size by excluding some source graphic files.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.0
