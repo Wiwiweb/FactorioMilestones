@@ -130,7 +130,7 @@ local function print_milestone_reached(force, milestone)
 
     if settings.global["milestones_global_announcements"].value then
         local force_color = color_table_to_string(force.custom_color or force.color);
-        local force_name = force.players and force.players[1].name or force.name
+        local force_name = (force.players and force.players[1]) and force.players[1].name or force.name
         -- Dirty monkey patch of the message
         sub_message[1] = sub_message[1] .. "_team"
         table.insert(sub_message, force_color)
