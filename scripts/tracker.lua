@@ -11,17 +11,22 @@ local function force_print(force, message)
     end
 end
 
+-- Example use in your mod:
+-- local milestones_event = prototypes.custom_event.milestones_on_milestone_reached
+-- if milestones_event then
+--   script.on_event(milestones_event, function(event)
+--     game.print(serpent.block(event))
+--   end)
+-- end
 local function raise_milestone_reached_event(force, milestone, message)
-	if On_milestone_reached_event then
-		script.raise_event(On_milestone_reached_event, {
-            force = force,
-            milestone_name = milestone.name,
-            type = milestone.type,
-            quantity = milestone.quantity,
-            completion_tick = milestone.completion_tick,
-            message = message
-		})
-	end
+    script.raise_event(prototypes.custom_event.milestones_on_milestone_reached, {
+        force_name = force.name,
+        milestone_name = milestone.name,
+        type = milestone.type,
+        quantity = milestone.quantity,
+        completion_tick = milestone.completion_tick,
+        message = message,
+    })
 end
 
 -- Writes to a file named "milestones-<MAP SEED>.txt"

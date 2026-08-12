@@ -197,6 +197,17 @@ data:extend{
     }
 }
 
+-- Custom event
+
+data:extend{
+  {
+    type = "custom-event",
+    name = "milestones_on_milestone_reached",
+  },
+}
+
+-- Shortcut bar
+
 data:extend{
   {
     type = "shortcut",

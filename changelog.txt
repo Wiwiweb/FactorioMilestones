@@ -4,8 +4,9 @@ Date: ????
   Changes:
     - Removed outdated built-in Space Extension preset addon.
 
-  Bugfixes:
-    - Fixed that the custom event from "get_on_milestone_reached_event" would not actually be fired. (Thanks to devdot)
+  Scripting:
+    - Added a defined custom event `prototypes.custom_event.milestones_on_milestone_reached` that other mods can listen to to react to milestones. See main mod page for an example on how to use it.
+    - Removed the "get_on_milestone_reached_event" remote interface which is no longer needed thanks to the new custom event definition. (Thanks to devdot for pointing out issues with this custom event)
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.1

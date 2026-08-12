@@ -1,5 +1,4 @@
 require("scripts.commands")
-require("scripts.remote_interface")
 require("scripts.tracker")
 require("scripts.gui")
 require("scripts.presets_loader")
