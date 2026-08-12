@@ -21,7 +21,7 @@ script.on_init(function()
         else
             storage.current_preset_name = "Imported"
             storage.loaded_milestones = initial_preset
-            table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_initial_preset"})
+            table.insert(storage.delayed_chat_messages, {"", Icon_with_space, {"milestones.message_loaded_initial_preset"}})
         end
     end
 
@@ -40,7 +40,7 @@ script.on_init(function()
         backfilled_anything = backfilled_anything or backfilled_anything_from_this_force
     end
     if backfilled_anything then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_into_exiting_game"})
+        table.insert(storage.delayed_chat_messages, {"", Icon_with_space, {"milestones.message_loaded_into_exiting_game"}})
     end
     remove_invalid_milestones_all_forces()
 

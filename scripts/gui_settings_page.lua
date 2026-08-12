@@ -516,7 +516,7 @@ function confirm_settings_page(player_index)
         if game.is_multiplayer() then
             main_message = game.print({"milestones.message_settings_changed_multiplayer", player.name})
         end
-        local full_message = {"", main_message}
+        local full_message = {"", Icon_with_space, main_message}
         if backfilled_anything then
             table.insert(full_message, " ")
             table.insert(full_message, {"milestones.message_settings_backfilled"})

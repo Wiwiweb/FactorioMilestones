@@ -1,3 +1,5 @@
+Icon_with_space = "[img=milestones_main_icon_white] "
+
 function table_contains(table, element)
     for _, value in pairs(table) do
         if value == element then return true end

@@ -115,7 +115,7 @@ function load_presets()
     if storage.current_preset_name == nil then
         storage.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. storage.current_preset_name)
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", storage.current_preset_name})
+        table.insert(storage.delayed_chat_messages, {"", Icon_with_space, {"milestones.message_loaded_presets", storage.current_preset_name}})
         storage.loaded_milestones = table.deepcopy(presets[storage.current_preset_name].milestones)
     end
 end
@@ -133,9 +133,9 @@ function load_preset_addons()
     log("Preset addons loaded: " .. serpent.line(preset_addons_loaded))
 
     if #preset_addons_loaded == 1 then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
+        table.insert(storage.delayed_chat_messages, {"", Icon_with_space, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]}})
     elseif #preset_addons_loaded > 1 then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
+        table.insert(storage.delayed_chat_messages, {"", Icon_with_space, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")}})
     end
 end
 
@@ -156,8 +156,8 @@ function reload_presets()
     log("New presets found: " .. serpent.line(added_presets))
     log("New list of valid presets: " .. serpent.line(storage.valid_preset_names))
     if #added_presets == 1 then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_reloaded_presets_singular", added_presets[1]})
+        table.insert(storage.delayed_chat_messages, {"", Icon_with_space, {"milestones.message_reloaded_presets_singular", added_presets[1]}})
     elseif #added_presets > 1 then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_reloaded_presets_plural", table.concat(added_presets, ", ")})
+        table.insert(storage.delayed_chat_messages, {"", Icon_with_space, {"milestones.message_reloaded_presets_plural", table.concat(added_presets, ", ")}})
     end
 end

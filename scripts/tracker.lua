@@ -70,13 +70,14 @@ local function print_milestone_reached(force, milestone)
     local human_timestamp = format_time(milestone.completion_tick)
     local sprite_name = sprite_prefix(milestone) .. "." .. milestone.name
     local milestone_localised_name
-    local message
+    local sub_message
+    local postscript
     if milestone.type == "technology" then
         milestone_localised_name = prototypes.technology[milestone.name].localised_name
         local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity)
         local image_tag = string.format("[img=%s]", sprite_name)
         milestone_localised_name = {"", image_tag, milestone_localised_name}
-        message = {"milestones.message_milestone_reached_technology", milestone_localised_name, level_string, human_timestamp}
+        sub_message = {"milestones.message_milestone_reached_technology", milestone_localised_name, level_string, human_timestamp}
     else
         if milestone.type == "item" or milestone.type == "item_consumption" then
             if milestone.name == "se-rocket-launch-pad-silo-dummy-result-item" then
@@ -109,27 +110,27 @@ local function print_milestone_reached(force, milestone)
             milestone_localised_name = {"", image_tag, milestone_localised_name}
         end
 
-        local postscript
         if milestone.name == "character" then
             postscript = " (haha! 😁)"
         end
 
         if milestone.quantity == 1 then
-            message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_first", milestone_localised_name, human_timestamp}, postscript}
+            sub_message = {"milestones.message_milestone_reached_" ..message_type.. "_first", milestone_localised_name, human_timestamp}
         else
             local print_quantity = milestone.quantity
             if milestone.quantity >= 10000 then
                 print_quantity = core_util.format_number(milestone.quantity, true)
             end
-            message = {"", {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, milestone_localised_name, human_timestamp}, postscript}
+            sub_message = {"milestones.message_milestone_reached_" ..message_type.. "_more", print_quantity, milestone_localised_name, human_timestamp}
         end
     end
+
+    local message = {"", Icon_with_space, sub_message, postscript}
 
     if settings.global["milestones_global_announcements"].value then
         local force_color = color_table_to_string(force.custom_color or force.color);
         local force_name = force.players and force.players[1].name or force.name
         -- Dirty monkey patch of the message
-        local sub_message = message[2]
         sub_message[1] = sub_message[1] .. "_team"
         table.insert(sub_message, force_color)
         table.insert(sub_message, force_name)
