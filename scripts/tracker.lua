@@ -3,6 +3,14 @@ require("scripts.gui")
 require("scripts.util")
 require("scripts.milestones_util")
 
+local function game_print(message)
+    for _, player in pairs(game.players) do
+        if not settings.get_player_settings(player)["milestones_disable_chat_notifications"].value then
+            player.print(message)
+        end
+    end
+end
+
 local function force_print(force, message)
     for _, player in pairs(force.players) do
         if not settings.get_player_settings(player)["milestones_disable_chat_notifications"].value then
@@ -54,7 +62,7 @@ local function write_milestone_to_file(force, milestone, human_timestamp)
     end
 end
 
-local function colorTableToString(colourTable)
+local function color_table_to_string(colourTable)
     return string.format("%s,%s,%s", colourTable.r, colourTable.g, colourTable.b);
 end
 
@@ -117,11 +125,16 @@ local function print_milestone_reached(force, milestone)
         end
     end
 
-    if (settings.global["milestones_global_announcements"].value) then
-        local colorStr = colorTableToString(force.custom_color or force.color);
-        local forceMsg = {"milestones.message_team_completion", force.players[1].name, colorStr};
-        game.print({"", forceMsg, " ", message})
+    if settings.global["milestones_global_announcements"].value then
+        local force_color = color_table_to_string(force.custom_color or force.color);
+        local force_name = force.players and force.players[1].name or force.name
+        -- Dirty monkey patch of the message
+        local sub_message = message[2]
+        sub_message[1] = sub_message[1] .. "_team"
+        table.insert(sub_message, force_color)
+        table.insert(sub_message, force_name)
         game.play_sound{path="utility/achievement_unlocked"}
+        game_print(message)
     else
         force.play_sound{path="utility/achievement_unlocked"}
         force_print(force, message);

@@ -18,10 +18,17 @@ data:extend{
     },
     {
         type = "bool-setting",
-        name = "milestones_write_file_server",
+        name = "milestones_global_announcements",
         setting_type = "runtime-global",
         default_value = false,
         order = "c",
+    },
+    {
+        type = "bool-setting",
+        name = "milestones_write_file_server",
+        setting_type = "runtime-global",
+        default_value = false,
+        order = "d",
     },
     {
         type = "string-setting",
@@ -65,12 +72,5 @@ data:extend{
         setting_type = "runtime-per-user",
         default_value = false,
         order = "f",
-    },
-    {
-        type = "bool-setting",
-        name = "milestones_global_announcements",
-        setting_type = "runtime-global",
-        default_value = true,
-        order = "g",
     },
 }
