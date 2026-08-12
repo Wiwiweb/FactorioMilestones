@@ -26,13 +26,14 @@ end
 --     game.print(serpent.block(event))
 --   end)
 -- end
-local function raise_milestone_reached_event(force, milestone, message)
+local function raise_milestone_reached_event(force, milestone, message, human_timestamp)
     script.raise_event(prototypes.custom_event.milestones_on_milestone_reached, {
         force_name = force.name,
         milestone_name = milestone.name,
         type = milestone.type,
         quantity = milestone.quantity,
         completion_tick = milestone.completion_tick,
+        completion_time = human_timestamp,
         message = message,
     })
 end
@@ -141,7 +142,7 @@ local function print_milestone_reached(force, milestone)
         force_print(force, message);
     end
 
-    raise_milestone_reached_event(force, milestone, message)
+    raise_milestone_reached_event(force, milestone, message, human_timestamp)
     write_milestone_to_file(force, milestone, human_timestamp)
 end
 
