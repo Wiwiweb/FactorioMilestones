@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.2
-Date: ????
+Date: 2026-08-12
   Changes:
     - Added a new map setting that allows printing milestones to all teams in a multiplayer team game. (Thanks to GravityCY)
     - Removed the outdated built-in Space Extension preset addon.
