@@ -67,13 +67,50 @@ remote.add_interface("ice-armor", {
 
 You can take a look at examples in [`preset_addons.lua`](presets/preset_addons.lua).
 
+Preset addons will add their milestones at the end of the existing matching group of the preset. If the preset doesn't have a matching group, it will be created at the end of all groups. e.g., in the above example, the ice-armor milestone will be added at the end of the Progress group.
+
 ### Nice-to-know features for preset makers
 
 * You can mark milestones with `hidden=true` for spoilery things. Hidden milestones will still be tracked and announced, but will only be visible once they are achieved.
+* The available milestone types are: `item,fluid,kill,technology,item_consumption,fluid_consumption,group,alias`
 * You can track consumption instead of production with `type="item_consumption"` and `type="fluid_consumption"`. This can have some niche use (e.g. Ultracube cube consumption).
 * You can create item "aliases", which will count as another item. 
-  * For example you could have a "box of science" count the same as 5 science for the sake of milestones so that players still achieve science milestones even when they are producing boxes: `{type="alias", name="nullius-box-geology-pack", equals="nullius-geology-pack", quantity=5}` (Example from Nullius)
-  * Or you could have an "upgraded" item also count for the original item so that players can still achieve the milestone for the original item: `{type="alias", name="digosaurus-turd", equals="digosaurus", quantity=1},` (Example from Pyanodons)
+  * For example you could have a "box of science" count the same as 5 science for the sake of milestones so that players still achieve science milestones even when they are producing boxes:  
+  `{type="alias", name="nullius-box-geology-pack", equals="nullius-geology-pack", quantity=5}` (Example from Nullius)
+  * Or you could have an "upgraded" item also count for the original item so that players can still achieve the milestone for the original item:  
+  `{type="alias", name="digosaurus-turd", equals="digosaurus", quantity=1}` (Example from Pyanodons)
+* If you don't want your preset to be enabled if another different mod is installed (maybe to avoid duplication), you can add a `forbidden_mods` attribute after the `required_mods` attribute. This is mostly useful for preset addons.
+
+Thanks for adding a Milestones preset for your mod :)
+
+## Interfacing with Milestones from other mods (custom event)
+
+Milestones will emit a custom event when a milestone is reached. You can listen to it in your mod like this:
+```lua
+local milestones_event = prototypes.custom_event.milestones_on_milestone_reached
+if milestones_event then
+    script.on_event(milestones_event, function(event)
+        game.print(serpent.block(event))
+    end)
+end
+```
+The event attributes are:
+* force_name (string): Which force achieved the milestone.
+* milestone_name (string): The name of the item/entity/technology that was the goal achieved.
+* quantity (int): The quantity that was required for the goal. For technologies, this is the technology level.
+* type (string): One of item,fluid,kill,technology,item_consumption,fluid_consumption
+* completion_tick (int)
+* completion_time (string): Equivalent to completion_tick but formatted as a normal time.
+* message (array): The full LocalisedString printed by Milestones in chat.
+
+## Interfacing with Milestones from external programs (log file)
+ 
+By enabling the mod settings "Write milestones to file (player)" or "Write milestones to file (server)", Milestones will write reached milestones to a file named `milestones-<MAP SEED>.txt` in your [script output folder](https://wiki.factorio.com/Application_directory#User_data_directory).
+
+Each milestone reached appends a new line at the moment it is reached.
+
+Each line is JSON and looks like this:  
+`{"force":"player","name":"iron-ore","quantity":10,"type"="item","completion_tick":5279,"completion_time":"1:27"}`
 
 
-Thanks a lot!
+Thanks a lot for your interest :)
