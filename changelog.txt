@@ -2,6 +2,8 @@
 Version: 1.5.2
 Date: ????
   Changes:
+    - Removed outdated built-in Space Extension preset addon.
+
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.1
 Date: 2026-08-05
