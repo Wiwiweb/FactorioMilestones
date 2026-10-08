@@ -14,9 +14,23 @@ commands.add_command("milestones-debug-print-loaded-milestones",
   "- Print the json of loaded milestones. Same as the \"export\" string available in settings.",
   debug_print_loaded_milestones)
 
+-- The commands that change milestones need a player (the server console and RCON have none) who is an admin,
+-- like the settings page.
+local function admin_player(command_data)
+  local player = command_data.player_index and game.get_player(command_data.player_index)
+  if not player then return nil end
+  if not player.admin then
+    player.print({"cant-run-command-not-admin", command_data.name})
+    return nil
+  end
+  return player
+end
+
 function debug_set_milestones_time(command_data)
   if not command_data.parameter then return end
-  local force = game.get_player(command_data.player_index).force
+  local player = admin_player(command_data)
+  if not player then return end
+  local force = player.force
   local storage_force = storage.forces[force.name]
   local parameters = {}
   for word in string.gmatch(command_data.parameter, "([^,]+)") do -- Split comma-seperated string
@@ -44,7 +58,9 @@ commands.add_command("milestones-set-milestone-time",
 
 function debug_reset_milestones(command_data)
   if not command_data.parameter then return end
-  local force = game.get_player(command_data.player_index).force
+  local player = admin_player(command_data)
+  if not player then return end
+  local force = player.force
   local storage_force = storage.forces[force.name]
   local name = command_data.parameter
   local i = 1
@@ -73,7 +89,8 @@ commands.add_command("milestones-reinitialize-gui",
   reinitialize_gui)
 
 
-function reinitialize_surfaces()
+function reinitialize_surfaces(command_data)
+  if not admin_player(command_data) and command_data.player_index then return end
   for force_name, storage_force in pairs(storage.forces) do
     local force = game.forces[force_name]
     if force then
@@ -90,7 +107,8 @@ commands.add_command("milestones-reinitialize-surfaces",
   "- Reset the mod's tracking of surfaces and estimate incomplete milestones. Try this if some milestones didn't trigger for you when you would expect it (and please report this issue).",
   reinitialize_surfaces)
 
-function reinitialize_storage()
+function reinitialize_storage(command_data)
+  if not admin_player(command_data) and command_data.player_index then return end
   for _, force in pairs(game.forces) do
     initialize_force_if_needed(force)
   end
