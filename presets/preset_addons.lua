@@ -55,6 +55,16 @@ preset_addons = {
         }
     },
 
+    ["Armoured Biters (2.1 Compat)"] = { -- Fork of Armoured Biters for Factorio 2.1, same prototype names
+        required_mods = {"ArmouredBiters21Compat"},
+        forbidden_mods = {"SeaBlock"},
+        milestones = {
+            {type="group", name="Kills"},
+            {type="kill", name="behemoth-armoured-biter",  quantity=1},
+            {type="kill", name="leviathan-armoured-biter", quantity=1},
+        }
+    },
+
     ["Cold Biters"] = {
         required_mods = {"Cold_biters"},
         forbidden_mods = {"SeaBlock"},
