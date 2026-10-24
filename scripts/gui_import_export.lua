@@ -106,9 +106,8 @@ function import_settings(player_index)
     if imported_milestones == nil then
         game.players[player_index].print(error)
     else
-        local settings_flow = storage.players[player_index].settings_flow
-        settings_flow.clear()
-        fill_settings_flow(settings_flow, imported_milestones)
+        -- Same as switching presets: also resets the selection and the add/delete buttons (#17)
+        switch_to_milestones_set(imported_milestones, player_index)
         local preset_dropdown = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown
         preset_dropdown.caption = {"milestones.settings_imported"}
         preset_dropdown.tags = {action="milestones_change_preset", imported=true} -- For some reason, can't just change a single tag
